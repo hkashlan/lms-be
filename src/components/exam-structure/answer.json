@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_exam_structure_answers",
+  "info": {
+    "displayName": "answer"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "correct": {
+      "type": "boolean"
+    }
+  }
+}
