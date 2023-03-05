@@ -6,6 +6,6 @@ export default ({ env }) => ({
     salt: env('API_TOKEN_SALT'),
   },
   watchIgnoreFiles : [
-    "./data",
+    '**/data/**'
   ]
 });

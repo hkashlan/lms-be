@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -49,13 +49,7 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "teacherFor"
     },
-    "students": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "courses"
-    },
-    "numberOfStudetn": {
+    "numberOfStudents": {
       "type": "integer",
       "required": true
     }

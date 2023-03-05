@@ -69,11 +69,16 @@
       "target": "api::course-instance.course-instance",
       "mappedBy": "teacher"
     },
-    "courses": {
+    "faculties": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::course-instance.course-instance",
+      "target": "api::faculty.faculty",
       "mappedBy": "students"
+    },
+    "courses": {
+      "type": "component",
+      "repeatable": true,
+      "component": "student-info.course-result"
     }
   }
 }
