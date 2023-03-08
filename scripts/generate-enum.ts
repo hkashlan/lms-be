@@ -41,39 +41,70 @@ function enumName(myString: string) {
   return className(myString) + "Attributes";
 }
 
-function generateEnum(comp: Schema) {
-  let fileContent = `export enum ${enumName(comp.info.displayName)} {\n`;
-  Object.keys(comp.attributes).forEach((key) => {
-    fileContent += `\t${key} = "${key}",\n`;
-  });
-  fileContent += "}\n\n";
-  return fileContent;
+function generateTypeKeys(comp: Schema) {
+  let relations = "";
+  Object.keys(comp.attributes)
+    .filter(
+      (key) =>
+        comp.attributes[key].type === "relation" ||
+        comp.attributes[key].type === "component"
+    )
+    .forEach((key) => {
+      relations += `\t${key} = "${key}",\n`;
+    });
+  if (relations) {
+    let fileContent =
+      `export enum ${enumName(comp.info.displayName)} {\n` + relations;
+    fileContent += "}\n\n";
+    return fileContent;
+  } else {
+    return "";
+  }
 }
 
 function generateType(comp: Schema) {
-  let fileContent = `export class ${className(comp.info.displayName)} {\n`;
+  let fileContent = "";
+  fileContent = generateEnum(comp);
+
+  fileContent += `export class ${className(comp.info.displayName)} {\n`;
   Object.keys(comp.attributes).forEach((key) => {
-    fileContent += `\t${key}: ${getType(comp.attributes[key])};\n`;
+    fileContent += `\t${key}: ${getType(key, comp.attributes[key])};\n`;
   });
   fileContent += "}\n\n";
   return fileContent;
 }
 
-function getType(attr: Attribute) {
-  let type = getBaseType(attr);
+function generateEnum(comp: Schema) {
+  return Object.keys(comp.attributes)
+    .filter((key) => comp.attributes[key].type === "enumeration")
+    .map((key) => {
+      const attr = comp.attributes[key];
+      let fileContent = `export enum ${className(key)} {\n`;
+      fileContent += attr["enum"]
+        .map((key) => `\t${key} = "${key}",\n`)
+        .join("");
+      fileContent += `}\n\n`;
+      return fileContent;
+    })
+    .join("");
+}
+
+function getType(key: string, attr: Attribute) {
+  let type = getBaseType(key, attr);
   if (attr["repeatable"]) {
     type = type + "[]";
   }
   return type;
 }
 
-function getBaseType(attr: Attribute) {
+function getBaseType(key: string, attr: Attribute) {
   switch (attr.type) {
     case "email":
     case "password":
     case "richtext":
-    case "enumeration":
       return "string";
+    case "enumeration":
+      return className(key);
     case "integer":
       return "number";
     case "component":
@@ -85,7 +116,7 @@ function getBaseType(attr: Attribute) {
       const relation: string = attr["relation"];
       const toClass = className(attr["target"].split(".")[1]);
       const isArray =
-        relation === "oneToMany" || relation === "ManyToMany" ? "[]" : "";
+        relation === "oneToMany" || relation === "manyToMany" ? "[]" : "";
       return toClass + isArray;
 
     default:
@@ -95,7 +126,6 @@ function getBaseType(attr: Attribute) {
 
 async function saveFile(fileContent: string) {
   const filePath = "src/schema.ts";
-  // console.log(fileContent);
   fs.writeFile(
     filePath,
     // prettier.format(fileContent, { parser: "typescript" }),
@@ -114,7 +144,7 @@ async function generateSchema(): Promise<string> {
   const allTypes = await getTypes();
 
   let fileContent = "";
-  allTypes.forEach((schema) => (fileContent += generateEnum(schema)));
+  allTypes.forEach((schema) => (fileContent += generateTypeKeys(schema)));
   allTypes.forEach((schema) => (fileContent += generateType(schema)));
 
   return fileContent;
@@ -130,6 +160,7 @@ async function getTypes(): Promise<Schema[]> {
         key.startsWith("api::") || key === "plugin::users-permissions.user"
     )
     .map((key) => strapi.contentTypes[key]);
+  contentTypes.forEach((c) => (c.attributes["id"] = { type: "number" }));
   const components: Schema[] = Object.values(strapi.components);
   strapi.destroy();
   const allTypes: Schema[] = [...contentTypes, ...components];

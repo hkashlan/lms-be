@@ -21,6 +21,11 @@
       "type": "component",
       "repeatable": true,
       "component": "exam-structure.question"
+    },
+    "student_activities": {
+      "type": "component",
+      "repeatable": true,
+      "component": "course-structure.student-lesson"
     }
   }
 }

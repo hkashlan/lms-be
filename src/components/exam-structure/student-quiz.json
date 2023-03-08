@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_exam_structure_student_quizs",
+  "info": {
+    "displayName": "student-quiz"
+  },
+  "options": {},
+  "attributes": {
+    "student": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "date": {
+      "type": "datetime",
+      "required": true
+    },
+    "mark": {
+      "type": "integer"
+    }
+  }
+}

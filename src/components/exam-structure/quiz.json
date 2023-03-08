@@ -25,6 +25,11 @@
       "repeatable": true,
       "component": "exam-structure.question",
       "required": true
+    },
+    "student_quizzes": {
+      "type": "component",
+      "repeatable": true,
+      "component": "exam-structure.student-quiz"
     }
   }
 }

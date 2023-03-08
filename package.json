@@ -7,12 +7,13 @@
     "develop": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "genenrate-types": "ts-node -T scripts/generate-enum.ts"
   },
   "dependencies": {
+    "@strapi/plugin-content-manager": "4.6.2",
     "@strapi/plugin-i18n": "4.6.2",
     "@strapi/plugin-users-permissions": "4.6.2",
-    "@strapi/plugin-content-manager": "4.6.2",
     "@strapi/strapi": "4.6.2",
     "pg": "^8.9.0"
   },
