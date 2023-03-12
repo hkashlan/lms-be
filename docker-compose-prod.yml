@@ -31,7 +31,15 @@ services:
       - lms-be
     depends_on:
       - lms-beDB
-
+      - certbot
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot-etc:/etc/letsencrypt
+      - ./certbot-var:/var/lib/letsencrypt
+      - ./certbot-log:/var/log/letsencrypt
+      - ./nginx-conf:/etc/nginx/conf.d
+    command: certonly --webroot --webroot-path=/var/www/html --email your-email@example.com --agree-tos --no-eff-email -d your-domain.com
   lms-beDB:
     container_name: lms-beDB
     platform: linux/amd64 #for platform error on Apple M1 chips
@@ -43,7 +51,7 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
     volumes:
-      - lms-be-data:/var/lib/postgresql/data/ #using a volume
+      # - lms-be-data:/var/lib/postgresql/data/ #using a volume
       - ./data/postgres:/var/lib/postgresql/data/ # if you want to use a bind folder
 
     ports:
