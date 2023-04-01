@@ -13,7 +13,7 @@ services:
       DATABASE_HOST: lms-beDB
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
-      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_PORT: 5432
       JWT_SECRET: ${JWT_SECRET}
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
@@ -65,28 +65,28 @@ services:
     networks:
       - lms-be
     restart: unless-stopped
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./letsencrypt:/etc/letsencrypt
-      - ./certbot-logs:/var/log/letsencrypt
-    command: certonly --webroot --webroot-path=/var/www/html -d yourdomain.com
-    restart: unless-stopped
-    environment:
-      - EMAIL=hkashlan@gmail.com
-      - DOMAIN=manazel-alabrar.com
-  nginx:
-    image: nginx:latest
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./docker-config/nginx.conf:/etc/nginx/nginx.conf
-      - ./letsencrypt:/etc/letsencrypt
-    networks:
-      - lms-be
-    depends_on:
-      - lms-be
+  # certbot:
+  #   image: certbot/certbot
+  #   volumes:
+  #     - ./letsencrypt:/etc/letsencrypt
+  #     - ./certbot-logs:/var/log/letsencrypt
+  #   command: certonly --webroot --webroot-path=/var/www/html -d yourdomain.com
+  #   restart: unless-stopped
+  #   environment:
+  #     - EMAIL=hkashlan@gmail.com
+  #     - DOMAIN=manazel-alabrar.com
+  # nginx:
+  #   image: nginx:latest
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./docker-config/nginx.conf:/etc/nginx/nginx.conf
+  #     - ./letsencrypt:/etc/letsencrypt
+  #   networks:
+  #     - lms-be
+  #   depends_on:
+  #     - lms-be
 
 volumes:
   lms-be-data:
