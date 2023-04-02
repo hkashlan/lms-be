@@ -25,10 +25,11 @@ services:
       - ./yarn.lock:/opt/yarn.lock
       - ./.env:/opt/app/.env
       - ./public:/opt/app/public
-    ports:
-      - "1337:1337"
+#   ports:
+#      - "1337:1337"
     networks:
       - lms-be
+      - letsencrypt-docker-compose  
     depends_on:
       - lms-beDB
   lms-beDB:
@@ -45,8 +46,8 @@ services:
       # - lms-be-data:/var/lib/postgresql/data/ #using a volume
       - ./data/postgres:/var/lib/postgresql/data/ # if you want to use a bind folder
 
-    ports:
-      - "5434:5432"
+#   ports:
+#      - "5434:5432"
     networks:
       - lms-be
   pgadmin:
@@ -60,10 +61,11 @@ services:
     volumes:
       - ./data/pgadmin:/var/lib/pgadmin
 
-    ports:
-      - "5055:80"
+#    ports:
+#      - "5055:80"
     networks:
       - lms-be
+      - letsencrypt-docker-compose  
     restart: unless-stopped
   # certbot:
   #   image: certbot/certbot
@@ -95,3 +97,6 @@ networks:
   lms-be:
     name: Lms-be
     driver: bridge
+  letsencrypt-docker-compose:
+    name: letsencrypt-docker-compose_default
+    external: true
