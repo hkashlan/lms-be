@@ -8,11 +8,5 @@ export default [
   "strapi::body",
   "strapi::session",
   "strapi::favicon",
-  {
-    name: "strapi::public",
-    config: {
-      defaultIndex: false,
-    },
-  },
-  "global::homepage",
+  "strapi::public",
 ];
