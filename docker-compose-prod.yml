@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile
     environment:
       API_URL: https://lms-be.manazel-alabrar.com
+    networks:
+      - letsencrypt-docker-compose
 
   lms-be:
     container_name: lms-be
