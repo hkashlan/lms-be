@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_exam_structure_quizzes",
+  "info": {
+    "displayName": "quiz"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "dateFrom": {
+      "type": "datetime",
+      "required": true
+    },
+    "dateTo": {
+      "type": "datetime",
+      "required": true
+    },
+    "mark": {
+      "type": "integer"
+    },
+    "questions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "exam-structure.question",
+      "required": true
+    },
+    "student_quizzes": {
+      "type": "component",
+      "repeatable": true,
+      "component": "exam-structure.student-quiz"
+    }
+  }
+}

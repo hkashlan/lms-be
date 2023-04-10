@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_exam_structure_questions",
+  "info": {
+    "displayName": "question"
+  },
+  "options": {},
+  "attributes": {
+    "questionType": {
+      "type": "enumeration",
+      "enum": [
+        "SingleChoice",
+        "MultiChoice"
+      ],
+      "required": true,
+      "default": "SingleChoice"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "answers": {
+      "type": "component",
+      "repeatable": true,
+      "component": "exam-structure.answer",
+      "required": true
+    }
+  }
+}

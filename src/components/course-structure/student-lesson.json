@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_course_structure_student_lessons",
+  "info": {
+    "displayName": "student-lesson"
+  },
+  "options": {},
+  "attributes": {
+    "student": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "done": {
+      "type": "boolean"
+    },
+    "mark": {
+      "type": "integer"
+    }
+  }
+}
