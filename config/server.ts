@@ -1,7 +1,7 @@
 export default ({ env }) => ({
   host: env("HOST", "0.0.0.0"),
   port: env.int("PORT", 1337),
-  url: "https://manazel-alabrar.com/",
+  url: env('' , "https://lms-be.manazel-alabrar.com/"),
   app: {
     keys: env.array("APP_KEYS"),
   },
