@@ -120,3 +120,4 @@ build
 data
 
 public
+.env
