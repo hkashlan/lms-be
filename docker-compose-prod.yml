@@ -35,8 +35,6 @@ services:
       - ./yarn.lock:/opt/yarn.lock
       - ./.env:/opt/app/.env
       - ./public:/opt/app/public
-    #   ports:
-    #      - "1337:1337"
     networks:
       - lms-be
       - letsencrypt-docker-compose
@@ -53,11 +51,7 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
     volumes:
-      # - lms-be-data:/var/lib/postgresql/data/ #using a volume
       - ./data/postgres:/var/lib/postgresql/data/ # if you want to use a bind folder
-
-    #   ports:
-    #      - "5434:5432"
     networks:
       - lms-be
   pgadmin:
@@ -70,38 +64,10 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: "False"
     volumes:
       - ./data/pgadmin:/var/lib/pgadmin
-
-    #    ports:
-    #      - "5055:80"
     networks:
       - lms-be
       - letsencrypt-docker-compose
     restart: unless-stopped
-  # certbot:
-  #   image: certbot/certbot
-  #   volumes:
-  #     - ./letsencrypt:/etc/letsencrypt
-  #     - ./certbot-logs:/var/log/letsencrypt
-  #   command: certonly --webroot --webroot-path=/var/www/html -d yourdomain.com
-  #   restart: unless-stopped
-  #   environment:
-  #     - EMAIL=hkashlan@gmail.com
-  #     - DOMAIN=manazel-alabrar.com
-  # nginx:
-  #   image: nginx:latest
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./docker-config/nginx.conf:/etc/nginx/nginx.conf
-  #     - ./letsencrypt:/etc/letsencrypt
-  #   networks:
-  #     - lms-be
-  #   depends_on:
-  #     - lms-be
-
-volumes:
-  lms-be-data:
 
 networks:
   lms-be:
