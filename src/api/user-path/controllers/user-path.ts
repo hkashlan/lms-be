@@ -146,19 +146,19 @@ function mapUserToStudent(user: User): BFF.Student {
     title: user.username,
     lastTitle: "",
     image: "",
-    paths: user.paths.map(
+    paths: user.pathInstances.map(
       (f) =>
         ({
-          id: f.id,
-          title: f.title,
-          description: f.description,
+          id: f.path.id,
+          title: f.path.title,
+          description: f.path.description,
           progress: arrPercentage(
             user.courses,
-            (c) => c.path.id === f.id && !!c.mark
+            (c) => c.path.id === f.path.id && !!c.mark
           ),
           courses: user.courses.map((c) => ({
             id: c.course_instance.id,
-            facultyId: f.id,
+            facultyId: f.path.id,
             title: c.course_instance.title,
             description: c.course_instance.description,
             dateFrom: c.course_instance.dateFrom,
