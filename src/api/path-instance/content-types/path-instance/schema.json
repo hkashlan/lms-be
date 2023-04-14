@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "path_instances",
+  "info": {
+    "singularName": "path-instance",
+    "pluralName": "path-instances",
+    "displayName": "path-instance",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "path": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::path.path",
+      "inversedBy": "path_instances"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext",
+      "required": true
+    },
+    "dateFrom": {
+      "type": "date"
+    },
+    "dateTo": {
+      "type": "date"
+    },
+    "teacher": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "teacherFor"
+    },
+    "numberOfStudents": {
+      "type": "integer",
+      "required": true
+    }
+  }
+}

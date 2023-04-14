@@ -15,10 +15,10 @@
       "relation": "oneToOne",
       "target": "api::course-instance.course-instance"
     },
-    "faculty": {
+    "path": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::faculty.faculty"
+      "target": "api::path.path"
     },
     "mark": {
       "type": "integer"

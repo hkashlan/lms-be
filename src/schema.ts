@@ -1,24 +1,31 @@
+export enum UserAttributes {
+	teacherFor = "teacherFor",
+	paths = "paths",
+	courses = "courses",
+	pathInstances = "pathInstances",
+}
+
 export enum CourseAttributes {
 	course_instances = "course_instances",
-	faculty = "faculty",
+	path = "path",
 }
 
 export enum CourseInstanceAttributes {
 	course = "course",
 	lessons = "lessons",
 	quizzes = "quizzes",
+}
+
+export enum PathAttributes {
+	courses = "courses",
 	teacher = "teacher",
-}
-
-export enum FacultyAttributes {
-	courses = "courses",
 	students = "students",
+	path_instances = "path_instances",
 }
 
-export enum UserAttributes {
-	teacherFor = "teacherFor",
-	faculties = "faculties",
-	courses = "courses",
+export enum PathInstanceAttributes {
+	path = "path",
+	teacher = "teacher",
 }
 
 export enum LessonAttributes {
@@ -46,35 +53,12 @@ export enum StudentQuizAttributes {
 export enum CourseResultAttributes {
 	course = "course",
 	course_instance = "course_instance",
-	faculty = "faculty",
+	path = "path",
 }
 
-export class Course {
-	title: string;
-	course_instances: CourseInstance[];
-	faculty: Faculty;
-	id: number;
-}
-
-export class CourseInstance {
-	course: Course;
-	title: string;
-	description: string;
-	dateFrom: Date;
-	dateTo: Date;
-	lessons: Lesson[];
-	quizzes: Quiz[];
-	teacher: User;
-	numberOfStudents: number;
-	id: number;
-}
-
-export class Faculty {
-	title: string;
-	description: string;
-	courses: Course[];
-	students: User[];
-	id: number;
+export enum PathResultAttributes {
+	path = "path",
+	path_instance = "path_instance",
 }
 
 export class User {
@@ -86,9 +70,50 @@ export class User {
 	confirmationToken: string;
 	confirmed: boolean;
 	blocked: boolean;
-	teacherFor: CourseInstance[];
-	faculties: Faculty[];
+	teacherFor: PathInstance[];
+	paths: Path[];
 	courses: CourseResult[];
+	pathInstances: PathResult[];
+	id: number;
+}
+
+export class Course {
+	title: string;
+	course_instances: CourseInstance[];
+	path: Path;
+	id: number;
+}
+
+export class CourseInstance {
+	course: Course;
+	title: string;
+	description: string;
+	dateFrom: Date;
+	dateTo: Date;
+	lessons: Lesson[];
+	quizzes: Quiz[];
+	id: number;
+}
+
+export class Path {
+	title: string;
+	description: string;
+	courses: Course[];
+	teacher: User;
+	students: User[];
+	path_instances: PathInstance[];
+	id: number;
+}
+
+export class PathInstance {
+	path: Path;
+	title: string;
+	description: string;
+	dateFrom: Date;
+	dateTo: Date;
+	teacher: User;
+	numberOfStudents: number;
+	publishedAt: Date;
 	id: number;
 }
 
@@ -140,7 +165,12 @@ export class StudentQuiz {
 export class CourseResult {
 	course: Course;
 	course_instance: CourseInstance;
-	faculty: Faculty;
+	path: Path;
 	mark: number;
+}
+
+export class PathResult {
+	path: Path;
+	path_instance: PathInstance;
 }
 

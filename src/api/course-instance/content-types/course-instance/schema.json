@@ -42,16 +42,6 @@
       "type": "component",
       "repeatable": true,
       "component": "exam-structure.quiz"
-    },
-    "teacher": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "teacherFor"
-    },
-    "numberOfStudents": {
-      "type": "integer",
-      "required": true
     }
   }
 }

@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_student_info_path_results",
+  "info": {
+    "displayName": "path-result"
+  },
+  "options": {},
+  "attributes": {
+    "path": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::path.path"
+    },
+    "path_instance": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::path-instance.path-instance"
+    }
+  }
+}

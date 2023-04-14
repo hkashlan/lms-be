@@ -59,6 +59,6 @@ export namespace BFF {
     title: string;
     lastTitle: string;
     image: string;
-    faculties: Faculty[];
+    paths: Faculty[];
   }
 }

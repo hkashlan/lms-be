@@ -1,5 +1,5 @@
 /**
- * A set of functions called "actions" for `user-faculty`
+ * A set of functions called "actions" for `user-path`
  */
 
 import {
@@ -9,6 +9,7 @@ import {
   CourseResultAttributes,
   Lesson,
   LessonAttributes,
+  PathResultAttributes,
   QuestionAttributes,
   Quiz,
   QuizAttributes,
@@ -74,17 +75,22 @@ function getQuizzes() {
 function getUserPopulate() {
   const user = {
     populate: {
-      [UserAttributes.faculties]: "*",
+      [UserAttributes.paths]: "*",
+      [UserAttributes.pathInstances]: {
+        populate: {
+          [PathResultAttributes.path]: "*",
+          [PathResultAttributes.path_instance]: "*",
+        },
+      },
       [UserAttributes.courses]: {
         populate: {
           [CourseResultAttributes.course_instance]: {
             populate: {
               ...getLessonPopulate(),
               ...getQuizzes(),
-              [CourseInstanceAttributes.teacher]: "*",
             },
           },
-          [CourseResultAttributes.faculty]: "*",
+          [CourseResultAttributes.path]: "*",
         },
       },
     },
@@ -93,7 +99,7 @@ function getUserPopulate() {
 }
 
 export default {
-  myFaculties: async (ctx: Context, next: Next) => {
+  myPaths: async (ctx: Context, next: Next) => {
     try {
       // const user: User = await strapi.services[
       //   "plugin::content-manager.entity-manager"
@@ -114,7 +120,7 @@ export default {
       // {
       //   where: { id: 1 },
       //   populate: {
-      //     [UserAttributes.faculties]: "*",
+      //     [UserAttributes.paths]: "*",
       //     [UserAttributes.courses]: {
       //       populate: {
       //         [CourseAttributes.course_instances]: "*",
@@ -140,7 +146,7 @@ function mapUserToStudent(user: User): BFF.Student {
     title: user.username,
     lastTitle: "",
     image: "",
-    faculties: user.faculties.map(
+    paths: user.paths.map(
       (f) =>
         ({
           id: f.id,
@@ -148,7 +154,7 @@ function mapUserToStudent(user: User): BFF.Student {
           description: f.description,
           progress: arrPercentage(
             user.courses,
-            (c) => c.faculty.id === f.id && !!c.mark
+            (c) => c.path.id === f.id && !!c.mark
           ),
           courses: user.courses.map((c) => ({
             id: c.course_instance.id,

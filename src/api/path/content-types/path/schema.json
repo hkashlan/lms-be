@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "faculties",
+  "collectionName": "paths",
   "info": {
-    "singularName": "faculty",
-    "pluralName": "faculties",
-    "displayName": "faculty",
+    "singularName": "path",
+    "pluralName": "paths",
+    "displayName": "path",
     "description": ""
   },
   "options": {
@@ -24,13 +24,25 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::course.course",
-      "mappedBy": "faculty"
+      "mappedBy": "path"
+    },
+    "teacher": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "teacherFor"
     },
     "students": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "faculties"
+      "inversedBy": "paths"
+    },
+    "path_instances": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::path-instance.path-instance",
+      "mappedBy": "path"
     }
   }
 }
