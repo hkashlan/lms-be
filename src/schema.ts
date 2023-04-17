@@ -1,59 +1,172 @@
-export enum UserAttributes {
+export enum UserRelations {
 	teacherFor = "teacherFor",
 	paths = "paths",
 	courses = "courses",
 	pathInstances = "pathInstances",
+	pathInstanceRefs = "pathInstanceRefs",
 }
 
-export enum CourseAttributes {
+export enum CourseRelations {
 	course_instances = "course_instances",
 	path = "path",
 }
 
-export enum CourseInstanceAttributes {
+export enum CourseInstanceRelations {
 	course = "course",
 	lessons = "lessons",
 	quizzes = "quizzes",
 }
 
-export enum PathAttributes {
+export enum PathRelations {
 	courses = "courses",
 	teacher = "teacher",
 	students = "students",
 	path_instances = "path_instances",
 }
 
-export enum PathInstanceAttributes {
+export enum PathInstanceRelations {
 	path = "path",
 	teacher = "teacher",
+	students = "students",
+}
+
+export enum LessonRelations {
+	questions = "questions",
+	student_activities = "student_activities",
+}
+
+export enum StudentLessonRelations {
+	student = "student",
+}
+
+export enum QuestionRelations {
+	answers = "answers",
+}
+
+export enum QuizRelations {
+	questions = "questions",
+	student_quizzes = "student_quizzes",
+}
+
+export enum StudentQuizRelations {
+	student = "student",
+}
+
+export enum CourseResultRelations {
+	course = "course",
+	course_instance = "course_instance",
+	path = "path",
+}
+
+export enum PathResultRelations {
+	path = "path",
+	path_instance = "path_instance",
+}
+
+export enum UserAttributes {
+	username = "username",
+	email = "email",
+	provider = "provider",
+	password = "password",
+	resetPasswordToken = "resetPasswordToken",
+	confirmationToken = "confirmationToken",
+	confirmed = "confirmed",
+	blocked = "blocked",
+	teacherFor = "teacherFor",
+	paths = "paths",
+	courses = "courses",
+	pathInstances = "pathInstances",
+	pathInstanceRefs = "pathInstanceRefs",
+	id = "id",
+}
+
+export enum CourseAttributes {
+	title = "title",
+	course_instances = "course_instances",
+	path = "path",
+	id = "id",
+}
+
+export enum CourseInstanceAttributes {
+	course = "course",
+	title = "title",
+	description = "description",
+	dateFrom = "dateFrom",
+	dateTo = "dateTo",
+	lessons = "lessons",
+	quizzes = "quizzes",
+	id = "id",
+}
+
+export enum PathAttributes {
+	title = "title",
+	description = "description",
+	courses = "courses",
+	teacher = "teacher",
+	students = "students",
+	path_instances = "path_instances",
+	id = "id",
+}
+
+export enum PathInstanceAttributes {
+	path = "path",
+	title = "title",
+	description = "description",
+	dateFrom = "dateFrom",
+	dateTo = "dateTo",
+	teacher = "teacher",
+	numberOfStudents = "numberOfStudents",
+	numberOfRegisteredStudents = "numberOfRegisteredStudents",
+	stillOpen = "stillOpen",
+	students = "students",
+	id = "id",
 }
 
 export enum LessonAttributes {
+	title = "title",
+	description = "description",
+	date = "date",
 	questions = "questions",
 	student_activities = "student_activities",
 }
 
 export enum StudentLessonAttributes {
 	student = "student",
+	done = "done",
+	mark = "mark",
+}
+
+export enum AnswerAttributes {
+	title = "title",
+	correct = "correct",
 }
 
 export enum QuestionAttributes {
+	questionType = "questionType",
+	title = "title",
 	answers = "answers",
 }
 
 export enum QuizAttributes {
+	title = "title",
+	dateFrom = "dateFrom",
+	dateTo = "dateTo",
+	mark = "mark",
 	questions = "questions",
 	student_quizzes = "student_quizzes",
 }
 
 export enum StudentQuizAttributes {
 	student = "student",
+	date = "date",
+	mark = "mark",
 }
 
 export enum CourseResultAttributes {
 	course = "course",
 	course_instance = "course_instance",
 	path = "path",
+	mark = "mark",
 }
 
 export enum PathResultAttributes {
@@ -74,6 +187,7 @@ export class User {
 	paths: Path[];
 	courses: CourseResult[];
 	pathInstances: PathResult[];
+	pathInstanceRefs: PathInstance[];
 	id: number;
 }
 
@@ -113,7 +227,9 @@ export class PathInstance {
 	dateTo: Date;
 	teacher: User;
 	numberOfStudents: number;
-	publishedAt: Date;
+	numberOfRegisteredStudents: number;
+	stillOpen: boolean;
+	students: User[];
 	id: number;
 }
 

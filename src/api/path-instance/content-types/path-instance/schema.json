@@ -41,6 +41,22 @@
     "numberOfStudents": {
       "type": "integer",
       "required": true
+    },
+    "numberOfRegisteredStudents": {
+      "type": "integer",
+      "required": true,
+      "default": 0
+    },
+    "stillOpen": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "students": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "pathInstanceRefs"
     }
   }
 }

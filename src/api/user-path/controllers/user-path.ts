@@ -3,20 +3,24 @@
  */
 
 import {
-  CourseAttributes,
+  CourseRelations,
   CourseInstance,
-  CourseInstanceAttributes,
-  CourseResultAttributes,
+  CourseInstanceRelations,
+  CourseResultRelations,
   Lesson,
-  LessonAttributes,
-  PathResultAttributes,
-  QuestionAttributes,
+  LessonRelations,
+  PathInstanceRelations,
+  PathResultRelations,
+  QuestionRelations,
   Quiz,
-  QuizAttributes,
-  StudentLessonAttributes,
-  StudentQuizAttributes,
+  QuizRelations,
+  StudentLessonRelations,
+  StudentQuizRelations,
   User,
+  UserRelations,
+  PathInstanceAttributes,
   UserAttributes,
+  PathInstance,
 } from "../../../schema";
 
 const getUserId = async (ctx) => {
@@ -30,15 +34,15 @@ const getUserId = async (ctx) => {
 
   return userId;
 };
-// BFF.Student
+// BFF.myPaths.Student
 import { Context, Next } from "koa";
 import { BFF } from "../../../schema-bff";
 
 function getQuestions() {
   return {
-    [LessonAttributes.questions]: {
+    [LessonRelations.questions]: {
       populate: {
-        [QuestionAttributes.answers]: "*",
+        [QuestionRelations.answers]: "*",
       },
     },
   };
@@ -46,11 +50,11 @@ function getQuestions() {
 
 function getLessonPopulate() {
   return {
-    [CourseInstanceAttributes.lessons]: {
+    [CourseInstanceRelations.lessons]: {
       populate: {
         ...getQuestions(),
-        [LessonAttributes.student_activities]: {
-          [StudentLessonAttributes.student]: "*",
+        [LessonRelations.student_activities]: {
+          [StudentLessonRelations.student]: "*",
         },
       },
     },
@@ -59,12 +63,12 @@ function getLessonPopulate() {
 
 function getQuizzes() {
   return {
-    [CourseInstanceAttributes.quizzes]: {
+    [CourseInstanceRelations.quizzes]: {
       populate: {
         ...getQuestions(),
-        [QuizAttributes.student_quizzes]: {
+        [QuizRelations.student_quizzes]: {
           populate: {
-            [StudentQuizAttributes.student]: "*",
+            [StudentQuizRelations.student]: "*",
           },
         },
       },
@@ -75,22 +79,22 @@ function getQuizzes() {
 function getUserPopulate() {
   const user = {
     populate: {
-      [UserAttributes.paths]: "*",
-      [UserAttributes.pathInstances]: {
+      [UserRelations.paths]: "*",
+      [UserRelations.pathInstances]: {
         populate: {
-          [PathResultAttributes.path]: "*",
-          [PathResultAttributes.path_instance]: "*",
+          [PathResultRelations.path]: "*",
+          [PathResultRelations.path_instance]: "*",
         },
       },
-      [UserAttributes.courses]: {
+      [UserRelations.courses]: {
         populate: {
-          [CourseResultAttributes.course_instance]: {
+          [CourseResultRelations.course_instance]: {
             populate: {
               ...getLessonPopulate(),
               ...getQuizzes(),
             },
           },
-          [CourseResultAttributes.path]: "*",
+          [CourseResultRelations.path]: "*",
         },
       },
     },
@@ -101,9 +105,6 @@ function getUserPopulate() {
 export default {
   myPaths: async (ctx: Context, next: Next) => {
     try {
-      // const user: User = await strapi.services[
-      //   "plugin::content-manager.entity-manager"
-      // ].findOne(1, "plugin::users-permissions.user");
       const userId = await getUserId(ctx);
       const user = await strapi
         .query("plugin::users-permissions.user")
@@ -111,27 +112,8 @@ export default {
           where: { id: userId },
           ...getUserPopulate(),
         });
-      const student: BFF.Student = mapUserToStudent(user);
-      // const userId = await getUserId(ctx);
-      // const tt = getDeepPopulate("plugin::users-permissions.user");
-      // const user = await strapi.entityService.findOne(
-      //   "plugin::users-permissions.user",
-      //   1
-      // {
-      //   where: { id: 1 },
-      //   populate: {
-      //     [UserAttributes.paths]: "*",
-      //     [UserAttributes.courses]: {
-      //       populate: {
-      //         [CourseAttributes.course_instances]: "*",
-      //       },
-      //     },
-      //   },
-      // }
-      // );
-      // const user = await strapi.query["plugin::users-permissions.user"]
-      //   .findOne({ id: 1 })
-      //   .populateDeep();
+
+      const student: BFF.myPaths.Student = mapUserToStudent(user);
 
       ctx.body = student;
     } catch (err) {
@@ -139,10 +121,55 @@ export default {
       ctx.body = err;
     }
   },
+
+  openPaths: async (ctx: Context, next: Next) => {
+    try {
+      // const user: User = await strapi.services[
+      //   "plugin::content-manager.entity-manager"
+      // ].findOne(1, "plugin::users-permissions.user");
+      const userId = await getUserId(ctx);
+      const user: User = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({
+          where: { id: userId },
+          populate: {
+            [UserRelations.paths]: "*",
+          },
+        });
+      const pathTakenIds = user.paths.map((path) => path.id);
+
+      const openPaths: PathInstance[] = await strapi
+        .query("api::path-instance.path-instance")
+        .findMany({
+          where: {
+            [PathInstanceAttributes.stillOpen]: true,
+            [PathInstanceAttributes.students]: {
+              $or: [
+                {
+                  [UserAttributes.id]: { $ne: userId },
+                },
+                {
+                  [UserAttributes.id]: { $null: true },
+                },
+              ],
+            },
+          },
+          populate: {
+            [PathInstanceRelations.path]: "*",
+          },
+        });
+
+      openPaths.filter((path) => !pathTakenIds.includes(path.path.id));
+      ctx.body = openPaths;
+    } catch (err) {
+      console.error(err);
+      ctx.body = err;
+    }
+  },
 };
 
-function mapUserToStudent(user: User): BFF.Student {
-  const student: BFF.Student = {
+function mapUserToStudent(user: User): BFF.myPaths.Student {
+  const student: BFF.myPaths.Student = {
     title: user.username,
     lastTitle: "",
     image: "",
@@ -158,7 +185,7 @@ function mapUserToStudent(user: User): BFF.Student {
           ),
           courses: user.courses.map((c) => ({
             id: c.course_instance.id,
-            facultyId: f.path.id,
+            pathId: f.path.id,
             title: c.course_instance.title,
             description: c.course_instance.description,
             dateFrom: c.course_instance.dateFrom,
@@ -171,7 +198,7 @@ function mapUserToStudent(user: User): BFF.Student {
             lessons: mapLessonsToBffLessons(c.course_instance.lessons, user.id),
             quizzes: mapQuizzesToBffQuizzes(c.course_instance.quizzes, user.id),
           })),
-        } as BFF.Faculty)
+        } as BFF.myPaths.Path)
     ),
   };
   return student;

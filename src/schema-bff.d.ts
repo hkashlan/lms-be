@@ -1,4 +1,55 @@
 export namespace BFF {
+  export namespace myPaths {
+    export interface Course {
+      id: number;
+      pathId: number;
+      title: string;
+      description: string;
+      dateFrom: Date;
+      dateTo: Date;
+      lessons: Lesson[];
+      progress: number;
+      quizzes: Quiz[];
+    }
+
+    export interface PathInfo {
+      id: number;
+      title: string;
+      description: string;
+    }
+
+    export interface Path extends PathInfo {
+      courses: Course[];
+      progress: number;
+    }
+
+    export interface Student {
+      title: string;
+      lastTitle: string;
+      image: string;
+      paths: Path[];
+    }
+  }
+
+  export namespace openPath {
+    export class Path {
+      title: string;
+      description: string;
+      id: number;
+    }
+    export interface PathInstance {
+      path: Path;
+      title: string;
+      description: string;
+      dateFrom: Date;
+      dateTo: Date;
+      teacher: User;
+      numberOfStudents: number;
+      numberOfRegisteredStudents: number;
+      stillOpen: boolean;
+      id: number;
+    }
+  }
   export interface Answer {
     title: string;
     correct: boolean;
@@ -33,32 +84,5 @@ export namespace BFF {
     title: string;
     questions: Question[];
     mark?: number;
-  }
-
-  export interface Course {
-    id: number;
-    facultyId: number;
-    title: string;
-    description: string;
-    dateFrom: Date;
-    dateTo: Date;
-    lessons: Lesson[];
-    progress: number;
-    quizzes: Quiz[];
-  }
-
-  export interface Faculty {
-    id: number;
-    title: string;
-    description: string;
-    courses: Course[];
-    progress: number;
-  }
-
-  export interface Student {
-    title: string;
-    lastTitle: string;
-    image: string;
-    paths: Faculty[];
   }
 }

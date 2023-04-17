@@ -84,6 +84,12 @@
       "type": "component",
       "repeatable": true,
       "component": "student-info.path-result"
+    },
+    "pathInstanceRefs": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::path-instance.path-instance",
+      "mappedBy": "students"
     }
   }
 }
