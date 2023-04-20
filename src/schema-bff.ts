@@ -1,4 +1,11 @@
 export namespace BFF {
+  export interface Response<T> {
+    data?: T;
+    error?: {
+      message: string;
+    };
+  }
+
   export namespace myPaths {
     export interface Course {
       id: number;
@@ -29,6 +36,8 @@ export namespace BFF {
       image: string;
       paths: Path[];
     }
+
+    export type OpenPathResponse = Response<Student>;
   }
 
   export namespace openPath {
@@ -43,13 +52,22 @@ export namespace BFF {
       description: string;
       dateFrom: Date;
       dateTo: Date;
-      teacher: User;
       numberOfStudents: number;
       numberOfRegisteredStudents: number;
       stillOpen: boolean;
       id: number;
     }
+
+    export type OpenPathResponse = Response<PathInstance[]>;
   }
+
+  export namespace register {
+    export enum Errors {
+      PATH_NOT_FOUND = "PATH_NOT_FOUND",
+    }
+    export type OpenPathResponse = Response<openPath.PathInstance[]>;
+  }
+
   export interface Answer {
     title: string;
     correct: boolean;

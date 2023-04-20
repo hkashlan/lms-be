@@ -18,5 +18,14 @@ export default {
         policies: ["global::is-authenticated"],
       },
     },
+    {
+      method: "GET",
+      path: "/user/open-paths/register/:id",
+      handler: "user-path.register",
+      config: {
+        // https://docs.strapi.io/dev-docs/backend-customization/policies
+        policies: ["global::is-authenticated"],
+      },
+    },
   ],
 };
