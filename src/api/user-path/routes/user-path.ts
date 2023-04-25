@@ -27,5 +27,14 @@ export default {
         policies: ["global::is-authenticated"],
       },
     },
+    {
+      method: "POST",
+      path: "/user/open-paths/save-profile",
+      handler: "user-path.saveProfile",
+      config: {
+        // https://docs.strapi.io/dev-docs/backend-customization/policies
+        policies: ["global::is-authenticated"],
+      },
+    },
   ],
 };

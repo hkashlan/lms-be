@@ -13,6 +13,17 @@
     "timestamps": true
   },
   "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "string"
+    },
     "username": {
       "type": "string",
       "minLength": 3,

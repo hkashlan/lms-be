@@ -13,6 +13,7 @@ export enum CourseRelations {
 
 export enum CourseInstanceRelations {
 	course = "course",
+	path_instance = "path_instance",
 	lessons = "lessons",
 	quizzes = "quizzes",
 }
@@ -27,6 +28,7 @@ export enum PathRelations {
 export enum PathInstanceRelations {
 	path = "path",
 	teacher = "teacher",
+	course_instances = "course_instances",
 	students = "students",
 }
 
@@ -77,6 +79,9 @@ export enum UserAttributes {
 	courses = "courses",
 	pathInstances = "pathInstances",
 	pathInstanceRefs = "pathInstanceRefs",
+	firstName = "firstName",
+	lastName = "lastName",
+	status = "status",
 	id = "id",
 }
 
@@ -89,6 +94,7 @@ export enum CourseAttributes {
 
 export enum CourseInstanceAttributes {
 	course = "course",
+	path_instance = "path_instance",
 	title = "title",
 	description = "description",
 	dateFrom = "dateFrom",
@@ -118,6 +124,7 @@ export enum PathInstanceAttributes {
 	numberOfStudents = "numberOfStudents",
 	numberOfRegisteredStudents = "numberOfRegisteredStudents",
 	stillOpen = "stillOpen",
+	course_instances = "course_instances",
 	students = "students",
 	id = "id",
 }
@@ -188,6 +195,9 @@ export class User {
 	courses: CourseResult[];
 	pathInstances: PathResult[];
 	pathInstanceRefs: PathInstance[];
+	firstName: string;
+	lastName: string;
+	status: string;
 	id: number;
 }
 
@@ -200,6 +210,7 @@ export class Course {
 
 export class CourseInstance {
 	course: Course;
+	path_instance: PathInstance;
 	title: string;
 	description: string;
 	dateFrom: Date;
@@ -229,6 +240,7 @@ export class PathInstance {
 	numberOfStudents: number;
 	numberOfRegisteredStudents: number;
 	stillOpen: boolean;
+	course_instances: CourseInstance[];
 	students: User[];
 	id: number;
 }

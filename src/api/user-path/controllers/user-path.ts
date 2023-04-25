@@ -108,7 +108,7 @@ export default {
     const response: BFF.Response<BFF.myPaths.Student> = {};
     try {
       const userId = await getUserId(ctx);
-      const user = await getUser(userId);
+      const user = await getUser(userId, getUserPopulate().populate);
 
       const student: BFF.myPaths.Student = mapUserToStudent(user);
 
@@ -153,6 +153,26 @@ export default {
     }
     ctx.body = response;
   },
+
+  saveProfile: async (ctx: Context, next: Next) => {
+    const response: BFF.saveProfile.response = {};
+    const user = ctx.state.user;
+
+    const { firstName, lastName } = ctx.request.body;
+    await strapi.query("plugin::users-permissions.user").update({
+      where: { id: user.id },
+      data: {
+        firstName,
+        lastName,
+      },
+    });
+
+    response.data = {
+      firstName,
+      lastName,
+    };
+    ctx.body = response;
+  },
 };
 
 async function registerStudentDB(user: User, path: PathInstance) {
@@ -185,20 +205,17 @@ async function registerStudentDB(user: User, path: PathInstance) {
   });
 }
 
-async function getUser(userId: any): Promise<User> {
+async function getUser(userId: any, populate?: any): Promise<User> {
   return await strapi.query("plugin::users-permissions.user").findOne({
     where: { id: userId },
-    ...getUserPopulate(),
+    populate,
   });
 }
 
 async function getUserForPath(userId: any): Promise<User> {
-  return await strapi.query("plugin::users-permissions.user").findOne({
-    where: { id: userId },
-    populate: {
-      [UserRelations.paths]: "*",
-      [UserRelations.pathInstances]: "*",
-    },
+  return await getUser(userId, {
+    [UserRelations.paths]: "*",
+    [UserRelations.pathInstances]: "*",
   });
 }
 
@@ -245,6 +262,8 @@ async function getAvailablePathsForStudent(userId: any, withStudents = false) {
 function mapUserToStudent(user: User): BFF.myPaths.Student {
   const student: BFF.myPaths.Student = {
     title: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
     lastTitle: "",
     image: "",
     paths: user.pathInstances.map(

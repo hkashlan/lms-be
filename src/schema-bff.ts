@@ -31,13 +31,15 @@ export namespace BFF {
     }
 
     export interface Student {
+      firstName: string;
+      lastName: string;
       title: string;
       lastTitle: string;
       image: string;
       paths: Path[];
     }
 
-    export type OpenPathResponse = Response<Student>;
+    export type response = Response<Student>;
   }
 
   export namespace openPath {
@@ -58,14 +60,23 @@ export namespace BFF {
       id: number;
     }
 
-    export type OpenPathResponse = Response<PathInstance[]>;
+    export type response = Response<PathInstance[]>;
+  }
+
+  export namespace saveProfile {
+    export interface Profile {
+      firstName: string;
+      lastName: string;
+    }
+
+    export type response = Response<Profile>;
   }
 
   export namespace register {
     export enum Errors {
       PATH_NOT_FOUND = "PATH_NOT_FOUND",
     }
-    export type OpenPathResponse = Response<openPath.PathInstance[]>;
+    export type response = Response<openPath.PathInstance[]>;
   }
 
   export interface Answer {
