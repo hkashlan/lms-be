@@ -52,6 +52,12 @@
       "required": true,
       "default": true
     },
+    "course_instances": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course-instance.course-instance",
+      "mappedBy": "path_instance"
+    },
     "students": {
       "type": "relation",
       "relation": "manyToMany",

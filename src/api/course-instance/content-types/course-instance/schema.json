@@ -18,6 +18,12 @@
       "target": "api::course.course",
       "inversedBy": "course_instances"
     },
+    "path_instance": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::path-instance.path-instance",
+      "inversedBy": "course_instances"
+    },
     "title": {
       "type": "string",
       "required": true
