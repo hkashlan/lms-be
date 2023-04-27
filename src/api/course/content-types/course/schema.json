@@ -22,10 +22,10 @@
       "target": "api::course-instance.course-instance",
       "mappedBy": "course"
     },
-    "faculty": {
+    "path": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::faculty.faculty",
+      "target": "api::path.path",
       "inversedBy": "courses"
     }
   }

@@ -13,6 +13,17 @@
     "timestamps": true
   },
   "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "string"
+    },
     "username": {
       "type": "string",
       "minLength": 3,
@@ -66,19 +77,30 @@
     "teacherFor": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::course-instance.course-instance",
+      "target": "api::path-instance.path-instance",
       "mappedBy": "teacher"
     },
-    "faculties": {
+    "paths": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::faculty.faculty",
+      "target": "api::path.path",
       "mappedBy": "students"
     },
     "courses": {
       "type": "component",
       "repeatable": true,
       "component": "student-info.course-result"
+    },
+    "pathInstances": {
+      "type": "component",
+      "repeatable": true,
+      "component": "student-info.path-result"
+    },
+    "pathInstanceRefs": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::path-instance.path-instance",
+      "mappedBy": "students"
     }
   }
 }

@@ -38,10 +38,14 @@ function className(myString: string) {
 }
 
 function enumName(myString: string) {
+  return className(myString) + "Relations";
+}
+
+function enumNameAttributes(myString: string) {
   return className(myString) + "Attributes";
 }
 
-function generateTypeKeys(comp: Schema) {
+function generateTypeRelations(comp: Schema) {
   let relations = "";
   Object.keys(comp.attributes)
     .filter(
@@ -55,6 +59,22 @@ function generateTypeKeys(comp: Schema) {
   if (relations) {
     let fileContent =
       `export enum ${enumName(comp.info.displayName)} {\n` + relations;
+    fileContent += "}\n\n";
+    return fileContent;
+  } else {
+    return "";
+  }
+}
+
+function generateTypeAttributes(comp: Schema) {
+  let relations = "";
+  Object.keys(comp.attributes).forEach((key) => {
+    relations += `\t${key} = "${key}",\n`;
+  });
+  if (relations) {
+    let fileContent =
+      `export enum ${enumNameAttributes(comp.info.displayName)} {\n` +
+      relations;
     fileContent += "}\n\n";
     return fileContent;
   } else {
@@ -144,7 +164,8 @@ async function generateSchema(): Promise<string> {
   const allTypes = await getTypes();
 
   let fileContent = "";
-  allTypes.forEach((schema) => (fileContent += generateTypeKeys(schema)));
+  allTypes.forEach((schema) => (fileContent += generateTypeRelations(schema)));
+  allTypes.forEach((schema) => (fileContent += generateTypeAttributes(schema)));
   allTypes.forEach((schema) => (fileContent += generateType(schema)));
 
   return fileContent;
