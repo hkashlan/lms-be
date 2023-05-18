@@ -1,3 +1,4 @@
+export class media {url: string}
 export enum UserRelations {
 	teacherFor = "teacherFor",
 	paths = "paths",
@@ -14,6 +15,7 @@ export enum CourseRelations {
 export enum CourseInstanceRelations {
 	course = "course",
 	path_instance = "path_instance",
+	book = "book",
 	lessons = "lessons",
 	quizzes = "quizzes",
 }
@@ -66,6 +68,9 @@ export enum PathResultRelations {
 }
 
 export enum UserAttributes {
+	firstName = "firstName",
+	lastName = "lastName",
+	status = "status",
 	username = "username",
 	email = "email",
 	provider = "provider",
@@ -79,9 +84,6 @@ export enum UserAttributes {
 	courses = "courses",
 	pathInstances = "pathInstances",
 	pathInstanceRefs = "pathInstanceRefs",
-	firstName = "firstName",
-	lastName = "lastName",
-	status = "status",
 	id = "id",
 }
 
@@ -99,6 +101,7 @@ export enum CourseInstanceAttributes {
 	description = "description",
 	dateFrom = "dateFrom",
 	dateTo = "dateTo",
+	book = "book",
 	lessons = "lessons",
 	quizzes = "quizzes",
 	id = "id",
@@ -132,6 +135,8 @@ export enum PathInstanceAttributes {
 export enum LessonAttributes {
 	title = "title",
 	description = "description",
+	pageNumber = "pageNumber",
+	toPageNumber = "toPageNumber",
 	date = "date",
 	questions = "questions",
 	student_activities = "student_activities",
@@ -182,6 +187,9 @@ export enum PathResultAttributes {
 }
 
 export class User {
+	firstName: string;
+	lastName: string;
+	status: string;
 	username: string;
 	email: string;
 	provider: string;
@@ -195,9 +203,6 @@ export class User {
 	courses: CourseResult[];
 	pathInstances: PathResult[];
 	pathInstanceRefs: PathInstance[];
-	firstName: string;
-	lastName: string;
-	status: string;
 	id: number;
 }
 
@@ -215,6 +220,7 @@ export class CourseInstance {
 	description: string;
 	dateFrom: Date;
 	dateTo: Date;
+	book: media;
 	lessons: Lesson[];
 	quizzes: Quiz[];
 	id: number;
@@ -248,6 +254,8 @@ export class PathInstance {
 export class Lesson {
 	title: string;
 	description: string;
+	pageNumber: number;
+	toPageNumber: number;
 	date: Date;
 	questions: Question[];
 	student_activities: StudentLesson[];

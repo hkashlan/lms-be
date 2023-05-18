@@ -14,6 +14,7 @@ export namespace BFF {
       description: string;
       dateFrom: Date;
       dateTo: Date;
+      book?: string;
       lessons: Lesson[];
       progress: number;
       quizzes: Quiz[];
@@ -43,7 +44,7 @@ export namespace BFF {
   }
 
   export namespace openPath {
-    export class Path {
+    export interface Path {
       title: string;
       description: string;
       id: number;
@@ -70,6 +71,9 @@ export namespace BFF {
     }
 
     export type response = Response<Profile>;
+  }
+  export namespace finishLesson {
+    export type response = Response<boolean>;
   }
 
   export namespace register {
@@ -98,6 +102,7 @@ export namespace BFF {
   export interface Lesson {
     lessonId: number;
     title: string;
+    pageNumber?: number;
     description: string;
     present: boolean;
     done: boolean;

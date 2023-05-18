@@ -51,7 +51,8 @@ function generateTypeRelations(comp: Schema) {
     .filter(
       (key) =>
         comp.attributes[key].type === "relation" ||
-        comp.attributes[key].type === "component"
+        comp.attributes[key].type === "component" ||
+        comp.attributes[key].type === "media"
     )
     .forEach((key) => {
       relations += `\t${key} = "${key}",\n`;
@@ -163,7 +164,7 @@ async function saveFile(fileContent: string) {
 async function generateSchema(): Promise<string> {
   const allTypes = await getTypes();
 
-  let fileContent = "";
+  let fileContent = "export class media {url: string}\n";
   allTypes.forEach((schema) => (fileContent += generateTypeRelations(schema)));
   allTypes.forEach((schema) => (fileContent += generateTypeAttributes(schema)));
   allTypes.forEach((schema) => (fileContent += generateType(schema)));

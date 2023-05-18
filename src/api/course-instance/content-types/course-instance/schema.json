@@ -38,6 +38,11 @@
     "dateTo": {
       "type": "date"
     },
+    "book": {
+      "allowedTypes": ["files"],
+      "type": "media",
+      "multiple": false
+    },
     "lessons": {
       "type": "component",
       "repeatable": true,
