@@ -2,12 +2,7 @@
  * A set of functions called "actions" for `user-path`
  */
 
-import {
-  CourseInstance,
-  CourseInstanceRelations,
-  LessonRelations,
-  PathInstance,
-} from "../../../schema";
+import { PathInstance } from "../../../schema";
 
 const getUserId = async (ctx) => {
   const { user } = ctx.state;
@@ -23,13 +18,12 @@ const getUserId = async (ctx) => {
 // BFF.myPaths.Student
 import { Context, Next } from "koa";
 import { BFF } from "../../../schema-bff";
-import { mapUserToStudent } from "./mapUserToStudent";
-import { getAvailablePathsForStudent } from "./getAvailablePathsForStudent";
-import { getUser } from "./get-user";
-import { getUserPopulate } from "./getUserPopulate";
-import { registerStudentDB } from "./registerStudentDB";
-import { StudentLesson } from "../../../schema";
-import { StudentLessonRelations } from "../../../schema";
+import { mapUserToStudent } from "./utils/mapUserToStudent";
+import { getAvailablePathsForStudent } from "./utils/getAvailablePathsForStudent";
+import { getUser } from "./utils/get-user";
+import { getUserPopulate } from "./utils/getUserPopulate";
+import { registerStudentDB } from "./db-operation/register-student";
+import { updateStudentLesson } from "./db-operation/update-student-lesson";
 
 export default {
   myPaths: async (ctx: Context, next: Next) => {
@@ -101,56 +95,30 @@ export default {
     };
     ctx.body = response;
   },
+  finishExam: async (ctx: Context, next: Next) => {
+    const response: BFF.studentLessonResponse.response = {};
+
+    let userActivity = await updateStudentLesson(
+      +ctx.params.courseId,
+      +ctx.params.lessonId,
+      ctx.state.user,
+      { mark: +ctx.params.mark }
+    );
+    response.data = userActivity;
+    ctx.body = response;
+  },
 
   finishLesson: async (ctx: Context, next: Next) => {
-    const user = ctx.state.user;
-    const response: BFF.finishLesson.response = {};
-    const courseId = +ctx.params.courseId;
-    const lessonId = +ctx.params.lessonId;
+    const response: BFF.studentLessonResponse.response = {};
     const finish = ctx.params.finish === "true";
 
-    const courseInstance: CourseInstance = await strapi
-      .query("api::course-instance.course-instance")
-      .findOne({
-        where: { id: courseId },
-        populate: {
-          [CourseInstanceRelations.lessons]: {
-            populate: {
-              [LessonRelations.student_activities]: {
-                populate: {
-                  [StudentLessonRelations.student]: "*",
-                },
-              },
-            },
-          },
-        },
-      });
-
-    const lesson = courseInstance.lessons[lessonId];
-
-    let userActivity: StudentLesson = lesson.student_activities.find(
-      (s) => s.student.id === user.id
+    let userActivity = await updateStudentLesson(
+      +ctx.params.courseId,
+      +ctx.params.lessonId,
+      ctx.state.user,
+      { done: finish }
     );
-    if (!userActivity) {
-      userActivity = {
-        student: user,
-        done: finish,
-        mark: 0,
-      };
-      lesson.student_activities.push(userActivity);
-    } else {
-      userActivity.done = finish;
-    }
-
-    await strapi.entityService.update(
-      "api::course-instance.course-instance",
-      courseId,
-      {
-        data: {
-          lessons: courseInstance.lessons,
-        },
-      }
-    );
+    response.data = userActivity;
     ctx.body = response;
   },
 };

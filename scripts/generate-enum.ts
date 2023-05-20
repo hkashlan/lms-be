@@ -89,7 +89,11 @@ function generateType(comp: Schema) {
 
   fileContent += `export class ${className(comp.info.displayName)} {\n`;
   Object.keys(comp.attributes).forEach((key) => {
-    fileContent += `\t${key}: ${getType(key, comp.attributes[key])};\n`;
+    const required = comp.attributes[key]["required"] ? "" : "?";
+    fileContent += `\t${key}${required}: ${getType(
+      key,
+      comp.attributes[key]
+    )};\n`;
   });
   fileContent += "}\n\n";
   return fileContent;
@@ -182,7 +186,11 @@ async function getTypes(): Promise<Schema[]> {
         key.startsWith("api::") || key === "plugin::users-permissions.user"
     )
     .map((key) => strapi.contentTypes[key]);
-  contentTypes.forEach((c) => (c.attributes["id"] = { type: "number" }));
+
+  contentTypes.forEach(
+    (c) => (c.attributes["id"] = { type: "number", required: true })
+  );
+
   const components: Schema[] = Object.values(strapi.components);
   strapi.destroy();
   const allTypes: Schema[] = [...contentTypes, ...components];

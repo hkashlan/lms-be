@@ -1,4 +1,4 @@
-import { User, PathInstance } from "../../../schema";
+import { User, PathInstance } from "../../../../schema";
 
 export async function registerStudentDB(user: User, path: PathInstance) {
   user.pathInstances.push({ path: path.path, path_instance: path });

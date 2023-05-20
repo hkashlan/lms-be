@@ -1,4 +1,4 @@
-import { User, UserRelations } from "../../../schema";
+import { User, UserRelations } from "../../../../schema";
 
 export async function getUser(userId: any, populate?: any): Promise<User> {
   return await strapi.query("plugin::users-permissions.user").findOne({

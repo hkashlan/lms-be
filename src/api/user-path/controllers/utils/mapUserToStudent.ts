@@ -1,5 +1,5 @@
-import { Lesson, Quiz, User } from "../../../schema";
-import { BFF } from "../../../schema-bff";
+import { Lesson, Quiz, User } from "../../../../schema";
+import { BFF } from "../../../../schema-bff";
 
 export function arrPercentage<T>(arr: T[], predicate: (value: T) => boolean) {
   return arr?.filter(predicate).length * 100 || 0 / arr?.length || 1;

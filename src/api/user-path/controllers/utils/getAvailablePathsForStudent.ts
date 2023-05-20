@@ -4,8 +4,8 @@ import {
   PathInstanceAttributes,
   UserAttributes,
   PathInstance,
-} from "../../../schema";
-import { PathRelations } from "../../../schema";
+} from "../../../../schema";
+import { PathRelations } from "../../../../schema";
 import { getUserForPath } from "./get-user";
 
 export async function getAvailablePathsForStudent(

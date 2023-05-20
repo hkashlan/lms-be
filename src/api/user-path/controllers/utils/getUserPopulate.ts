@@ -8,7 +8,7 @@ import {
   StudentLessonRelations,
   StudentQuizRelations,
   UserRelations,
-} from "../../../schema";
+} from "../../../../schema";
 
 function getQuestions() {
   return {

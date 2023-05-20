@@ -189,50 +189,50 @@ export enum PathResultAttributes {
 export class User {
 	firstName: string;
 	lastName: string;
-	status: string;
+	status?: string;
 	username: string;
 	email: string;
-	provider: string;
-	password: string;
-	resetPasswordToken: string;
-	confirmationToken: string;
-	confirmed: boolean;
-	blocked: boolean;
-	teacherFor: PathInstance[];
-	paths: Path[];
-	courses: CourseResult[];
-	pathInstances: PathResult[];
-	pathInstanceRefs: PathInstance[];
+	provider?: string;
+	password?: string;
+	resetPasswordToken?: string;
+	confirmationToken?: string;
+	confirmed?: boolean;
+	blocked?: boolean;
+	teacherFor?: PathInstance[];
+	paths?: Path[];
+	courses?: CourseResult[];
+	pathInstances?: PathResult[];
+	pathInstanceRefs?: PathInstance[];
 	id: number;
 }
 
 export class Course {
 	title: string;
-	course_instances: CourseInstance[];
-	path: Path;
+	course_instances?: CourseInstance[];
+	path?: Path;
 	id: number;
 }
 
 export class CourseInstance {
-	course: Course;
-	path_instance: PathInstance;
+	course?: Course;
+	path_instance?: PathInstance;
 	title: string;
 	description: string;
-	dateFrom: Date;
-	dateTo: Date;
-	book: media;
+	dateFrom?: Date;
+	dateTo?: Date;
+	book?: media;
 	lessons: Lesson[];
-	quizzes: Quiz[];
+	quizzes?: Quiz[];
 	id: number;
 }
 
 export class Path {
 	title: string;
 	description: string;
-	courses: Course[];
-	teacher: User;
-	students: User[];
-	path_instances: PathInstance[];
+	courses?: Course[];
+	teacher?: User;
+	students?: User[];
+	path_instances?: PathInstance[];
 	id: number;
 }
 
@@ -246,30 +246,30 @@ export class PathInstance {
 	numberOfStudents: number;
 	numberOfRegisteredStudents: number;
 	stillOpen: boolean;
-	course_instances: CourseInstance[];
-	students: User[];
+	course_instances?: CourseInstance[];
+	students?: User[];
 	id: number;
 }
 
 export class Lesson {
 	title: string;
-	description: string;
-	pageNumber: number;
-	toPageNumber: number;
+	description?: string;
+	pageNumber?: number;
+	toPageNumber?: number;
 	date: Date;
-	questions: Question[];
-	student_activities: StudentLesson[];
+	questions?: Question[];
+	student_activities?: StudentLesson[];
 }
 
 export class StudentLesson {
-	student: User;
-	done: boolean;
-	mark: number;
+	student?: User;
+	done?: boolean;
+	mark?: number;
 }
 
 export class Answer {
 	title: string;
-	correct: boolean;
+	correct?: boolean;
 }
 
 export enum QuestionType {
@@ -287,26 +287,26 @@ export class Quiz {
 	title: string;
 	dateFrom: Date;
 	dateTo: Date;
-	mark: number;
+	mark?: number;
 	questions: Question[];
-	student_quizzes: StudentQuiz[];
+	student_quizzes?: StudentQuiz[];
 }
 
 export class StudentQuiz {
-	student: User;
+	student?: User;
 	date: Date;
-	mark: number;
+	mark?: number;
 }
 
 export class CourseResult {
-	course: Course;
-	course_instance: CourseInstance;
-	path: Path;
-	mark: number;
+	course?: Course;
+	course_instance?: CourseInstance;
+	path?: Path;
+	mark?: number;
 }
 
 export class PathResult {
-	path: Path;
-	path_instance: PathInstance;
+	path?: Path;
+	path_instance?: PathInstance;
 }
 

@@ -35,6 +35,14 @@ export default {
       },
     },
     {
+      method: "GET",
+      path: "/user/open-paths/finish-exam/:courseId/:lessonId/:mark",
+      handler: "user-path.finishExam",
+      config: {
+        policies: ["global::is-authenticated"],
+      },
+    },
+    {
       method: "POST",
       path: "/user/open-paths/save-profile",
       handler: "user-path.saveProfile",
