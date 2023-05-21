@@ -67,12 +67,12 @@ export default {
     const { openPaths, user } = await getAvailablePathsForStudent(userId, true);
     const path = openPaths.find((p) => p.path.id === id);
 
-    if (path && path.numberOfRegisteredStudents < path.numberOfStudents) {
-      await registerStudentDB(user, path);
-      response.data = openPaths.filter((p) => p !== path);
-    } else if (!path) {
-      response.error = { message: BFF.register.Errors.PATH_NOT_FOUND };
-    }
+    // if (path && path.numberOfRegisteredStudents < path.numberOfStudents) {
+    await registerStudentDB(user, path);
+    response.data = openPaths.filter((p) => p !== path);
+    // } else if (!path) {
+    //   response.error = { message: BFF.register.Errors.PATH_NOT_FOUND };
+    // }
     ctx.body = response;
   },
 
