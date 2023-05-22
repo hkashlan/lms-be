@@ -50,8 +50,8 @@ export default {
       //   "plugin::content-manager.entity-manager"
       // ].findOne(1, "plugin::users-permissions.user");
       const userId = await getUserId(ctx);
-      const { openPaths } = await getAvailablePathsForStudent(userId);
-      response.data = openPaths;
+      const { openPathInstances } = await getAvailablePathsForStudent(userId);
+      response.data = openPathInstances;
 
       ctx.body = response;
     } catch (err) {
@@ -64,13 +64,19 @@ export default {
 
     const id = +ctx.params.id;
     const userId = await getUserId(ctx);
-    const { openPaths, user } = await getAvailablePathsForStudent(userId, true);
-    const path = openPaths.find((p) => p.path.id === id);
+    const { openPathInstances, user } = await getAvailablePathsForStudent(
+      userId,
+      true
+    );
+    const pathInstance = openPathInstances.find((p) => p.id === id);
 
-    if (path && path.numberOfRegisteredStudents < path.numberOfStudents) {
-      await registerStudentDB(user, path);
-      response.data = openPaths.filter((p) => p !== path);
-    } else if (!path) {
+    if (
+      pathInstance &&
+      pathInstance.numberOfRegisteredStudents < pathInstance.numberOfStudents
+    ) {
+      await registerStudentDB(user, pathInstance);
+      response.data = openPathInstances.filter((p) => p !== pathInstance);
+    } else if (!pathInstance) {
       response.error = { message: BFF.register.Errors.PATH_NOT_FOUND };
     }
     ctx.body = response;

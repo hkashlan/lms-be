@@ -6,7 +6,7 @@
   "scripts": {
     "develop": "strapi develop",
     "developDebug": "DEBUG=knex:*  strapi develop",
-    "start": "DEBUG=knex:*  strapi start",
+    "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
     "genenrate-types": "ts-node -T scripts/generate-enum.ts"

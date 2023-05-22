@@ -28,7 +28,7 @@ export async function getAvailablePathsForStudent(
         [PathInstanceRelations.path]: "*",
       };
 
-  const openPaths: PathInstance[] = await strapi
+  const openPathInstances: PathInstance[] = await strapi
     .query("api::path-instance.path-instance")
     .findMany({
       where: {
@@ -47,6 +47,6 @@ export async function getAvailablePathsForStudent(
       populate,
     });
 
-  openPaths.filter((path) => !pathTakenIds.includes(path.path.id));
-  return { openPaths, user };
+  openPathInstances.filter((path) => !pathTakenIds.includes(path.path.id));
+  return { openPathInstances, user };
 }
