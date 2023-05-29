@@ -18,7 +18,7 @@ function closeOpenPaths(strapi: any) {
   strapi.query("api::path-instance.path-instance").updateMany({
     where: {
       [PathInstanceAttributes.stillOpen]: true,
-      [PathInstanceAttributes.dateTo]: { $gt: startOfDay() },
+      [PathInstanceAttributes.dateTo]: { $lt: startOfDay() },
     },
     data: {
       [PathInstanceAttributes.stillOpen]: false,
