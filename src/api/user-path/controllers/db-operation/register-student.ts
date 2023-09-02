@@ -6,11 +6,23 @@ export async function registerStudentDB(user: User, path: PathInstance) {
   path.path.students.push(user);
   path.students.push(user);
   path.numberOfRegisteredStudents++;
+  user.courses = user.courses ?? [];
+  user.courses.push(
+    ...path.course_instances.map(
+      (c) =>
+        ({
+          course: c.course.id,
+          course_instance: c.id,
+          path: path.path.id,
+        } as any)
+    )
+  );
 
-  await strapi.query("plugin::users-permissions.user").update({
-    where: { id: user.id },
+  await strapi.entityService.update("plugin::users-permissions.user", user.id, {
     data: {
       paths: user.paths,
+      courses: user.courses,
+      pathInstances: user.pathInstances,
     },
   });
 

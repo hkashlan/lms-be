@@ -11,5 +11,6 @@ export async function getUserForPath(userId: any): Promise<User> {
   return await getUser(userId, {
     [UserRelations.paths]: "*",
     [UserRelations.pathInstances]: "*",
+    [UserRelations.courses]: "*",
   });
 }

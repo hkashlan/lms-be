@@ -4,6 +4,7 @@ import {
   PathInstanceAttributes,
   UserAttributes,
   PathInstance,
+  CourseInstanceRelations,
 } from "../../../../schema";
 import { PathRelations } from "../../../../schema";
 import { getUserForPath } from "./get-user";
@@ -20,6 +21,11 @@ export async function getAvailablePathsForStudent(
         [PathInstanceRelations.path]: {
           populate: {
             [PathRelations.students]: "*",
+          },
+        },
+        [PathInstanceRelations.course_instances]: {
+          populate: {
+            [CourseInstanceRelations.course]: "*",
           },
         },
         [PathInstanceRelations.students]: "*",
