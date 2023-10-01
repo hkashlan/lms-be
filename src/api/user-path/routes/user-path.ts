@@ -23,7 +23,22 @@ export default {
       path: "/user/open-paths/register/:id",
       handler: "user-path.register",
       config: {
-        // https://docs.strapi.io/dev-docs/backend-customization/policies
+        policies: ["global::is-authenticated"],
+      },
+    },
+    {
+      method: "GET",
+      path: "/user/open-paths/finish-lesson/:courseId/:lessonId/:finish",
+      handler: "user-path.finishLesson",
+      config: {
+        policies: ["global::is-authenticated"],
+      },
+    },
+    {
+      method: "GET",
+      path: "/user/open-paths/finish-exam/:courseId/:lessonId/:mark",
+      handler: "user-path.finishExam",
+      config: {
         policies: ["global::is-authenticated"],
       },
     },

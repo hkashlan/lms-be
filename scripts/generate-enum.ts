@@ -1,30 +1,4 @@
-import {
-  CollectionTypeSchema,
-  StringAttribute,
-  RequiredAttribute,
-  SetMinMaxLength,
-  JSONAttribute,
-  DefaultTo,
-  RelationAttribute,
-  DateTimeAttribute,
-  PrivateAttribute,
-  EmailAttribute,
-  UniqueAttribute,
-  PasswordAttribute,
-  BooleanAttribute,
-  EnumerationAttribute,
-  BigIntegerAttribute,
-  RichTextAttribute,
-  DateAttribute,
-  ComponentAttribute,
-  IntegerAttribute,
-  DecimalAttribute,
-  SetMinMax,
-  ComponentSchema,
-  Schema,
-  Attribute,
-} from "@strapi/strapi";
-import { StringRecord } from "@strapi/strapi/lib/types/utils";
+import { Schema, Attribute } from "@strapi/strapi";
 import fs from "fs";
 const strapiContext = require("../node_modules/@strapi/strapi/lib/index");
 const prettier = require("prettier");
@@ -45,13 +19,14 @@ function enumNameAttributes(myString: string) {
   return className(myString) + "Attributes";
 }
 
-function generateTypeRelations(comp: Schema) {
+function generateTypeRelations(comp: Schema.Schema) {
   let relations = "";
   Object.keys(comp.attributes)
     .filter(
       (key) =>
         comp.attributes[key].type === "relation" ||
-        comp.attributes[key].type === "component"
+        comp.attributes[key].type === "component" ||
+        comp.attributes[key].type === "media"
     )
     .forEach((key) => {
       relations += `\t${key} = "${key}",\n`;
@@ -66,7 +41,7 @@ function generateTypeRelations(comp: Schema) {
   }
 }
 
-function generateTypeAttributes(comp: Schema) {
+function generateTypeAttributes(comp: Schema.Schema) {
   let relations = "";
   Object.keys(comp.attributes).forEach((key) => {
     relations += `\t${key} = "${key}",\n`;
@@ -82,19 +57,23 @@ function generateTypeAttributes(comp: Schema) {
   }
 }
 
-function generateType(comp: Schema) {
+function generateType(comp: Schema.Schema) {
   let fileContent = "";
   fileContent = generateEnum(comp);
 
   fileContent += `export class ${className(comp.info.displayName)} {\n`;
   Object.keys(comp.attributes).forEach((key) => {
-    fileContent += `\t${key}: ${getType(key, comp.attributes[key])};\n`;
+    const required = comp.attributes[key]["required"] ? "" : "?";
+    fileContent += `\t${key}${required}: ${getType(
+      key,
+      comp.attributes[key]
+    )};\n`;
   });
   fileContent += "}\n\n";
   return fileContent;
 }
 
-function generateEnum(comp: Schema) {
+function generateEnum(comp: Schema.Schema) {
   return Object.keys(comp.attributes)
     .filter((key) => comp.attributes[key].type === "enumeration")
     .map((key) => {
@@ -109,7 +88,7 @@ function generateEnum(comp: Schema) {
     .join("");
 }
 
-function getType(key: string, attr: Attribute) {
+function getType(key: string, attr: Attribute.Any) {
   let type = getBaseType(key, attr);
   if (attr["repeatable"]) {
     type = type + "[]";
@@ -117,7 +96,7 @@ function getType(key: string, attr: Attribute) {
   return type;
 }
 
-function getBaseType(key: string, attr: Attribute) {
+function getBaseType(key: string, attr: Attribute.Any) {
   switch (attr.type) {
     case "email":
     case "password":
@@ -163,7 +142,7 @@ async function saveFile(fileContent: string) {
 async function generateSchema(): Promise<string> {
   const allTypes = await getTypes();
 
-  let fileContent = "";
+  let fileContent = "export class media {url: string}\n";
   allTypes.forEach((schema) => (fileContent += generateTypeRelations(schema)));
   allTypes.forEach((schema) => (fileContent += generateTypeAttributes(schema)));
   allTypes.forEach((schema) => (fileContent += generateType(schema)));
@@ -171,7 +150,7 @@ async function generateSchema(): Promise<string> {
   return fileContent;
 }
 
-async function getTypes(): Promise<Schema[]> {
+async function getTypes(): Promise<Schema.Schema[]> {
   const appContext = await strapiContext.compile();
   const strapi = await strapiContext(appContext).register();
 
@@ -181,10 +160,14 @@ async function getTypes(): Promise<Schema[]> {
         key.startsWith("api::") || key === "plugin::users-permissions.user"
     )
     .map((key) => strapi.contentTypes[key]);
-  contentTypes.forEach((c) => (c.attributes["id"] = { type: "number" }));
-  const components: Schema[] = Object.values(strapi.components);
+
+  contentTypes.forEach(
+    (c) => (c.attributes["id"] = { type: "number", required: true })
+  );
+
+  const components: Schema.Schema[] = Object.values(strapi.components);
   strapi.destroy();
-  const allTypes: Schema[] = [...contentTypes, ...components];
+  const allTypes: Schema.Schema[] = [...contentTypes, ...components];
   const excludeAttributes = [
     "createdAt",
     "updatedAt",

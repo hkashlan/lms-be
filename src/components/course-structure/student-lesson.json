@@ -1,7 +1,8 @@
 {
   "collectionName": "components_course_structure_student_lessons",
   "info": {
-    "displayName": "student-lesson"
+    "displayName": "student-lesson",
+    "description": ""
   },
   "options": {},
   "attributes": {

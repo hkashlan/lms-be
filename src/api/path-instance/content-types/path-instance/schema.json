@@ -16,7 +16,8 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::path.path",
-      "inversedBy": "path_instances"
+      "inversedBy": "path_instances",
+      "required": true
     },
     "title": {
       "type": "string",
@@ -27,16 +28,19 @@
       "required": true
     },
     "dateFrom": {
-      "type": "date"
+      "type": "date",
+      "required": true
     },
     "dateTo": {
-      "type": "date"
+      "type": "date",
+      "required": true
     },
     "teacher": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "teacherFor"
+      "inversedBy": "teacherFor",
+      "required": true
     },
     "numberOfStudents": {
       "type": "integer",

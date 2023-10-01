@@ -13,6 +13,12 @@
     "description": {
       "type": "richtext"
     },
+    "pageNumber": {
+      "type": "integer"
+    },
+    "toPageNumber": {
+      "type": "integer"
+    },
     "date": {
       "type": "datetime",
       "required": true
