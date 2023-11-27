@@ -34,8 +34,7 @@ export namespace BFF {
     }
 
     export interface Student {
-      firstName: string;
-      lastName: string;
+      name: string;
       title: string;
       lastTitle: string;
       image: string;
@@ -68,8 +67,7 @@ export namespace BFF {
 
   export namespace saveProfile {
     export interface Profile {
-      firstName: string;
-      lastName: string;
+      name: string;
     }
 
     export type response = Response<Profile>;

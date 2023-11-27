@@ -86,18 +86,16 @@ export default {
     const response: BFF.saveProfile.response = {};
     const user = ctx.state.user;
 
-    const { firstName, lastName } = ctx.request.body;
+    const { name } = ctx.request.body;
     await strapi.query("plugin::users-permissions.user").update({
       where: { id: user.id },
       data: {
-        firstName,
-        lastName,
+        name,
       },
     });
 
     response.data = {
-      firstName,
-      lastName,
+      name,
     };
     ctx.body = response;
   },

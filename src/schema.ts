@@ -35,6 +35,7 @@ export enum PathInstanceRelations {
 }
 
 export enum LessonRelations {
+	audio = "audio",
 	questions = "questions",
 	student_activities = "student_activities",
 }
@@ -68,8 +69,7 @@ export enum PathResultRelations {
 }
 
 export enum UserAttributes {
-	firstName = "firstName",
-	lastName = "lastName",
+	name = "name",
 	status = "status",
 	username = "username",
 	email = "email",
@@ -137,6 +137,7 @@ export enum LessonAttributes {
 	description = "description",
 	pageNumber = "pageNumber",
 	toPageNumber = "toPageNumber",
+	audio = "audio",
 	date = "date",
 	questions = "questions",
 	student_activities = "student_activities",
@@ -187,8 +188,7 @@ export enum PathResultAttributes {
 }
 
 export class User {
-	firstName: string;
-	lastName: string;
+	name: string;
 	status?: string;
 	username: string;
 	email: string;
@@ -209,7 +209,7 @@ export class User {
 export class Course {
 	title: string;
 	course_instances?: CourseInstance[];
-	path?: Path;
+	path: Path;
 	id: number;
 }
 
@@ -256,6 +256,7 @@ export class Lesson {
 	description?: string;
 	pageNumber?: number;
 	toPageNumber?: number;
+	audio?: media;
 	date: Date;
 	questions?: Question[];
 	student_activities?: StudentLesson[];
