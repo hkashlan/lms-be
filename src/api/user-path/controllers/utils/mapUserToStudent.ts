@@ -48,8 +48,7 @@ export function mapLessonsToBffLessons(
 export function mapUserToStudent(user: User): BFF.myPaths.Student {
   const student: BFF.myPaths.Student = {
     title: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
+    name: user.name,
     lastTitle: "",
     image: "",
     paths: user.pathInstances.map(
