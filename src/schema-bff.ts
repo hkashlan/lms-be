@@ -105,6 +105,7 @@ export namespace BFF {
     pageNumber?: number;
     description: string;
     present: boolean;
+    audio?: string;
     done: boolean;
     date: Date;
     mark: number;

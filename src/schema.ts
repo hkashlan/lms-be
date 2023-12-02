@@ -1,4 +1,4 @@
-export class media {url: string}
+export interface media {url: string}
 export enum UserRelations {
 	teacherFor = "teacherFor",
 	paths = "paths",
@@ -70,6 +70,8 @@ export enum PathResultRelations {
 
 export enum UserAttributes {
 	name = "name",
+	firstName = "firstName",
+	lastName = "lastName",
 	status = "status",
 	username = "username",
 	email = "email",
@@ -187,8 +189,10 @@ export enum PathResultAttributes {
 	path_instance = "path_instance",
 }
 
-export class User {
+export interface User {
 	name: string;
+	firstName: string;
+	lastName: string;
 	status?: string;
 	username: string;
 	email: string;
@@ -206,14 +210,14 @@ export class User {
 	id: number;
 }
 
-export class Course {
+export interface Course {
 	title: string;
 	course_instances?: CourseInstance[];
 	path: Path;
 	id: number;
 }
 
-export class CourseInstance {
+export interface CourseInstance {
 	course?: Course;
 	path_instance?: PathInstance;
 	title: string;
@@ -226,7 +230,7 @@ export class CourseInstance {
 	id: number;
 }
 
-export class Path {
+export interface Path {
 	title: string;
 	description: string;
 	courses?: Course[];
@@ -236,7 +240,7 @@ export class Path {
 	id: number;
 }
 
-export class PathInstance {
+export interface PathInstance {
 	path: Path;
 	title: string;
 	description: string;
@@ -251,7 +255,7 @@ export class PathInstance {
 	id: number;
 }
 
-export class Lesson {
+export interface Lesson {
 	title: string;
 	description?: string;
 	pageNumber?: number;
@@ -262,13 +266,13 @@ export class Lesson {
 	student_activities?: StudentLesson[];
 }
 
-export class StudentLesson {
+export interface StudentLesson {
 	student?: User;
 	done?: boolean;
 	mark?: number;
 }
 
-export class Answer {
+export interface Answer {
 	title: string;
 	correct?: boolean;
 }
@@ -278,13 +282,13 @@ export enum QuestionType {
 	MultiChoice = "MultiChoice",
 }
 
-export class Question {
+export interface Question {
 	questionType: QuestionType;
 	title: string;
 	answers: Answer[];
 }
 
-export class Quiz {
+export interface Quiz {
 	title: string;
 	dateFrom: Date;
 	dateTo: Date;
@@ -293,20 +297,20 @@ export class Quiz {
 	student_quizzes?: StudentQuiz[];
 }
 
-export class StudentQuiz {
+export interface StudentQuiz {
 	student?: User;
 	date: Date;
 	mark?: number;
 }
 
-export class CourseResult {
+export interface CourseResult {
 	course?: Course;
 	course_instance?: CourseInstance;
 	path?: Path;
 	mark?: number;
 }
 
-export class PathResult {
+export interface PathResult {
 	path?: Path;
 	path_instance?: PathInstance;
 }

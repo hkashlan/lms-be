@@ -38,6 +38,7 @@ export function mapLessonsToBffLessons(
       done: studentLesson.done,
       pageNumber: l.pageNumber,
       toPageNumber: l.toPageNumber,
+      audio: l.audio?.url,
       date: l.date,
       mark: studentLesson.mark,
       questions: l.questions,

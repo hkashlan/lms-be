@@ -25,6 +25,7 @@ function getLessonPopulate() {
     [CourseInstanceRelations.lessons]: {
       populate: {
         ...getQuestions(),
+        [LessonRelations.audio]: "*",
         [LessonRelations.student_activities]: {
           populate: {
             [StudentLessonRelations.student]: "*",
