@@ -72,7 +72,7 @@ export function mapUserToStudent(user: User): BFF.myPaths.Student {
             book: c.course_instance.book?.url,
             progress: arrPercentage(c.course_instance.lessons, (l) =>
               l.student_activities.some(
-                (s) => s.student.id === user.id && s.done
+                (s) => s.student?.id === user.id && s.done
               )
             ),
             lessons: mapLessonsToBffLessons(c.course_instance.lessons, user.id),
