@@ -1,7 +1,8 @@
 {
   "collectionName": "components_exam_structure_questions",
   "info": {
-    "displayName": "question"
+    "displayName": "question",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -15,16 +16,16 @@
       "type": "string",
       "required": true
     },
-    "mark": {
-      "type": "number",
-      "required": true,
-      "default": 1
-    },
     "answers": {
       "type": "component",
       "repeatable": true,
       "component": "exam-structure.answer",
       "required": true
+    },
+    "mark": {
+      "type": "integer",
+      "required": true,
+      "default": 1
     }
   }
 }

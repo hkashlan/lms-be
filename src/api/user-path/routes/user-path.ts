@@ -43,6 +43,14 @@ export default {
       },
     },
     {
+      method: "GET",
+      path: "/user/open-paths/finish-quiz/:courseId/:quizId/:mark",
+      handler: "user-path.finishQuiz",
+      config: {
+        policies: ["global::is-authenticated"],
+      },
+    },
+    {
       method: "POST",
       path: "/user/open-paths/save-profile",
       handler: "user-path.saveProfile",

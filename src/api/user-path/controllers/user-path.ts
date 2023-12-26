@@ -24,6 +24,7 @@ import { getUser } from "./utils/get-user";
 import { getUserPopulate } from "./utils/getUserPopulate";
 import { registerStudentDB } from "./db-operation/register-student";
 import { updateStudentLesson } from "./db-operation/update-student-lesson";
+import { updateStudentQuiz } from "./db-operation/update-student-quiz";
 
 export default {
   myPaths: async (ctx: Context, next: Next) => {
@@ -107,6 +108,18 @@ export default {
       +ctx.params.lessonId,
       ctx.state.user,
       { mark: +ctx.params.mark }
+    );
+    response.data = userActivity;
+    ctx.body = response;
+  },
+  finishQuiz: async (ctx: Context, next: Next) => {
+    const response: BFF.studentLessonResponse.response = {};
+
+    let userActivity = await updateStudentQuiz(
+      +ctx.params.courseId,
+      +ctx.params.quizId,
+      ctx.state.user,
+      +ctx.params.mark
     );
     response.data = userActivity;
     ctx.body = response;
