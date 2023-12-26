@@ -10,7 +10,7 @@ export function mapQuizzesToBffQuizzes(
   id: number
 ): BFF.Quiz[] {
   return quizzes?.map((q) => {
-    const quizStudent = q.student_quizzes.find((s) => s.student.id === id);
+    const quizStudent = q.student_quizzes.find((s) => s.student?.id === id);
     return {
       dateFrom: q.dateFrom,
       dateTo: q.dateTo,
@@ -28,7 +28,7 @@ export function mapLessonsToBffLessons(
 ): BFF.Lesson[] {
   return lessons?.map((l, index) => {
     const studentLesson = l.student_activities.find(
-      (s) => s.student.id === userId
+      (s) => s.student?.id === userId
     ) ?? { done: false, mark: undefined };
     return {
       lessonId: index,
