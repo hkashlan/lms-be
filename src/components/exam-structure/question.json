@@ -7,16 +7,18 @@
   "attributes": {
     "questionType": {
       "type": "enumeration",
-      "enum": [
-        "SingleChoice",
-        "MultiChoice"
-      ],
+      "enum": ["SingleChoice", "MultiChoice"],
       "required": true,
       "default": "SingleChoice"
     },
     "title": {
       "type": "string",
       "required": true
+    },
+    "mark": {
+      "type": "number",
+      "required": true,
+      "default": 1
     },
     "answers": {
       "type": "component",
