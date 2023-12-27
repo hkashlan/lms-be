@@ -21,7 +21,7 @@ export async function updateStudentLesson(
           populate: {
             [LessonRelations.student_activities]: {
               populate: {
-                [StudentLessonRelations.student]: "*",
+                [StudentLessonRelations.student]: true,
               },
             },
           },

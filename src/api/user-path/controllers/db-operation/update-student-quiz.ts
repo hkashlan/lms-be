@@ -25,7 +25,7 @@ export async function updateStudentQuiz(
             [QuizRelations.student_quizzes]: {
               populate: {
                 [StudentQuizRelations.student]: {
-                  populate: "*",
+                  populate: true,
                 },
               },
             },
