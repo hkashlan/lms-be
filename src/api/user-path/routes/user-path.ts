@@ -44,7 +44,7 @@ export default {
     },
     {
       method: "GET",
-      path: "/user/open-paths/finish-quiz/:courseId/:quizId/:mark",
+      path: "/user/open-paths/finish-quiz/:courseId/:quizId/:fullMark/:mark",
       handler: "user-path.finishQuiz",
       config: {
         policies: ["global::is-authenticated"],

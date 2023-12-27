@@ -96,7 +96,7 @@ export namespace BFF {
   export interface Question {
     title: string;
     answers: Answer[];
-    mark: number;
+    mark?: number;
     questionType: QuestionType;
   }
 
@@ -120,5 +120,6 @@ export namespace BFF {
     title: string;
     questions: Question[];
     mark?: number;
+    fullMark?: number;
   }
 }

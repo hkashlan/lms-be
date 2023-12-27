@@ -13,6 +13,7 @@ export async function updateStudentQuiz(
   courseId: number,
   quizId: number,
   user: any,
+  fullMark: number,
   mark: number
 ): Promise<StudentLesson> {
   const courseInstance: CourseInstance = await strapi
@@ -44,6 +45,7 @@ export async function updateStudentQuiz(
       student: user,
       date: new Date(),
       mark,
+      fullMark,
     };
     quiz.student_quizzes.push(userActivity);
   } else {

@@ -119,6 +119,7 @@ export default {
       +ctx.params.courseId,
       +ctx.params.quizId,
       ctx.state.user,
+      +ctx.params.fullMark,
       +ctx.params.mark
     );
     response.data = userActivity;

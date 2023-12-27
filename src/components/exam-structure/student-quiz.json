@@ -15,7 +15,12 @@
       "required": true
     },
     "mark": {
-      "type": "integer"
+      "type": "integer",
+      "required": true
+    },
+    "fullMark": {
+      "type": "integer",
+      "required": true
     }
   }
 }
