@@ -24,7 +24,7 @@
     },
     "mark": {
       "type": "integer",
-      "required": true,
+      "required": false,
       "default": 1
     }
   }
