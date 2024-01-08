@@ -1,4 +1,4 @@
-import { StudentLesson } from "./schema";
+import { StudentLesson, StudentQuiz } from "./schema";
 
 export namespace BFF {
   export interface Response<T> {
@@ -111,6 +111,7 @@ export namespace BFF {
     date: Date;
     mark: number;
     questions: Question[];
+    answeredOptions: number[][];
   }
 
   export interface Quiz {
@@ -121,5 +122,16 @@ export namespace BFF {
     questions: Question[];
     mark?: number;
     fullMark?: number;
+    answeredOptions?: number[][];
   }
+
+  export type StudentLessonBody = Omit<StudentLesson, "student" | "date"> & {
+    courseId: number;
+    lessonId: number;
+  };
+
+  export type StudentQuizBody = Omit<StudentQuiz, "student" | "date"> & {
+    courseId: number;
+    quizId: number;
+  };
 }

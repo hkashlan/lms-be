@@ -2,7 +2,7 @@
  * A set of functions called "actions" for `user-path`
  */
 
-import { PathInstance } from "../../../schema";
+import { PathInstance, StudentQuiz } from "../../../schema";
 
 const getUserId = async (ctx) => {
   const { user } = ctx.state;
@@ -102,40 +102,26 @@ export default {
   },
   finishExam: async (ctx: Context, next: Next) => {
     const response: BFF.studentLessonResponse.response = {};
+    const student: BFF.StudentLessonBody = ctx.request.body;
 
-    let userActivity = await updateStudentLesson(
-      +ctx.params.courseId,
-      +ctx.params.lessonId,
-      ctx.state.user,
-      { mark: +ctx.params.mark }
-    );
+    let userActivity = await updateStudentLesson(ctx.state.user, student);
     response.data = userActivity;
     ctx.body = response;
   },
   finishQuiz: async (ctx: Context, next: Next) => {
     const response: BFF.studentLessonResponse.response = {};
+    const student: BFF.StudentQuizBody = ctx.request.body;
 
-    let userActivity = await updateStudentQuiz(
-      +ctx.params.courseId,
-      +ctx.params.quizId,
-      ctx.state.user,
-      +ctx.params.fullMark,
-      +ctx.params.mark
-    );
+    let userActivity = await updateStudentQuiz(ctx.state.user, student);
     response.data = userActivity;
     ctx.body = response;
   },
 
   finishLesson: async (ctx: Context, next: Next) => {
     const response: BFF.studentLessonResponse.response = {};
-    const finish = ctx.params.finish === "true";
+    const student: BFF.StudentLessonBody = ctx.request.body;
 
-    let userActivity = await updateStudentLesson(
-      +ctx.params.courseId,
-      +ctx.params.lessonId,
-      ctx.state.user,
-      { done: finish }
-    );
+    let userActivity = await updateStudentLesson(ctx.state.user, student);
     response.data = userActivity;
     ctx.body = response;
   },

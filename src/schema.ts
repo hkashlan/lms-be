@@ -274,6 +274,7 @@ export interface StudentLesson {
   student?: User;
   done?: boolean;
   mark?: number;
+  answeredOptions?: number[][];
 }
 
 export interface Answer {
@@ -307,6 +308,7 @@ export interface StudentQuiz {
   date: Date;
   mark: number;
   fullMark: number;
+  answeredOptions: number[][];
 }
 
 export interface CourseResult {

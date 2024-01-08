@@ -1,7 +1,8 @@
 {
   "collectionName": "components_exam_structure_student_quizs",
   "info": {
-    "displayName": "student-quiz"
+    "displayName": "student-quiz",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -21,6 +22,9 @@
     "fullMark": {
       "type": "integer",
       "required": true
+    },
+    "answeredOptions": {
+      "type": "json"
     }
   }
 }

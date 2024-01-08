@@ -5,17 +5,16 @@ import {
   LessonRelations,
   StudentLessonRelations,
 } from "../../../../schema";
+import { BFF } from "../../../../schema-bff";
 
 export async function updateStudentLesson(
-  courseId: number,
-  lessonId: number,
   user: any,
-  studentLesson: Partial<StudentLesson>
+  student: BFF.StudentLessonBody
 ): Promise<StudentLesson> {
   const courseInstance: CourseInstance = await strapi
     .query("api::course-instance.course-instance")
     .findOne({
-      where: { id: courseId },
+      where: { id: student.courseId },
       populate: {
         [CourseInstanceRelations.lessons]: {
           populate: {
@@ -29,7 +28,7 @@ export async function updateStudentLesson(
       },
     });
 
-  const lesson = courseInstance.lessons[lessonId];
+  const lesson = courseInstance.lessons[student.lessonId];
 
   let userActivity: StudentLesson = lesson.student_activities.find(
     (s) => s.student.id === user.id
@@ -37,16 +36,16 @@ export async function updateStudentLesson(
   if (!userActivity) {
     userActivity = {
       student: user,
-      ...studentLesson,
+      ...student,
     };
     lesson.student_activities.push(userActivity);
   } else {
-    Object.assign(userActivity, studentLesson);
+    Object.assign(userActivity, student);
   }
 
   await strapi.entityService.update(
     "api::course-instance.course-instance",
-    courseId,
+    student.courseId,
     {
       data: {
         lessons: courseInstance.lessons,

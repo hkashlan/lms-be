@@ -19,7 +19,8 @@ export function mapQuizzesToBffQuizzes(
       questions: q.questions,
       mark: quizStudent?.mark,
       fullMark: quizStudent?.fullMark!,
-    };
+      answeredOptions: quizStudent?.answeredOptions,
+    } as BFF.Quiz;
   });
 }
 
@@ -42,6 +43,7 @@ export function mapLessonsToBffLessons(
       audio: l.audio?.url,
       date: l.date,
       mark: studentLesson.mark!,
+      answeredOptions: studentLesson.answeredOptions,
       questions: l.questions,
     };
   });
