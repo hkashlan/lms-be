@@ -16,6 +16,9 @@
     },
     "mark": {
       "type": "integer"
+    },
+    "answeredOptions": {
+      "type": "json"
     }
   }
 }
