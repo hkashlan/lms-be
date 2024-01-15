@@ -1,7 +1,8 @@
 {
   "collectionName": "components_exam_structure_student_quizs",
   "info": {
-    "displayName": "student-quiz"
+    "displayName": "student-quiz",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -15,7 +16,15 @@
       "required": true
     },
     "mark": {
-      "type": "integer"
+      "type": "integer",
+      "required": true
+    },
+    "fullMark": {
+      "type": "integer",
+      "required": true
+    },
+    "answeredOptions": {
+      "type": "json"
     }
   }
 }

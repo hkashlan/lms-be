@@ -61,7 +61,7 @@ function generateType(comp: Schema.Schema) {
   let fileContent = "";
   fileContent = generateEnum(comp);
 
-  fileContent += `export class ${className(comp.info.displayName)} {\n`;
+  fileContent += `export interface ${className(comp.info.displayName)} {\n`;
   Object.keys(comp.attributes).forEach((key) => {
     const required = comp.attributes[key]["required"] ? "" : "?";
     fileContent += `\t${key}${required}: ${getType(
@@ -142,7 +142,7 @@ async function saveFile(fileContent: string) {
 async function generateSchema(): Promise<string> {
   const allTypes = await getTypes();
 
-  let fileContent = "export class media {url: string}\n";
+  let fileContent = "export interface media {url: string}\n";
   allTypes.forEach((schema) => (fileContent += generateTypeRelations(schema)));
   allTypes.forEach((schema) => (fileContent += generateTypeAttributes(schema)));
   allTypes.forEach((schema) => (fileContent += generateType(schema)));

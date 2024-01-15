@@ -2,7 +2,7 @@
  * A set of functions called "actions" for `user-path`
  */
 
-import { PathInstance } from "../../../schema";
+import { PathInstance, StudentQuiz } from "../../../schema";
 
 const getUserId = async (ctx) => {
   const { user } = ctx.state;
@@ -24,6 +24,7 @@ import { getUser } from "./utils/get-user";
 import { getUserPopulate } from "./utils/getUserPopulate";
 import { registerStudentDB } from "./db-operation/register-student";
 import { updateStudentLesson } from "./db-operation/update-student-lesson";
+import { updateStudentQuiz } from "./db-operation/update-student-quiz";
 
 export default {
   myPaths: async (ctx: Context, next: Next) => {
@@ -86,44 +87,41 @@ export default {
     const response: BFF.saveProfile.response = {};
     const user = ctx.state.user;
 
-    const { firstName, lastName } = ctx.request.body;
+    const { name } = ctx.request.body;
     await strapi.query("plugin::users-permissions.user").update({
       where: { id: user.id },
       data: {
-        firstName,
-        lastName,
+        name,
       },
     });
 
     response.data = {
-      firstName,
-      lastName,
+      name,
     };
     ctx.body = response;
   },
   finishExam: async (ctx: Context, next: Next) => {
     const response: BFF.studentLessonResponse.response = {};
+    const student: BFF.StudentLessonBody = ctx.request.body;
 
-    let userActivity = await updateStudentLesson(
-      +ctx.params.courseId,
-      +ctx.params.lessonId,
-      ctx.state.user,
-      { mark: +ctx.params.mark }
-    );
+    let userActivity = await updateStudentLesson(ctx.state.user, student);
+    response.data = userActivity;
+    ctx.body = response;
+  },
+  finishQuiz: async (ctx: Context, next: Next) => {
+    const response: BFF.studentLessonResponse.response = {};
+    const student: BFF.StudentQuizBody = ctx.request.body;
+
+    let userActivity = await updateStudentQuiz(ctx.state.user, student);
     response.data = userActivity;
     ctx.body = response;
   },
 
   finishLesson: async (ctx: Context, next: Next) => {
     const response: BFF.studentLessonResponse.response = {};
-    const finish = ctx.params.finish === "true";
+    const student: BFF.StudentLessonBody = ctx.request.body;
 
-    let userActivity = await updateStudentLesson(
-      +ctx.params.courseId,
-      +ctx.params.lessonId,
-      ctx.state.user,
-      { done: finish }
-    );
+    let userActivity = await updateStudentLesson(ctx.state.user, student);
     response.data = userActivity;
     ctx.body = response;
   },

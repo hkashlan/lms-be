@@ -27,17 +27,25 @@ export default {
       },
     },
     {
-      method: "GET",
-      path: "/user/open-paths/finish-lesson/:courseId/:lessonId/:finish",
+      method: "POST",
+      path: "/user/open-paths/finish-lesson",
       handler: "user-path.finishLesson",
       config: {
         policies: ["global::is-authenticated"],
       },
     },
     {
-      method: "GET",
-      path: "/user/open-paths/finish-exam/:courseId/:lessonId/:mark",
+      method: "POST",
+      path: "/user/open-paths/finish-exam",
       handler: "user-path.finishExam",
+      config: {
+        policies: ["global::is-authenticated"],
+      },
+    },
+    {
+      method: "POST",
+      path: "/user/open-paths/finish-quiz",
+      handler: "user-path.finishQuiz",
       config: {
         policies: ["global::is-authenticated"],
       },

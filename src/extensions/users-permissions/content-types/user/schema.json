@@ -13,13 +13,15 @@
     "timestamps": true
   },
   "attributes": {
-    "firstName": {
+    "name": {
       "type": "string",
       "required": true
     },
+    "firstName": {
+      "type": "string"
+    },
     "lastName": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "status": {
       "type": "string"

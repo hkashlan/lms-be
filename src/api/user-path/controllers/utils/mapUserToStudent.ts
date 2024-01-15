@@ -10,7 +10,7 @@ export function mapQuizzesToBffQuizzes(
   id: number
 ): BFF.Quiz[] {
   return quizzes?.map((q) => {
-    const quizStudent = q.student_quizzes.find((s) => s.student.id === id);
+    const quizStudent = q.student_quizzes.find((s) => s.student?.id === id);
     return {
       dateFrom: q.dateFrom,
       dateTo: q.dateTo,
@@ -18,7 +18,9 @@ export function mapQuizzesToBffQuizzes(
       title: q.title,
       questions: q.questions,
       mark: quizStudent?.mark,
-    };
+      fullMark: quizStudent?.fullMark!,
+      answeredOptions: quizStudent?.answeredOptions,
+    } as BFF.Quiz;
   });
 }
 
@@ -28,7 +30,7 @@ export function mapLessonsToBffLessons(
 ): BFF.Lesson[] {
   return lessons?.map((l, index) => {
     const studentLesson = l.student_activities.find(
-      (s) => s.student.id === userId
+      (s) => s.student?.id === userId
     ) ?? { done: false, mark: undefined };
     return {
       lessonId: index,
@@ -38,8 +40,10 @@ export function mapLessonsToBffLessons(
       done: studentLesson.done,
       pageNumber: l.pageNumber,
       toPageNumber: l.toPageNumber,
+      audio: l.audio?.url,
       date: l.date,
-      mark: studentLesson.mark,
+      mark: studentLesson.mark!,
+      answeredOptions: studentLesson.answeredOptions,
       questions: l.questions,
     };
   });
@@ -48,8 +52,7 @@ export function mapLessonsToBffLessons(
 export function mapUserToStudent(user: User): BFF.myPaths.Student {
   const student: BFF.myPaths.Student = {
     title: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
+    name: user.name,
     lastTitle: "",
     image: "",
     paths: user.pathInstances.map(
@@ -72,7 +75,7 @@ export function mapUserToStudent(user: User): BFF.myPaths.Student {
             book: c.course_instance.book?.url,
             progress: arrPercentage(c.course_instance.lessons, (l) =>
               l.student_activities.some(
-                (s) => s.student.id === user.id && s.done
+                (s) => s.student?.id === user.id && s.done
               )
             ),
             lessons: mapLessonsToBffLessons(c.course_instance.lessons, user.id),
