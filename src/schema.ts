@@ -29,12 +29,15 @@ export enum PathRelations {
   path_instances = "path_instances",
 }
 
-export enum PathInstanceRelations {
-  path = "path",
-  teacher = "teacher",
-  course_instances = "course_instances",
-  students = "students",
+export namespace pathInstanceRelations {
+  export type path = "path";
 }
+
+export const PathInstanceRelations: {
+  path: pathInstanceRelations.path;
+} = {
+  path: "path",
+};
 
 export enum LessonRelations {
   audio = "audio",

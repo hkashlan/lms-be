@@ -52,7 +52,7 @@ export default {
       // ].findOne(1, "plugin::users-permissions.user");
       const userId = await getUserId(ctx);
       const { openPathInstances } = await getAvailablePathsForStudent(userId);
-      response.data = openPathInstances;
+      response.data = openPathInstances as any;
 
       ctx.body = response;
     } catch (err) {
@@ -65,10 +65,10 @@ export default {
 
     const id = +ctx.params.id;
     const userId = await getUserId(ctx);
-    const { openPathInstances, user } = await getAvailablePathsForStudent(
-      userId,
-      true
-    );
+    const result = await getAvailablePathsForStudent(userId, true);
+
+    const openPathInstances: PathInstance[] = result.openPathInstances as any;
+    const user = result.user;
     const pathInstance = openPathInstances.find((p) => p.id === id);
 
     if (

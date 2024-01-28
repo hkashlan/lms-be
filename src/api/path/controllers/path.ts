@@ -22,7 +22,10 @@ export default factories.createCoreController(
   ({ strapi }) => ({
     async findUserFaculty(ctx: Context) {
       const userId = await getUserId(ctx);
-      const user = await strapi.query("user").findOne({ id: userId });
+      const user = await strapi.entityService.findOne(
+        "plugin::users-permissions.user",
+        userId
+      );
 
       // const qp = await this.sanitizeParams(ctx);
       // const { results, pagination } = await strapi.service(api::restaurant.restaurant).find(qp);
