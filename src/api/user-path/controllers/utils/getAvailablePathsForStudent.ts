@@ -1,3 +1,4 @@
+import { Attribute } from "@strapi/strapi";
 import {
   PathInstanceRelations,
   User,
@@ -5,6 +6,8 @@ import {
   UserAttributes,
   PathInstance,
   CourseInstanceRelations,
+  PathAttributes,
+  pathInstanceRelations,
 } from "../../../../schema";
 import { PathRelations } from "../../../../schema";
 import { getUserForPath } from "./get-user";
@@ -16,28 +19,33 @@ export async function getAvailablePathsForStudent(
   const user: User = await getUserForPath(userId);
   const pathTakenIds = user.paths.map((path) => path.id);
 
+  // const PATH_INSTANCE_PATH: "path" = pathInstanceRelations.path;
   const populate = withStudents
     ? {
-        [PathInstanceRelations.path]: {
+        path: {
           populate: {
-            [PathRelations.students]: "*",
+            students: true,
           },
         },
-        [PathInstanceRelations.course_instances]: {
+        course_instances: {
           populate: {
-            [CourseInstanceRelations.course]: "*",
+            course: true,
           },
         },
-        [PathInstanceRelations.students]: "*",
+        students: true,
       }
     : {
-        [PathInstanceRelations.path]: "*",
+        // [PathInstanceRelations.path]: "*",
+        path: true,
       };
 
-  let openPathInstances: PathInstance[] = await strapi
-    .query("api::path-instance.path-instance")
-    .findMany({
+  let openPathInstances = await strapi.entityService.findMany(
+    "api::path-instance.path-instance",
+    {
       where: {
+        [PathInstanceAttributes.path]: {
+          [PathAttributes.id]: {},
+        },
         [PathInstanceAttributes.stillOpen]: true,
         [PathInstanceAttributes.students]: {
           $or: [
@@ -51,10 +59,11 @@ export async function getAvailablePathsForStudent(
         },
       },
       populate,
-    });
+    }
+  );
 
   openPathInstances = openPathInstances.filter(
-    (path) => !pathTakenIds.includes(path.path.id)
+    (path) => !pathTakenIds.includes(path.path.id as number)
   );
   return { openPathInstances, user };
 }
