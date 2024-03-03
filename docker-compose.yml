@@ -1,0 +1,44 @@
+version: '3.5'
+
+services:
+  db:
+    image: postgres:16.2-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: lms
+      POSTGRES_USER: lms
+      POSTGRES_DB: lms
+    container_name: postgres
+    volumes:
+      # - ./data/pgdata:/var/lib/postgresql/data:z
+      - data:/var/lib/postgresql/data/ #using a volume
+    ports:
+      - '5932:5432'
+
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile.dev
+  #   container_name: nest-docker-postgres
+  #   ports:
+  #     - '4000:3000'
+  #   depends_on:
+  #     - db
+  #   volumes:
+  #     - ./:/app/
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: nest-pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin@mycomp.com
+      - PGADMIN_DEFAULT_PASSWORD=secret
+      - PGADMIN_DISABLE_SIGNIN=true
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    ports:
+      - '5090:80'
+    depends_on:
+      - db
+volumes:
+  data:

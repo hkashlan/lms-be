@@ -1,0 +1,14 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "prettier.printWidth": 80,
+  "editor.rulers": [
+    {
+      "column": 80, // spacing of 1st column from left
+      "color": "#ff9900" // orange, Go Vols!
+    }
+  ]
+}
