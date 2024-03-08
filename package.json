@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "prisma:migrate": "npx prisma migrate dev",
-    "prisma:generate": "npx prisma generate",
+    "prisma:generate": "npx prisma generate ",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
@@ -26,9 +26,11 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^7.3.0",
     "@nestjs/typeorm": "^10.0.2",
     "@prisma/client": "^5.10.2",
     "pg": "^8.11.3",
+    "prisma-class-generator": "^0.2.9",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },

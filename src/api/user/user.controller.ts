@@ -4,10 +4,13 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { JsonPipe } from '../../core/pipes/json/json.pipe';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -20,8 +23,12 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  findAll(
+    @Query('filter', JsonPipe) filter?: Prisma.UserFindManyArgs,
+    @Query('page', ParseIntPipe) page?: number,
+    @Query('size', ParseIntPipe) size?: number,
+  ) {
+    return this.userService.findAll(filter, page, size);
   }
 
   @Get(':id')
