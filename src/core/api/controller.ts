@@ -10,11 +10,12 @@ import {
 } from '@nestjs/common';
 import { Result } from '../models/result';
 import { JsonPipe } from '../pipes/json/json.pipe';
+import { SelectFilter } from './repository';
 import { APIService } from './service';
 
-export class Controller<
+export class RestController<
   T,
-  Select extends { where: any; select: any },
+  Select extends SelectFilter,
   CreateInput,
   UpdateInput,
 > {
@@ -35,8 +36,8 @@ export class Controller<
   @Get()
   findAll(
     @Query('filter', JsonPipe) filter?: Select,
-    @Query('page', ParseIntPipe) page?: number,
-    @Query('size', ParseIntPipe) size?: number,
+    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
+    @Query('size', new ParseIntPipe({ optional: true })) size?: number,
   ): Promise<Result<T>> {
     return this.apiService.findAll(filter, page, size);
   }

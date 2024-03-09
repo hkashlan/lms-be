@@ -1,9 +1,9 @@
 import { Result } from '../models/result';
-import { Repository } from './repository';
+import { Repository, SelectFilter } from './repository';
 
 export class APIService<
   T,
-  Select extends { where: any; select: any },
+  Select extends SelectFilter,
   CreateInput,
   UpdateInput,
 > {
@@ -18,16 +18,17 @@ export class APIService<
     page?: number,
     size?: number,
   ): Promise<Result<T>> {
+    size = size ?? 10;
     const skip = page && size ? (page - 1) * size : 0;
     const users = await this.db.findMany({
       ...filter,
       skip,
-      take: size ?? 10,
+      take: size,
     });
     const userCount = await this.db.count({ where: filter?.where });
     return {
       items: users,
-      pages: userCount,
+      pages: Math.ceil(userCount / size),
     };
   }
 

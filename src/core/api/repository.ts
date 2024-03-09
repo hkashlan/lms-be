@@ -3,12 +3,16 @@ interface filterById {
 }
 
 interface filterByWhere {
-  where: any;
+  where?: any;
+}
+
+export interface SelectFilter extends filterByWhere {
+  select?: any;
 }
 
 export interface Repository<
   T,
-  Select extends filterByWhere & { select: any },
+  Select extends SelectFilter,
   CreateInput,
   UpdateInput,
 > {

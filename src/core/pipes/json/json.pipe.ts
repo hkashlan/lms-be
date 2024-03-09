@@ -9,7 +9,7 @@ import {
 export class JsonPipe implements PipeTransform<any> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   transform(value: any, metadata: ArgumentMetadata): any {
-    const objVal = value?.[metadata.data];
+    const objVal = value;
     if (!objVal) {
       return undefined;
     }
