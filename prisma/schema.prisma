@@ -9,8 +9,8 @@ generator client {
 }
 
 generator prismaClassGenerator {
-    provider = "prisma-class-generator"
-    dryRun = false
+  provider = "prisma-class-generator"
+  dryRun   = false
 }
 
 datasource db {
@@ -18,18 +18,88 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+model Path {
+  id             Int             @id @default(autoincrement())
+  title          String
+  description    String
+  courses        Course[]
+  students       Student[]
+  path_instances Path_instance[]
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+model Course {
+  id               Int               @id @default(autoincrement())
+  title            String
+  pathId           Int
+  path             Path              @relation(fields: [pathId], references: [id])
+  course_instances Course_instance[]
+  lessons          Json
+}
+
+model Path_instance {
+  id                            Int       @id @default(autoincrement())
+  path_id                       Int
+  path                          Path      @relation(fields: [path_id], references: [id])
+  title                         String
+  description                   String
+  date_from                     DateTime
+  date_to                       DateTime
+  number_of_students            Int
+  number_of_registered_students Int
+  stil_open                     Boolean?  @default(false)
+  students                      Student[]
+}
+
+model Course_instance {
+  id               Int      @id @default(autoincrement())
+  course_id        Int
+  path_instance_id Int
+  title            String
+  description      String
+  date_from        DateTime
+  date_to          DateTime
+  book             String
+  lessons          Json
+  quizzes          Quiz[]
+  course           Course   @relation(fields: [courseId], references: [id])
+  courseId         Int
+}
+
+model Quiz {
+  id                 Int             @id @default(autoincrement())
+  title              String
+  date_from          DateTime
+  date_to            DateTime
+  mark               Float
+  questions          Json
+  course_instance_id Int
+  course_instance    Course_instance @relation(fields: [course_instance_id], references: [id])
+}
+
+model Quiz_student {
+  id            Int      @id @default(autoincrement())
+  full_mark     Float
+  mark          Float
+  date          DateTime
+  quiz_id       Int
+  student_id    Int
+  answerOptions Json
+}
+
+model Student {
+  id             Int            @id @default(autoincrement())
+  name           String
+  password       String
+  student_info   Json
+  path           Path           @relation(fields: [pathId], references: [id])
+  pathId         Int
+  path_instance  Path_instance? @relation(fields: [pathInstanceId], references: [id])
+  pathInstanceId Int?
+}
+
+model Teacher {
+  id    Int    @id @default(autoincrement())
+  name  String
+  phone Int
+  email String
 }
