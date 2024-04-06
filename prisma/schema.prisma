@@ -8,111 +8,123 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator prismaClassGenerator {
-  provider = "prisma-class-generator"
-  dryRun   = false
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("POSTGRES_URL")
 }
 
+generator jsonSchema {
+  provider = "prisma-json-schema-generator"
+  output = "../src/app/core/models"
+}
+
 model Path {
   id                  Int                   @id @default(autoincrement())
-  title               String
+  name                String
   description         String
   courses             Course[]
   studentPathInstance StudentPathInstance[]
 }
 
 model PathInstance {
-  id                            Int                   @id @default(autoincrement())
-  title                         String
-  description                   String
-  date_from                     DateTime
-  date_to                       DateTime
-  number_of_students            Int
-  number_of_registered_students Int
-  stil_open                     Boolean?              @default(false)
-  quiz_instance_students        QuizInstanceStudent[]
-  student_path_instance         StudentPathInstance[]
+  id                         Int                   @id @default(autoincrement())
+  name                       String
+  description                String
+  dateFrom                   DateTime
+  dateTo                     DateTime
+  numberOfStudents           Int
+  numberOfRegisteredStudents Int
+  stilOpen                   Boolean?              @default(false)
+  quizInstanceStudents       QuizInstanceStudent[]
+  studentPathInstance        StudentPathInstance[]
+  CourseInstance             CourseInstance[]
 }
 
 model Course {
-  id               Int              @id @default(autoincrement())
-  title            String
-  pathId           Int
-  path             Path             @relation(fields: [pathId], references: [id])
-  course_instances CourseInstance[]
-  lessons          Json
+  id              Int              @id @default(autoincrement())
+  name            String
+  pathId          Int
+  pathName        String
+  path            Path             @relation(fields: [pathId], references: [id])
+  courseInstances CourseInstance[]
+  lessons         Json
 }
 
 model CourseInstance {
   id               Int            @id @default(autoincrement())
-  course_id        Int
-  path_instance_id Int
-  title            String
+  name             String
+  courseId         Int
+  courseName       String
+  course           Course         @relation(fields: [courseId], references: [id])
+  pathInstanceId   Int
+  pathInstanceName String
+  pathInstance     PathInstance   @relation(fields: [pathInstanceId], references: [id])
   description      String
-  date_from        DateTime
-  date_to          DateTime
+  dateFrom         DateTime
+  dateTo           DateTime
   book             String
   lessons          Json
   quizzes          QuizInstance[]
-  course           Course         @relation(fields: [courseId], references: [id])
-  courseId         Int
-  page_from        Int
-  page_to          Int
+  pageFrom         Int
+  pageTo           Int
   teacherId        Int
+  teacherName      String
   teacher          Teacher        @relation(fields: [teacherId], references: [id])
 }
 
 model StudentPathInstance {
-  id             Int          @id @default(autoincrement())
-  mark           Int
-  fullMark       Int
-  studentId      Int
-  student        Student      @relation(fields: [studentId], references: [id])
-  pathInstanceId Int
-  Path_instance  PathInstance @relation(fields: [pathInstanceId], references: [id])
-  pathId         Int
-  path           Path         @relation(fields: [pathId], references: [id])
+  id               Int          @id @default(autoincrement())
+  mark             Int
+  fullMark         Int
+  studentId        Int
+  studentName      String
+  student          Student      @relation(fields: [studentId], references: [id])
+  pathInstanceId   Int
+  pathInstanceName String
+  pathInstance     PathInstance @relation(fields: [pathInstanceId], references: [id])
+  pathId           Int
+  path             Path         @relation(fields: [pathId], references: [id])
+  pathName         String
 }
 
 model Student {
-  id                    Int                   @id @default(autoincrement())
-  name                  String
-  password              String
-  student_info          Json
-  quiz_students         QuizInstanceStudent[]
-  pathInformation       Json
-  student_path_instance StudentPathInstance[]
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  password            String
+  student_info        Json
+  quizStudents        QuizInstanceStudent[]
+  pathInformation     Json
+  studentPathInstance StudentPathInstance[]
 }
 
 model QuizInstance {
   id                 Int                   @id @default(autoincrement())
-  title              String
-  date_from          DateTime
-  date_to            DateTime
+  name               String
+  dateFrom           DateTime
+  dateTo             DateTime
   mark               Float
-  quiz_students      QuizInstanceStudent[]
+  quizStudents       QuizInstanceStudent[]
   questions          Json
-  course_instance_id Int
-  course_instance    CourseInstance        @relation(fields: [course_instance_id], references: [id])
+  courseInstanceId   Int
+  courseInstanceName String
+  courseInstance     CourseInstance        @relation(fields: [courseInstanceId], references: [id])
 }
 
 model QuizInstanceStudent {
-  id               Int          @id @default(autoincrement())
-  full_mark        Float
-  mark             Float
-  date             DateTime
-  quiz_id          Int
-  student_id       Int
-  path_instance_id Int
-  answerOptions    Json
-  quiz             QuizInstance @relation(fields: [quiz_id], references: [id])
-  student          Student      @relation(fields: [student_id], references: [id])
-  path_instance    PathInstance @relation(fields: [path_instance_id], references: [id])
+  id                 Int          @id @default(autoincrement())
+  fullMark           Float
+  mark               Float
+  date               DateTime
+  quizId             Int
+  quizName           String
+  quiz               QuizInstance @relation(fields: [quizId], references: [id])
+  studentId          Int
+  studentName        String
+  student            Student      @relation(fields: [studentId], references: [id])
+  pathInstanceId     Int
+  pathInstanceString String
+  pathInstance       PathInstance @relation(fields: [pathInstanceId], references: [id])
+  answerOptions      Json
 }
 
 model Teacher {
