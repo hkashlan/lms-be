@@ -13,11 +13,15 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
+generator jsonSchema {
+  provider = "prisma-json-schema-generator"
+  output   = "../src/app/core/models"
+}
 
 model User {
   id     Int     @id @default(autoincrement())
   email  String  @unique
-  name   String?
+  name   String
   active Boolean
 
   postId   Int
@@ -27,7 +31,7 @@ model User {
 
 model Post {
   id        Int     @id @default(autoincrement())
-  title     String
+  name     String
   content   String?
   published Boolean @default(false)
   users     User[]
