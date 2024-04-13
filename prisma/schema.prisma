@@ -15,7 +15,7 @@ datasource db {
 
 generator jsonSchema {
   provider = "prisma-json-schema-generator"
-  output = "../src/app/core/models"
+  output   = "../src/app/core/models"
 }
 
 model Path {
@@ -132,6 +132,6 @@ model Teacher {
   name            String
   password        String
   phone           Int
-  email           String
+  email           String           @unique
   courseInstances CourseInstance[]
 }

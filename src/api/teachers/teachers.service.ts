@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Teacher, Prisma } from '@prisma/client';
+import { Prisma, Teacher } from '@prisma/client';
 import { APIService } from '../../core/api/service';
 import { DatabaseService } from '../../core/database/database.service';
 
@@ -10,7 +10,7 @@ export class TeachersService extends APIService<
   Prisma.TeacherCreateInput,
   Prisma.TeacherUpdateInput
 > {
-  constructor(db: DatabaseService) {
+  constructor(private db: DatabaseService) {
     super({
       findMany: db.teacher.findMany,
       findOne: db.teacher.findUnique,
@@ -18,6 +18,16 @@ export class TeachersService extends APIService<
       create: db.teacher.create,
       update: db.teacher.update,
       delete: db.teacher.delete,
+    });
+  }
+
+  findByEmail() {}
+
+  async findOneByEmail(email: string): Promise<Teacher> {
+    return this.db.teacher.findFirst({
+      where: {
+        email: email,
+      },
     });
   }
 }

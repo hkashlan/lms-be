@@ -7,10 +7,12 @@ export class APIService<
   CreateInput,
   UpdateInput,
 > {
-  constructor(private db: Repository<T, Select, CreateInput, UpdateInput>) {}
+  constructor(
+    protected repository: Repository<T, Select, CreateInput, UpdateInput>,
+  ) {}
 
   async create(createUserDto: CreateInput): Promise<T> {
-    return this.db.create({ data: createUserDto });
+    return this.repository.create({ data: createUserDto });
   }
 
   async findAll(
@@ -20,12 +22,12 @@ export class APIService<
   ): Promise<Result<T>> {
     size = size ?? 10;
     const skip = page && size ? (page - 1) * size : 0;
-    const users = await this.db.findMany({
+    const users = await this.repository.findMany({
       ...filter,
       skip,
       take: size,
     });
-    const userCount = await this.db.count({ where: filter?.where });
+    const userCount = await this.repository.count({ where: filter?.where });
     return {
       items: users,
       pages: Math.ceil(userCount / size),
@@ -33,7 +35,7 @@ export class APIService<
   }
 
   async findOne(id: number): Promise<T> {
-    return this.db.findOne({
+    return this.repository.findOne({
       where: {
         id: id,
       },
@@ -41,7 +43,7 @@ export class APIService<
   }
 
   async update(id: number, updateUserDto: UpdateInput) {
-    return this.db.update({
+    return this.repository.update({
       where: {
         id,
       },
@@ -50,7 +52,7 @@ export class APIService<
   }
 
   async remove(id: number): Promise<T> {
-    return this.db.delete({
+    return this.repository.delete({
       where: {
         id: id,
       },

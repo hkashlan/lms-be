@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { CourseInstancesModule } from './api/course-instances/course-instances.module';
 import { CoursesModule } from './api/courses/courses.module';
 import { PathInstancesModule } from './api/path-instances/path-instances.module';
@@ -10,6 +11,8 @@ import { StudentsModule } from './api/students/students.module';
 import { TeachersModule } from './api/teachers/teachers.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthGuard } from './auth/auth.guard';
+import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './core/database/database.module';
 
 @Module({
@@ -24,8 +27,15 @@ import { DatabaseModule } from './core/database/database.module';
     QuizInstancesModule,
     QuizInstanceStudentsModule,
     TeachersModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
