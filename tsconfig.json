@@ -1,24 +1,21 @@
 {
-  "extends": "@strapi/typescript-utils/tsconfigs/server",
   "compilerOptions": {
-    "outDir": "dist",
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
     "sourceMap": true,
-    "rootDir": "."
-  },
-  "include": [
-    "./",
-    "./**/*.ts",
-    "./**/*.js",
-    "src/**/*.json"
-  ],
-  "exclude": [
-    "node_modules/",
-    "build/",
-    "dist/",
-    ".cache/",
-    ".tmp/",
-    "src/admin/",
-    "**/*.test.*",
-    "src/plugins/**"
-  ]
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false
+  }
 }

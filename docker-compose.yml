@@ -49,21 +49,21 @@ services:
     networks:
       - lms-be
   pgadmin:
-      container_name: pgadmin_container_2
-      image: dpage/pgadmin4
-      env_file: .env
-      environment:
-          PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-          PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-          PGADMIN_CONFIG_SERVER_MODE: 'False'
-      volumes:
-          - ./data/pgadmin:/var/lib/pgadmin
+    container_name: pgadmin_container_2
+    image: dpage/pgadmin4
+    env_file: .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - ./data/pgadmin:/var/lib/pgadmin
 
-      ports:
-          - '5055:80'
-      networks:
-        - lms-be
-      restart: unless-stopped
+    ports:
+      - '5055:80'
+    networks:
+      - lms-be
+    restart: unless-stopped
 
 volumes:
   lms-be-data:
