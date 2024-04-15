@@ -1,6 +1,7 @@
-############################
-# OS X
-############################
+# compiled output
+dist
+node_modules
+/build
 
 .DS_Store
 .AppleDouble
