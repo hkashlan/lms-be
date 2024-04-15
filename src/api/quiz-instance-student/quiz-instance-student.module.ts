@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { QuizInstanceStudentController } from './quizInstanceStudent.controller';
-import { QuizInstanceStudentService } from './quizInstanceStudent.service';
+import { QuizInstanceStudentController } from './quiz-instance-student.controller';
+import { QuizInstanceStudentService } from './quiz-instance-student.service';
 
 @Module({
   controllers: [QuizInstanceStudentController],

@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { QuizInstanceStudent, Prisma } from '@prisma/client';
 import { RestController } from '../../core/api/controller';
-import { QuizInstanceStudentService } from './quizInstanceStudent.service';
+import { QuizInstanceStudentService } from './quiz-instance-student.service';
 
 @Controller('quizInstanceStudent')
 export class QuizInstanceStudentController extends RestController<
@@ -10,7 +10,7 @@ export class QuizInstanceStudentController extends RestController<
   Prisma.QuizInstanceStudentCreateInput,
   Prisma.QuizInstanceStudentUpdateInput
 > {
-  constructor(readonly pathService: QuizInstanceStudentService) {
+  constructor(readonly quizInstanceStudentService: QuizInstanceStudentService) {
     super(quizInstanceStudentService);
   }
 }

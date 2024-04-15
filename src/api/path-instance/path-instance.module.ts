@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { PathInstanceController } from './pathInstance.controller';
-import { PathInstanceService } from './pathInstance.service';
+import { PathInstanceController } from './path-instance.controller';
+import { PathInstanceService } from './path-instance.service';
 
 @Module({
   controllers: [PathInstanceController],

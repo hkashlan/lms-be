@@ -10,7 +10,7 @@ export class TeacherController extends RestController<
   Prisma.TeacherCreateInput,
   Prisma.TeacherUpdateInput
 > {
-  constructor(readonly pathService: TeacherService) {
+  constructor(readonly teacherService: TeacherService) {
     super(teacherService);
   }
 }

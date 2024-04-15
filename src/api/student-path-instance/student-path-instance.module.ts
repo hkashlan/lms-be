@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { StudentPathInstanceController } from './studentPathInstance.controller';
-import { StudentPathInstanceService } from './studentPathInstance.service';
+import { StudentPathInstanceController } from './student-path-instance.controller';
+import { StudentPathInstanceService } from './student-path-instance.service';
 
 @Module({
   controllers: [StudentPathInstanceController],

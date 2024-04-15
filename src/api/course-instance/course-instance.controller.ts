@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { CourseInstance, Prisma } from '@prisma/client';
 import { RestController } from '../../core/api/controller';
-import { CourseInstanceService } from './courseInstance.service';
+import { CourseInstanceService } from './course-instance.service';
 
 @Controller('courseInstance')
 export class CourseInstanceController extends RestController<
@@ -10,7 +10,7 @@ export class CourseInstanceController extends RestController<
   Prisma.CourseInstanceCreateInput,
   Prisma.CourseInstanceUpdateInput
 > {
-  constructor(readonly pathService: CourseInstanceService) {
+  constructor(readonly courseInstanceService: CourseInstanceService) {
     super(courseInstanceService);
   }
 }

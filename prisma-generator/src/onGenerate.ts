@@ -36,8 +36,8 @@ export default async function onGenerate(options: GeneratorOptions) {
 
 function createModule(folder: string, model: DMMF.Model, small: string) {
   const content = `import { Module } from '@nestjs/common';
-import { ${model.name}Controller } from './${small}.controller';
-import { ${model.name}Service } from './${small}.service';
+import { ${model.name}Controller } from './${toKebabCase(model.name)}.controller';
+import { ${model.name}Service } from './${toKebabCase(model.name)}.service';
 
 @Module({
   controllers: [${model.name}Controller],
@@ -52,7 +52,7 @@ function createController(folder: string, model: DMMF.Model, small: string) {
   const content = `import { Controller } from '@nestjs/common';
 import { ${model.name}, Prisma } from '@prisma/client';
 import { RestController } from '../../core/api/controller';
-import { ${model.name}Service } from './${small}.service';
+import { ${model.name}Service } from './${toKebabCase(model.name)}.service';
 
 @Controller('${small}')
 export class ${model.name}Controller extends RestController<
@@ -61,7 +61,7 @@ export class ${model.name}Controller extends RestController<
   Prisma.${model.name}CreateInput,
   Prisma.${model.name}UpdateInput
 > {
-  constructor(readonly pathService: ${model.name}Service) {
+  constructor(readonly ${small}Service: ${model.name}Service) {
     super(${small}Service);
   }
 }
@@ -82,14 +82,14 @@ export class ${model.name}Service extends APIService<
   Prisma.${model.name}CreateInput,
   Prisma.${model.name}UpdateInput
 > {
-  constructor(db: DatabaseService) {
+  constructor(private db: DatabaseService) {
     super({
-      findMany: db.${small}.findMany,
-      findOne: db.${small}.findUnique,
-      count: db.${small}.count,
-      create: db.${small}.create,
-      update: db.${small}.update,
-      delete: db.${small}.delete,
+      findMany: this.db.${small}.findMany,
+      findOne: this.db.${small}.findUnique,
+      count: this.db.${small}.count,
+      create: this.db.${small}.create,
+      update: this.db.${small}.update,
+      delete: this.db.${small}.delete,
     });
   }
 }

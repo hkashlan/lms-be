@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { PathInstance, Prisma } from '@prisma/client';
 import { RestController } from '../../core/api/controller';
-import { PathInstanceService } from './pathInstance.service';
+import { PathInstanceService } from './path-instance.service';
 
 @Controller('pathInstance')
 export class PathInstanceController extends RestController<
@@ -10,7 +10,7 @@ export class PathInstanceController extends RestController<
   Prisma.PathInstanceCreateInput,
   Prisma.PathInstanceUpdateInput
 > {
-  constructor(readonly pathService: PathInstanceService) {
+  constructor(readonly pathInstanceService: PathInstanceService) {
     super(pathInstanceService);
   }
 }
