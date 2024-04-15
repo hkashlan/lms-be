@@ -2,14 +2,22 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "npm run developDebug",
-      "name": "Run npm develop",
+      "type": "node",
       "request": "launch",
-      "type": "node-terminal",
-      "env": {
-        "DATABASE_SSL": "false",
-        "NODE_ENV": "development"
-      }
+      "name": "Debug Nest Framework",
+      "args": ["${workspaceFolder}/src/main.ts"],
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register"
+      ],
+      "sourceMaps": true,
+      "envFile": "${workspaceFolder}/.env",
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "protocol": "inspector"
     }
   ]
 }

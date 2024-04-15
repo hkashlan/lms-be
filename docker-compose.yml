@@ -1,74 +1,44 @@
-version: '3'
+version: '3.5'
+
 services:
-  # lms-be:
-  #   container_name: lms-be
-  #   build: .
-  #   image: lms-be:latest
-  #   restart: unless-stopped
-  #   env_file: .env
-  #   environment:
-  #     DATABASE_CLIENT: ${DATABASE_CLIENT}
-  #     DATABASE_HOST: lms-beDB
-  #     DATABASE_NAME: ${DATABASE_NAME}
-  #     DATABASE_USERNAME: ${DATABASE_USERNAME}
-  #     DATABASE_PORT: ${DATABASE_PORT}
-  #     JWT_SECRET: ${JWT_SECRET}
-  #     ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
-  #     DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-  #     NODE_ENV: ${NODE_ENV}
-  #   volumes:
-  #     - ./config:/opt/app/config
-  #     - ./src:/opt/app/src
-  #     - ./package.json:/opt/package.json
-  #     - ./yarn.lock:/opt/yarn.lock
-  #     - ./.env:/opt/app/.env
-  #     - ./public/uploads:/opt/app/public/uploads
+  db:
+    image: postgres:16.2-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: lms
+      POSTGRES_USER: lms
+      POSTGRES_DB: lms
+    container_name: postgres
+    volumes:
+      # - ./data/pgdata:/var/lib/postgresql/data:z
+      - data:/var/lib/postgresql/data/ #using a volume
+    ports:
+      - '5932:5432'
+
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile.dev
+  #   container_name: nest-docker-postgres
   #   ports:
-  #     - '1337:1337'
-  #   networks:
-  #     - lms-be
+  #     - '4000:3000'
   #   depends_on:
-  #     - lms-beDB
+  #     - db
+  #   volumes:
+  #     - ./:/app/
 
-  lms-beDB:
-    container_name: lms-beDB1
-    platform: linux/amd64 #for platform error on Apple M1 chips
-    restart: unless-stopped
-    env_file: .env
-    image: postgres:14.5-alpine
-    environment:
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
-    volumes:
-      - lms-be-data:/var/lib/postgresql/data/ #using a volume
-      - ./data/postgres:/var/lib/postgresql/data/ # if you want to use a bind folder
-
-    ports:
-      - '5434:5432'
-    networks:
-      - lms-be
   pgadmin:
-    container_name: pgadmin_container_2
     image: dpage/pgadmin4
-    env_file: .env
+    restart: always
+    container_name: nest-pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - ./data/pgadmin:/var/lib/pgadmin
-
+      - PGADMIN_DEFAULT_EMAIL=pgadmin@mycomp.com
+      - PGADMIN_DEFAULT_PASSWORD=secret
+      - PGADMIN_DISABLE_SIGNIN=true
+      - PGADMIN_CONFIG_SERVER_MODE=False
     ports:
-      - '5055:80'
-    networks:
-      - lms-be
-    restart: unless-stopped
-
+      - '5090:80'
+    depends_on:
+      - db
 volumes:
-  lms-be-data:
-
-networks:
-  lms-be:
-    name: Lms-be
-    driver: bridge
+  data:
