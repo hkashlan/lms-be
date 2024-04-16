@@ -3,14 +3,14 @@ import { CourseInstance, Prisma } from '@prisma/client';
 import { RestController } from '../../core/api/controller';
 import { CourseInstanceService } from './course-instance.service';
 
-@Controller('courseInstance')
+@Controller('course-instance')
 export class CourseInstanceController extends RestController<
   CourseInstance,
   Prisma.CourseInstanceFindManyArgs,
   Prisma.CourseInstanceCreateInput,
   Prisma.CourseInstanceUpdateInput
 > {
-  constructor(readonly courseInstanceService: CourseInstanceService) {
+  constructor(courseInstanceService: CourseInstanceService) {
     super(courseInstanceService);
   }
 }

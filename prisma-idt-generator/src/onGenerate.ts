@@ -52,14 +52,14 @@ import { ${model.name}, Prisma } from '@prisma/client';
 import { RestController } from '../../core/api/controller';
 import { ${model.name}Service } from './${toKebabCase(model.name)}.service';
 
-@Controller('${small}')
+@Controller('${toKebabCase(model.name)}')
 export class ${model.name}Controller extends RestController<
   ${model.name},
   Prisma.${model.name}FindManyArgs,
   Prisma.${model.name}CreateInput,
   Prisma.${model.name}UpdateInput
 > {
-  constructor(readonly ${small}Service: ${model.name}Service) {
+  constructor(${small}Service: ${model.name}Service) {
     super(${small}Service);
   }
 }
