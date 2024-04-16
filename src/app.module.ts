@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { CourseInstancesModule } from './api/course-instances/course-instances.module';
-import { CoursesModule } from './api/courses/courses.module';
-import { PathInstancesModule } from './api/path-instances/path-instances.module';
+
+import { CourseInstanceModule } from './api/course-instance/course-instance.module';
+import { CourseModule } from './api/course/course.module';
+import { PathInstanceModule } from './api/path-instance/path-instance.module';
 import { PathModule } from './api/path/path.module';
-import { QuizInstanceStudentsModule } from './api/quiz-instance=students/quiz-instance=students.module';
-import { QuizInstancesModule } from './api/quiz-instances/quiz-instances.module';
-import { StudentPathInstancesModule } from './api/student-path-instances/student-path-instances.module';
-import { StudentsModule } from './api/students/students.module';
-import { TeachersModule } from './api/teachers/teachers.module';
+import { QuizInstanceStudentModule } from './api/quiz-instance-student/quiz-instance-student.module';
+import { QuizInstanceModule } from './api/quiz-instance/quiz-instance.module';
+import { StudentPathInstanceModule } from './api/student-path-instance/student-path-instance.module';
+import { StudentModule } from './api/student/student.module';
+import { TeacherModule } from './api/teacher/teacher.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthGuard } from './auth/auth.guard';
@@ -19,14 +20,14 @@ import { DatabaseModule } from './core/database/database.module';
   imports: [
     DatabaseModule,
     PathModule,
-    PathInstancesModule,
-    CoursesModule,
-    CourseInstancesModule,
-    StudentPathInstancesModule,
-    StudentsModule,
-    QuizInstancesModule,
-    QuizInstanceStudentsModule,
-    TeachersModule,
+    PathInstanceModule,
+    CourseModule,
+    CourseInstanceModule,
+    StudentPathInstanceModule,
+    StudentModule,
+    QuizInstanceModule,
+    QuizInstanceStudentModule,
+    TeacherModule,
     AuthModule,
   ],
   controllers: [AppController],
