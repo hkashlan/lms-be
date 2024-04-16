@@ -1,9 +1,9 @@
 {
-  "name": "prisma-custom-enums",
+  "name": "prisma-idt-generator",
   "version": "0.1.0",
   "main": "dist/generator.js",
   "bin": {
-    "prisma-custom-enums": "dist/bin.js"
+    "prisma-idt-generator": "dist/bin.js"
   },
   "files": [
     "dist"

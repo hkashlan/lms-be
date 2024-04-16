@@ -19,7 +19,7 @@ generator jsonSchema {
 }
 
 generator idt {
-  provider = "prisma-custom-enums"
+  provider = "prisma-idt-generator"
 }
 
 model Path {

@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "prisma:migrate": "npx prisma migrate dev",
-    "preprisma:generate": "cd prisma-generator && npm run build && cd .. && npm i ./prisma-generator",
+    "preprisma:generate": "cd prisma-idt-generator && npm run build && cd .. && npm i ./prisma-idt-generator",
     "prisma:generate": "npx prisma generate ",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
@@ -33,7 +33,7 @@
     "@prisma/generator-helper": "^5.12.1",
     "pg": "^8.11.3",
     "prisma-class-generator": "^0.2.9",
-    "prisma-custom-enums": "file:prisma-generator",
+    "prisma-idt-generator": "file:prisma-idt-generator",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },

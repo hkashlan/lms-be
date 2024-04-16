@@ -16,16 +16,14 @@ function toSmallLetter(str: string): string {
 export default async function onGenerate(options: GeneratorOptions) {
   const models = options.dmmf.datamodel.models;
   const folder = 'src/api';
-  const outputPath = path.resolve(folder);
-  if (fs.existsSync(outputPath)) {
-    fs.rmdirSync(outputPath, { recursive: true });
-  }
 
   models.forEach((e) => {
     const small = toSmallLetter(e.name);
-    createService(folder, e, small);
-    createController(folder, e, small);
-    createModule(folder, e, small);
+    if (!fs.existsSync(folder + '/' + toKebabCase(e.name))) {
+      createService(folder, e, small);
+      createController(folder, e, small);
+      createModule(folder, e);
+    }
   });
 
   const outputFile = options.generator.output;
@@ -34,7 +32,7 @@ export default async function onGenerate(options: GeneratorOptions) {
   }
 }
 
-function createModule(folder: string, model: DMMF.Model, small: string) {
+function createModule(folder: string, model: DMMF.Model) {
   const content = `import { Module } from '@nestjs/common';
 import { ${model.name}Controller } from './${toKebabCase(model.name)}.controller';
 import { ${model.name}Service } from './${toKebabCase(model.name)}.service';
@@ -82,14 +80,14 @@ export class ${model.name}Service extends APIService<
   Prisma.${model.name}CreateInput,
   Prisma.${model.name}UpdateInput
 > {
-  constructor(private db: DatabaseService) {
+  constructor(db: DatabaseService) {
     super({
-      findMany: this.db.${small}.findMany,
-      findOne: this.db.${small}.findUnique,
-      count: this.db.${small}.count,
-      create: this.db.${small}.create,
-      update: this.db.${small}.update,
-      delete: this.db.${small}.delete,
+      findMany: db.${small}.findMany,
+      findOne: db.${small}.findUnique,
+      count: db.${small}.count,
+      create: db.${small}.create,
+      update: db.${small}.update,
+      delete: db.${small}.delete,
     });
   }
 }
