@@ -20,10 +20,15 @@ generator jsonSchema {
 
 model Path {
   id                  Int                   @id @default(autoincrement())
-  name                String
+  name                String                
   description         String
   courses             Course[]
   studentPathInstance StudentPathInstance[]
+  createdDate         DateTime
+  updatedDate          DateTime
+  createdUser         String
+  updatedUser         String
+  
 }
 
 model PathInstance {
@@ -35,6 +40,10 @@ model PathInstance {
   numberOfStudents           Int
   numberOfRegisteredStudents Int
   stilOpen                   Boolean?              @default(false)
+  createdDate         DateTime
+  updatedDate          DateTime
+  createdUser         String
+  updatedUser          String
   quizInstanceStudents       QuizInstanceStudent[]
   studentPathInstance        StudentPathInstance[]
   CourseInstance             CourseInstance[]
@@ -45,6 +54,10 @@ model Course {
   name            String
   pathId          Int
   pathName        String
+  createdDate         DateTime
+  updatedDate          DateTime
+  createdUser         String
+  updatedUser         String
   path            Path             @relation(fields: [pathId], references: [id])
   courseInstances CourseInstance[]
   lessons         Json
@@ -62,6 +75,10 @@ model CourseInstance {
   description      String
   dateFrom         DateTime
   dateTo           DateTime
+  createdDate         DateTime
+  updatedDate          DateTime
+  createdUser         String
+  updatedUser         String
   book             String
   lessons          Json
   quizzes          QuizInstance[]
@@ -76,6 +93,10 @@ model StudentPathInstance {
   id               Int          @id @default(autoincrement())
   mark             Int
   fullMark         Int
+  createdDate         DateTime
+  updatedDate          DateTime
+  createdUser         String
+  updatedUser          String
   studentId        Int
   studentName      String
   student          Student      @relation(fields: [studentId], references: [id])
@@ -95,6 +116,8 @@ model Student {
   quizStudents        QuizInstanceStudent[]
   pathInformation     Json
   studentPathInstance StudentPathInstance[]
+  createdDate         DateTime
+  updatedDate          DateTime
 }
 
 model QuizInstance {
@@ -102,6 +125,10 @@ model QuizInstance {
   name               String
   dateFrom           DateTime
   dateTo             DateTime
+  createdDate         DateTime
+  updatedDate          DateTime
+  createdUser         String
+  updatedUser          String
   mark               Float
   quizStudents       QuizInstanceStudent[]
   questions          Json
@@ -115,6 +142,10 @@ model QuizInstanceStudent {
   fullMark           Float
   mark               Float
   date               DateTime
+  createdDate         DateTime
+  updatedDate          DateTime
+  createdUser         String
+  updatedUser          String
   quizId             Int
   quizName           String
   quiz               QuizInstance @relation(fields: [quizId], references: [id])
@@ -131,6 +162,10 @@ model Teacher {
   id              Int              @id @default(autoincrement())
   name            String
   password        String
+  createdDate         DateTime
+  updatedDate          DateTime
+  createdUser         String
+  updatedUser          String
   phone           Int
   email           String           @unique
   courseInstances CourseInstance[]
