@@ -1,4 +1,5 @@
-import { SetMetadata } from '@nestjs/common';
+import { ExecutionContext, SetMetadata } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { Role } from '@prisma/client';
 export const jwtConstants = {
   secret:
@@ -10,3 +11,11 @@ export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
 
 export const ROLES_KEY = 'roles';
 export const Roles = (...roles: Role[]) => SetMetadata(ROLES_KEY, roles);
+
+export const isPublic = (context: ExecutionContext, reflector: Reflector) => {
+  const isPublic = reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+    context.getHandler(),
+    context.getClass(),
+  ]);
+  return isPublic;
+};

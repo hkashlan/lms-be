@@ -10,6 +10,7 @@ import { QuizInstanceModule } from './api/quiz-instance/quiz-instance.module';
 import { StudentPathInstanceModule } from './api/student-path-instance/student-path-instance.module';
 import { StudentModule } from './api/student/student.module';
 import { TeacherModule } from './api/teacher/teacher.module';
+import { UserModule } from './api/user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthGuard } from './auth/auth.guard';
@@ -29,6 +30,7 @@ import { DatabaseModule } from './core/database/database.module';
     QuizInstanceModule,
     QuizInstanceStudentModule,
     TeacherModule,
+    UserModule,
     AuthModule,
   ],
   controllers: [AppController],
