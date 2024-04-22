@@ -10,7 +10,7 @@ export class PathController extends RestController<
   Prisma.PathCreateInput,
   Prisma.PathUpdateInput
 > {
-  constructor(readonly pathService: PathService) {
+  constructor(pathService: PathService) {
     super(pathService);
   }
 }
