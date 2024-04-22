@@ -102,8 +102,8 @@ model CourseInstance {
 
 model StudentPathInstance {
   id               Int          @id @default(autoincrement())
-  mark             Float
-  fullMark         Float
+  mark             Int
+  fullMark         Int
   studentId        Int
   studentName      String
   student          Student      @relation(fields: [studentId], references: [id])

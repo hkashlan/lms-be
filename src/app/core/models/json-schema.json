@@ -265,10 +265,10 @@
           "type": "integer"
         },
         "mark": {
-          "type": "number"
+          "type": "integer"
         },
         "fullMark": {
-          "type": "number"
+          "type": "integer"
         },
         "studentName": {
           "type": "string"
