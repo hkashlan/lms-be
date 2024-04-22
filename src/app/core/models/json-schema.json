@@ -24,6 +24,26 @@
           "items": {
             "$ref": "#/definitions/StudentPathInstance"
           }
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdUserName": {
+          "type": "string"
+        },
+        "createdUserId": {
+          "type": "integer"
+        },
+        "updatedUserName": {
+          "type": "string"
+        },
+        "updatedUserId": {
+          "type": "integer"
         }
       }
     },
@@ -77,6 +97,26 @@
           "items": {
             "$ref": "#/definitions/CourseInstance"
           }
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdUserName": {
+          "type": "string"
+        },
+        "createdUserId": {
+          "type": "integer"
+        },
+        "updatedUserName": {
+          "type": "string"
+        },
+        "updatedUserId": {
+          "type": "integer"
         }
       }
     },
@@ -110,6 +150,26 @@
             "array",
             "null"
           ]
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdUserName": {
+          "type": "string"
+        },
+        "createdUserId": {
+          "type": "integer"
+        },
+        "updatedUserName": {
+          "type": "string"
+        },
+        "updatedUserId": {
+          "type": "integer"
         }
       }
     },
@@ -175,6 +235,26 @@
         },
         "teacher": {
           "$ref": "#/definitions/Teacher"
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdUserName": {
+          "type": "string"
+        },
+        "createdUserId": {
+          "type": "integer"
+        },
+        "updatedUserName": {
+          "type": "string"
+        },
+        "updatedUserId": {
+          "type": "integer"
         }
       }
     },
@@ -185,10 +265,10 @@
           "type": "integer"
         },
         "mark": {
-          "type": "integer"
+          "type": "number"
         },
         "fullMark": {
-          "type": "integer"
+          "type": "number"
         },
         "studentName": {
           "type": "string"
@@ -207,52 +287,26 @@
         },
         "pathName": {
           "type": "string"
-        }
-      }
-    },
-    "Student": {
-      "type": "object",
-      "properties": {
-        "id": {
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdUserName": {
+          "type": "string"
+        },
+        "createdUserId": {
           "type": "integer"
         },
-        "name": {
+        "updatedUserName": {
           "type": "string"
         },
-        "password": {
-          "type": "string"
-        },
-        "student_info": {
-          "type": [
-            "number",
-            "string",
-            "boolean",
-            "object",
-            "array",
-            "null"
-          ]
-        },
-        "quizStudents": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/QuizInstanceStudent"
-          }
-        },
-        "pathInformation": {
-          "type": [
-            "number",
-            "string",
-            "boolean",
-            "object",
-            "array",
-            "null"
-          ]
-        },
-        "studentPathInstance": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/StudentPathInstance"
-          }
+        "updatedUserId": {
+          "type": "integer"
         }
       }
     },
@@ -297,6 +351,26 @@
         },
         "courseInstance": {
           "$ref": "#/definitions/CourseInstance"
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdUserName": {
+          "type": "string"
+        },
+        "createdUserId": {
+          "type": "integer"
+        },
+        "updatedUserName": {
+          "type": "string"
+        },
+        "updatedUserId": {
+          "type": "integer"
         }
       }
     },
@@ -343,10 +417,124 @@
             "array",
             "null"
           ]
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdUserName": {
+          "type": "string"
+        },
+        "createdUserId": {
+          "type": "integer"
+        },
+        "updatedUserName": {
+          "type": "string"
+        },
+        "updatedUserId": {
+          "type": "integer"
+        }
+      }
+    },
+    "Student": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "student_info": {
+          "type": [
+            "number",
+            "string",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "quizStudents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QuizInstanceStudent"
+          }
+        },
+        "pathInformation": {
+          "type": [
+            "number",
+            "string",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "studentPathInstance": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StudentPathInstance"
+          }
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdUserName": {
+          "type": "string"
+        },
+        "createdUserId": {
+          "type": "integer"
+        },
+        "updatedUserName": {
+          "type": "string"
+        },
+        "updatedUserId": {
+          "type": "integer"
         }
       }
     },
     "Teacher": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "courseInstances": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CourseInstance"
+          }
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdUserName": {
+          "type": "string"
+        },
+        "createdUserId": {
+          "type": "integer"
+        },
+        "updatedUserName": {
+          "type": "string"
+        },
+        "updatedUserId": {
+          "type": "integer"
+        }
+      }
+    },
+    "User": {
       "type": "object",
       "properties": {
         "id": {
@@ -355,20 +543,41 @@
         "name": {
           "type": "string"
         },
-        "password": {
-          "type": "string"
-        },
-        "phone": {
-          "type": "integer"
-        },
         "email": {
           "type": "string"
         },
-        "courseInstances": {
+        "password": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "role": {
           "type": "array",
-          "items": {
-            "$ref": "#/definitions/CourseInstance"
-          }
+          "enum": [
+            "TEACHER",
+            "STUDENT"
+          ]
+        },
+        "teacher": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Teacher"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "studnet": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Student"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       }
     }
@@ -390,17 +599,20 @@
     "studentPathInstance": {
       "$ref": "#/definitions/StudentPathInstance"
     },
-    "student": {
-      "$ref": "#/definitions/Student"
-    },
     "quizInstance": {
       "$ref": "#/definitions/QuizInstance"
     },
     "quizInstanceStudent": {
       "$ref": "#/definitions/QuizInstanceStudent"
     },
+    "student": {
+      "$ref": "#/definitions/Student"
+    },
     "teacher": {
       "$ref": "#/definitions/Teacher"
+    },
+    "user": {
+      "$ref": "#/definitions/User"
     }
   }
 }

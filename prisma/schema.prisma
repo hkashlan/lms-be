@@ -1,0 +1,204 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+generator jsonSchema {
+  provider = "prisma-json-schema-generator"
+  output   = "../src/app/core/models"
+}
+
+model Path {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  description         String
+  courses             Course[]
+  studentPathInstance StudentPathInstance[]
+  createdDate         DateTime
+  updatedDate         DateTime
+  createdUserName     String
+  createdUserId       Int
+  updatedUserName     String
+  updatedUserId       Int
+}
+
+model PathInstance {
+  id                         Int                   @id @default(autoincrement())
+  name                       String
+  description                String
+  dateFrom                   DateTime
+  dateTo                     DateTime
+  numberOfStudents           Int
+  numberOfRegisteredStudents Int
+  stilOpen                   Boolean?              @default(false)
+  quizInstanceStudents       QuizInstanceStudent[]
+  studentPathInstance        StudentPathInstance[]
+  CourseInstance             CourseInstance[]
+  createdDate                DateTime
+  updatedDate                DateTime
+  createdUserName            String
+  createdUserId              Int
+  updatedUserName            String
+  updatedUserId              Int
+}
+
+model Course {
+  id              Int              @id @default(autoincrement())
+  name            String
+  pathId          Int
+  pathName        String
+  path            Path             @relation(fields: [pathId], references: [id])
+  courseInstances CourseInstance[]
+  lessons         Json
+  createdDate     DateTime
+  updatedDate     DateTime
+  createdUserName String
+  createdUserId   Int
+  updatedUserName String
+  updatedUserId   Int
+}
+
+model CourseInstance {
+  id               Int            @id @default(autoincrement())
+  name             String
+  courseId         Int
+  courseName       String
+  course           Course         @relation(fields: [courseId], references: [id])
+  pathInstanceId   Int
+  pathInstanceName String
+  pathInstance     PathInstance   @relation(fields: [pathInstanceId], references: [id])
+  description      String
+  dateFrom         DateTime
+  dateTo           DateTime
+  book             String
+  lessons          Json
+  quizzes          QuizInstance[]
+  pageFrom         Int
+  pageTo           Int
+  teacherId        Int
+  teacherName      String
+  teacher          Teacher        @relation(fields: [teacherId], references: [id])
+  createdDate      DateTime
+  updatedDate      DateTime
+  createdUserName  String
+  createdUserId    Int
+  updatedUserName  String
+  updatedUserId    Int
+}
+
+model StudentPathInstance {
+  id               Int          @id @default(autoincrement())
+  mark             Float
+  fullMark         Float
+  studentId        Int
+  studentName      String
+  student          Student      @relation(fields: [studentId], references: [id])
+  pathInstanceId   Int
+  pathInstanceName String
+  pathInstance     PathInstance @relation(fields: [pathInstanceId], references: [id])
+  pathId           Int
+  path             Path         @relation(fields: [pathId], references: [id])
+  pathName         String
+  createdDate      DateTime
+  updatedDate      DateTime
+  createdUserName  String
+  createdUserId    Int
+  updatedUserName  String
+  updatedUserId    Int
+}
+
+model QuizInstance {
+  id                 Int                   @id @default(autoincrement())
+  name               String
+  dateFrom           DateTime
+  dateTo             DateTime
+  mark               Float
+  quizStudents       QuizInstanceStudent[]
+  questions          Json
+  courseInstanceId   Int
+  courseInstanceName String
+  courseInstance     CourseInstance        @relation(fields: [courseInstanceId], references: [id])
+  createdDate        DateTime
+  updatedDate        DateTime
+  createdUserName    String
+  createdUserId      Int
+  updatedUserName    String
+  updatedUserId      Int
+}
+
+model QuizInstanceStudent {
+  id                 Int          @id @default(autoincrement())
+  fullMark           Float
+  mark               Float
+  date               DateTime
+  quizId             Int
+  quizName           String
+  quiz               QuizInstance @relation(fields: [quizId], references: [id])
+  studentId          Int
+  studentName        String
+  student            Student      @relation(fields: [studentId], references: [id])
+  pathInstanceId     Int
+  pathInstanceString String
+  pathInstance       PathInstance @relation(fields: [pathInstanceId], references: [id])
+  answerOptions      Json
+  createdDate        DateTime
+  updatedDate        DateTime
+  createdUserName    String
+  createdUserId      Int
+  updatedUserName    String
+  updatedUserId      Int
+}
+
+model Student {
+  id                  Int                   @id
+  user                User                  @relation(fields: [id], references: [id])
+  student_info        Json
+  quizStudents        QuizInstanceStudent[]
+  pathInformation     Json
+  studentPathInstance StudentPathInstance[]
+  createdDate         DateTime
+  updatedDate         DateTime
+  createdUserName     String
+  createdUserId       Int
+  updatedUserName     String
+  updatedUserId       Int
+}
+
+model Teacher {
+  id              Int              @id
+  user            User             @relation(fields: [id], references: [id])
+  courseInstances CourseInstance[]
+
+  createdDate     DateTime
+  updatedDate     DateTime
+  createdUserName String
+  createdUserId   Int
+  updatedUserName String
+  updatedUserId   Int
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  name     String
+  email    String   @unique
+  password String
+  language String
+  role     Role[]
+  teacher  Teacher?
+  studnet  Student?
+}
+
+enum Role {
+  TEACHER
+  STUDENT
+}
