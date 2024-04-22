@@ -552,7 +552,7 @@
         "language": {
           "type": "string"
         },
-        "role": {
+        "roles": {
           "type": "array",
           "enum": [
             "TEACHER",
