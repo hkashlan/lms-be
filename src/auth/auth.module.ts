@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { TeacherService } from '../api/teacher/teacher.service';
+import { UserService } from '../api/user/user.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
       signOptions: { expiresIn: '60m' },
     }),
   ],
-  providers: [AuthService, TeacherService],
+  providers: [AuthService, UserService],
   controllers: [AuthController],
 })
 export class AuthModule {}

@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { Path, Prisma } from '@prisma/client';
-import { RestController } from '../../core/api/controller';
+import { ModelRestController } from '../../core/api/model.controller';
 import { PathService } from './path.service';
 
 @Controller('path')
-export class PathController extends RestController<
+export class PathController extends ModelRestController<
   Path,
   Prisma.PathFindManyArgs,
   Prisma.PathCreateInput,

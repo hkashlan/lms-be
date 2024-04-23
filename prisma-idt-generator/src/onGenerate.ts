@@ -49,11 +49,11 @@ export class ${model.name}Module {}
 function createController(folder: string, model: DMMF.Model, small: string) {
   const content = `import { Controller } from '@nestjs/common';
 import { ${model.name}, Prisma } from '@prisma/client';
-import { RestController } from '../../core/api/controller';
+import { ModelRestController } from '../../core/api/model.controller';
 import { ${model.name}Service } from './${toKebabCase(model.name)}.service';
 
 @Controller('${toKebabCase(model.name)}')
-export class ${model.name}Controller extends RestController<
+export class ${model.name}Controller extends ModelRestController<
   ${model.name},
   Prisma.${model.name}FindManyArgs,
   Prisma.${model.name}CreateInput,

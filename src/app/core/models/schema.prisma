@@ -102,13 +102,13 @@ model CourseInstance {
 
 model StudentPathInstance {
   id               Int          @id @default(autoincrement())
-  mark             Int
-  fullMark         Int
+  mark             Float
+  fullMark         Float
   studentId        Int
   studentName      String
   student          Student      @relation(fields: [studentId], references: [id])
   pathInstanceId   Int
-  pathInstanceName String
+  pathInstanceString String
   pathInstance     PathInstance @relation(fields: [pathInstanceId], references: [id])
   pathId           Int
   path             Path         @relation(fields: [pathId], references: [id])
@@ -164,9 +164,9 @@ model QuizInstanceStudent {
 }
 
 model Student {
-  id                  Int                   @id
+  id                  Int                   @id @default(autoincrement())
   name                String
-  user                User                  @relation(fields: [id], references: [id])
+  password            String
   student_info        Json
   quizStudents        QuizInstanceStudent[]
   pathInformation     Json
@@ -180,11 +180,12 @@ model Student {
 }
 
 model Teacher {
-  id              Int              @id
+  id              Int              @id @default(autoincrement())
   name            String
-  user            User             @relation(fields: [id], references: [id])
+  password        String
+  phone           Int
+  email           String           @unique
   courseInstances CourseInstance[]
-
   createdDate     DateTime
   updatedDate     DateTime
   createdUserName String
@@ -194,28 +195,8 @@ model Teacher {
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
-  name            String
-  email           String   @unique
-  password        String
-  language        Language
-  roles           Role[]
-  teacher         Teacher?
-  studnet         Student?
-  createdDate     DateTime
-  updatedDate     DateTime
-  createdUserName String
-  createdUserId   Int
-  updatedUserName String
-  updatedUserId   Int
-}
-
-enum Role {
-  TEACHER
-  STUDENT
-}
-
-enum Language {
-  ar
-  en_EN
+  id       Int    @id @default(autoincrement())
+  name     String
+  password String
+  language String
 }

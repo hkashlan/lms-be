@@ -10,7 +10,7 @@ export class TeacherService extends APIService<
   Prisma.TeacherCreateInput,
   Prisma.TeacherUpdateInput
 > {
-  constructor(private db: DatabaseService) {
+  constructor(db: DatabaseService) {
     super({
       findMany: db.teacher.findMany,
       findOne: db.teacher.findUnique,
@@ -18,14 +18,6 @@ export class TeacherService extends APIService<
       create: db.teacher.create,
       update: db.teacher.update,
       delete: db.teacher.delete,
-    });
-  }
-
-  async findOneByEmail(email: string): Promise<Teacher> {
-    return this.db.teacher.findFirst({
-      where: {
-        email: email,
-      },
     });
   }
 }
