@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
-import { QuizInstance, Prisma } from '@prisma/client';
-import { RestController } from '../../core/api/controller';
+import { Prisma, QuizInstance } from '@prisma/client';
+import { ModelRestController } from '../../core/api/model.controller';
 import { QuizInstanceService } from './quiz-instance.service';
 
 @Controller('quiz-instance')
-export class QuizInstanceController extends RestController<
+export class QuizInstanceController extends ModelRestController<
   QuizInstance,
   Prisma.QuizInstanceFindManyArgs,
   Prisma.QuizInstanceCreateInput,

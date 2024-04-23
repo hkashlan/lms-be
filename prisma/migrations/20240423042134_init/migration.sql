@@ -1,8 +1,20 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('TEACHER', 'STUDENT');
+
+-- CreateEnum
+CREATE TYPE "Language" AS ENUM ('ar', 'en_EN');
+
 -- CreateTable
 CREATE TABLE "Path" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "createdDate" TIMESTAMP(3) NOT NULL,
+    "updatedDate" TIMESTAMP(3) NOT NULL,
+    "createdUserName" TEXT NOT NULL,
+    "createdUserId" INTEGER NOT NULL,
+    "updatedUserName" TEXT NOT NULL,
+    "updatedUserId" INTEGER NOT NULL,
 
     CONSTRAINT "Path_pkey" PRIMARY KEY ("id")
 );
@@ -17,6 +29,12 @@ CREATE TABLE "PathInstance" (
     "numberOfStudents" INTEGER NOT NULL,
     "numberOfRegisteredStudents" INTEGER NOT NULL,
     "stilOpen" BOOLEAN DEFAULT false,
+    "createdDate" TIMESTAMP(3) NOT NULL,
+    "updatedDate" TIMESTAMP(3) NOT NULL,
+    "createdUserName" TEXT NOT NULL,
+    "createdUserId" INTEGER NOT NULL,
+    "updatedUserName" TEXT NOT NULL,
+    "updatedUserId" INTEGER NOT NULL,
 
     CONSTRAINT "PathInstance_pkey" PRIMARY KEY ("id")
 );
@@ -28,6 +46,12 @@ CREATE TABLE "Course" (
     "pathId" INTEGER NOT NULL,
     "pathName" TEXT NOT NULL,
     "lessons" JSONB NOT NULL,
+    "createdDate" TIMESTAMP(3) NOT NULL,
+    "updatedDate" TIMESTAMP(3) NOT NULL,
+    "createdUserName" TEXT NOT NULL,
+    "createdUserId" INTEGER NOT NULL,
+    "updatedUserName" TEXT NOT NULL,
+    "updatedUserId" INTEGER NOT NULL,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
 );
@@ -49,6 +73,12 @@ CREATE TABLE "CourseInstance" (
     "pageTo" INTEGER NOT NULL,
     "teacherId" INTEGER NOT NULL,
     "teacherName" TEXT NOT NULL,
+    "createdDate" TIMESTAMP(3) NOT NULL,
+    "updatedDate" TIMESTAMP(3) NOT NULL,
+    "createdUserName" TEXT NOT NULL,
+    "createdUserId" INTEGER NOT NULL,
+    "updatedUserName" TEXT NOT NULL,
+    "updatedUserId" INTEGER NOT NULL,
 
     CONSTRAINT "CourseInstance_pkey" PRIMARY KEY ("id")
 );
@@ -64,19 +94,14 @@ CREATE TABLE "StudentPathInstance" (
     "pathInstanceName" TEXT NOT NULL,
     "pathId" INTEGER NOT NULL,
     "pathName" TEXT NOT NULL,
+    "createdDate" TIMESTAMP(3) NOT NULL,
+    "updatedDate" TIMESTAMP(3) NOT NULL,
+    "createdUserName" TEXT NOT NULL,
+    "createdUserId" INTEGER NOT NULL,
+    "updatedUserName" TEXT NOT NULL,
+    "updatedUserId" INTEGER NOT NULL,
 
     CONSTRAINT "StudentPathInstance_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Student" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "student_info" JSONB NOT NULL,
-    "pathInformation" JSONB NOT NULL,
-
-    CONSTRAINT "Student_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -89,6 +114,12 @@ CREATE TABLE "QuizInstance" (
     "questions" JSONB NOT NULL,
     "courseInstanceId" INTEGER NOT NULL,
     "courseInstanceName" TEXT NOT NULL,
+    "createdDate" TIMESTAMP(3) NOT NULL,
+    "updatedDate" TIMESTAMP(3) NOT NULL,
+    "createdUserName" TEXT NOT NULL,
+    "createdUserId" INTEGER NOT NULL,
+    "updatedUserName" TEXT NOT NULL,
+    "updatedUserId" INTEGER NOT NULL,
 
     CONSTRAINT "QuizInstance_pkey" PRIMARY KEY ("id")
 );
@@ -106,20 +137,58 @@ CREATE TABLE "QuizInstanceStudent" (
     "pathInstanceId" INTEGER NOT NULL,
     "pathInstanceString" TEXT NOT NULL,
     "answerOptions" JSONB NOT NULL,
+    "createdDate" TIMESTAMP(3) NOT NULL,
+    "updatedDate" TIMESTAMP(3) NOT NULL,
+    "createdUserName" TEXT NOT NULL,
+    "createdUserId" INTEGER NOT NULL,
+    "updatedUserName" TEXT NOT NULL,
+    "updatedUserId" INTEGER NOT NULL,
 
     CONSTRAINT "QuizInstanceStudent_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
+CREATE TABLE "Student" (
+    "id" INTEGER NOT NULL,
+    "student_info" JSONB NOT NULL,
+    "pathInformation" JSONB NOT NULL,
+    "createdDate" TIMESTAMP(3) NOT NULL,
+    "updatedDate" TIMESTAMP(3) NOT NULL,
+    "createdUserName" TEXT NOT NULL,
+    "createdUserId" INTEGER NOT NULL,
+    "updatedUserName" TEXT NOT NULL,
+    "updatedUserId" INTEGER NOT NULL,
+
+    CONSTRAINT "Student_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Teacher" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "phone" INTEGER NOT NULL,
-    "email" TEXT NOT NULL,
+    "id" INTEGER NOT NULL,
+    "createdDate" TIMESTAMP(3) NOT NULL,
+    "updatedDate" TIMESTAMP(3) NOT NULL,
+    "createdUserName" TEXT NOT NULL,
+    "createdUserId" INTEGER NOT NULL,
+    "updatedUserName" TEXT NOT NULL,
+    "updatedUserId" INTEGER NOT NULL,
 
     CONSTRAINT "Teacher_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateTable
+CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "language" "Language" NOT NULL,
+    "roles" "Role"[],
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
 ALTER TABLE "Course" ADD CONSTRAINT "Course_pathId_fkey" FOREIGN KEY ("pathId") REFERENCES "Path"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -153,3 +222,9 @@ ALTER TABLE "QuizInstanceStudent" ADD CONSTRAINT "QuizInstanceStudent_studentId_
 
 -- AddForeignKey
 ALTER TABLE "QuizInstanceStudent" ADD CONSTRAINT "QuizInstanceStudent_pathInstanceId_fkey" FOREIGN KEY ("pathInstanceId") REFERENCES "PathInstance"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Student" ADD CONSTRAINT "Student_id_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Teacher" ADD CONSTRAINT "Teacher_id_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

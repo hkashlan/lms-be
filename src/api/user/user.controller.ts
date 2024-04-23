@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
-import { User, Prisma } from '@prisma/client';
-import { RestController } from '../../core/api/controller';
+import { Prisma, User } from '@prisma/client';
+import { ModelRestController } from '../../core/api/model.controller';
 import { UserService } from './user.service';
 
 @Controller('user')
-export class UserController extends RestController<
+export class UserController extends ModelRestController<
   User,
   Prisma.UserFindManyArgs,
   Prisma.UserCreateInput,

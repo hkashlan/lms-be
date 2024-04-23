@@ -1,6 +1,14 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from '@prisma/client';
 import { UserService } from '../api/user/user.service';
+
+export interface Payload {
+  sub: number;
+  username: string;
+  name: string;
+  roles: Role[];
+}
 
 @Injectable()
 export class AuthService {
@@ -14,7 +22,7 @@ export class AuthService {
     if (user?.password !== pass) {
       throw new UnauthorizedException();
     }
-    const payload = {
+    const payload: Payload = {
       sub: user.id,
       username: user.email,
       name: user.name,

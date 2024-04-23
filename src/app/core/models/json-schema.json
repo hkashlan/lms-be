@@ -443,6 +443,9 @@
     "Student": {
       "type": "object",
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "user": {
           "$ref": "#/definitions/User"
         },
@@ -503,6 +506,9 @@
     "Teacher": {
       "type": "object",
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "user": {
           "$ref": "#/definitions/User"
         },
@@ -550,7 +556,11 @@
           "type": "string"
         },
         "language": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "ar",
+            "en_EN"
+          ]
         },
         "roles": {
           "type": "array",
@@ -578,6 +588,26 @@
               "type": "null"
             }
           ]
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdUserName": {
+          "type": "string"
+        },
+        "createdUserId": {
+          "type": "integer"
+        },
+        "updatedUserName": {
+          "type": "string"
+        },
+        "updatedUserId": {
+          "type": "integer"
         }
       }
     }

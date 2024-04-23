@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { Course, Prisma } from '@prisma/client';
-import { RestController } from '../../core/api/controller';
+import { ModelRestController } from '../../core/api/model.controller';
 import { CourseService } from './course.service';
 
 @Controller('course')
-export class CourseController extends RestController<
+export class CourseController extends ModelRestController<
   Course,
   Prisma.CourseFindManyArgs,
   Prisma.CourseCreateInput,
