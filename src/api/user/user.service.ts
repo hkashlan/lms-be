@@ -21,7 +21,7 @@ export class UserService extends APIService<
     });
   }
 
-  async findOneByEmail(email: string): Promise<User> {
+  async findOneByEmail(email: string): Promise<User | null> {
     return this.db.user.findFirst({
       where: {
         email: email,

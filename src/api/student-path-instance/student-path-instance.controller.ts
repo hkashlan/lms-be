@@ -1,7 +1,9 @@
 import { Controller } from '@nestjs/common';
-import { Prisma, StudentPathInstance } from '@prisma/client';
+import { StudentPathInstance, Prisma } from '@prisma/client';
 import { ModelRestController } from '../../core/api/model.controller';
+import { StudentPathInstanceValidation } from '../../models/validation/student-path-instance.z';
 import { StudentPathInstanceService } from './student-path-instance.service';
+
 
 @Controller('student-path-instance')
 export class StudentPathInstanceController extends ModelRestController<
@@ -11,6 +13,6 @@ export class StudentPathInstanceController extends ModelRestController<
   Prisma.StudentPathInstanceUpdateInput
 > {
   constructor(studentPathInstanceService: StudentPathInstanceService) {
-    super(studentPathInstanceService);
+    super(studentPathInstanceService, StudentPathInstanceValidation);
   }
 }

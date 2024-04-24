@@ -1,7 +1,9 @@
 import { Controller } from '@nestjs/common';
-import { Prisma, Teacher } from '@prisma/client';
+import { Teacher, Prisma } from '@prisma/client';
 import { ModelRestController } from '../../core/api/model.controller';
+import { TeacherValidation } from '../../models/validation/teacher.z';
 import { TeacherService } from './teacher.service';
+
 
 @Controller('teacher')
 export class TeacherController extends ModelRestController<
@@ -11,6 +13,6 @@ export class TeacherController extends ModelRestController<
   Prisma.TeacherUpdateInput
 > {
   constructor(teacherService: TeacherService) {
-    super(teacherService);
+    super(teacherService, TeacherValidation);
   }
 }

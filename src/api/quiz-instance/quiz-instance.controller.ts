@@ -1,7 +1,9 @@
 import { Controller } from '@nestjs/common';
-import { Prisma, QuizInstance } from '@prisma/client';
+import { QuizInstance, Prisma } from '@prisma/client';
 import { ModelRestController } from '../../core/api/model.controller';
+import { QuizInstanceValidation } from '../../models/validation/quiz-instance.z';
 import { QuizInstanceService } from './quiz-instance.service';
+
 
 @Controller('quiz-instance')
 export class QuizInstanceController extends ModelRestController<
@@ -11,6 +13,6 @@ export class QuizInstanceController extends ModelRestController<
   Prisma.QuizInstanceUpdateInput
 > {
   constructor(quizInstanceService: QuizInstanceService) {
-    super(quizInstanceService);
+    super(quizInstanceService, QuizInstanceValidation);
   }
 }

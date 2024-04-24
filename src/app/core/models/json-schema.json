@@ -25,6 +25,12 @@
             "$ref": "#/definitions/StudentPathInstance"
           }
         },
+        "pathInstances": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PathInstance"
+          }
+        },
         "createdDate": {
           "type": "string",
           "format": "date-time"
@@ -71,7 +77,8 @@
           "type": "integer"
         },
         "numberOfRegisteredStudents": {
-          "type": "integer"
+          "type": "integer",
+          "default": 0
         },
         "stilOpen": {
           "type": [
@@ -97,6 +104,12 @@
           "items": {
             "$ref": "#/definitions/CourseInstance"
           }
+        },
+        "pathName": {
+          "type": "string"
+        },
+        "path": {
+          "$ref": "#/definitions/Path"
         },
         "createdDate": {
           "type": "string",

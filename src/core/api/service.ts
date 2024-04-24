@@ -26,7 +26,7 @@ export class APIService<
       ...filter,
       skip,
       take: size,
-    });
+    } as unknown as Select);
     const userCount = await this.repository.count({ where: filter?.where });
     return {
       items: users,
@@ -34,7 +34,7 @@ export class APIService<
     };
   }
 
-  async findOne(id: number): Promise<T> {
+  async findOne(id: number): Promise<T | null> {
     return this.repository.findOne({
       where: {
         id: id,
