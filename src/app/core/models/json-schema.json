@@ -164,6 +164,16 @@
             "null"
           ]
         },
+        "quiz": {
+          "type": [
+            "number",
+            "string",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
         "createdDate": {
           "type": "string",
           "format": "date-time"

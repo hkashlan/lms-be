@@ -13,11 +13,6 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-generator jsonSchema {
-  provider = "prisma-json-schema-generator"
-  output   = "../src/app/core/models"
-}
-
 generator idt {
   provider = "prisma-idt-generator"
 }
