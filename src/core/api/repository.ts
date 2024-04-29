@@ -16,8 +16,8 @@ export interface Repository<
   CreateInput,
   UpdateInput,
 > {
-  findMany: (x: Select) => Promise<T[]>;
-  findOne: (x: filterById) => Promise<T>;
+  findMany: (x?: Select) => Promise<T[]>;
+  findOne: (x: filterById) => Promise<T | null>;
   count: (x: filterByWhere) => Promise<number>;
   create: (y: { data: CreateInput }) => Promise<T>;
   update: (x: filterById & { data: UpdateInput }) => Promise<T>;

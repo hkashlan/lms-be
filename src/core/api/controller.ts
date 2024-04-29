@@ -43,7 +43,7 @@ export class RestController<
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<T> {
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<T | null> {
     return this.apiService.findOne(id);
   }
 

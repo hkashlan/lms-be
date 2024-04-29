@@ -13,11 +13,6 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-generator jsonSchema {
-  provider = "prisma-json-schema-generator"
-  output   = "../src/app/core/models"
-}
-
 generator idt {
   provider = "prisma-idt-generator"
 }
@@ -28,6 +23,7 @@ model Path {
   description         String
   courses             Course[]
   studentPathInstance StudentPathInstance[]
+  pathInstances       PathInstance[]
   createdDate         DateTime
   updatedDate         DateTime
   createdUserName     String
@@ -43,11 +39,14 @@ model PathInstance {
   dateFrom                   DateTime
   dateTo                     DateTime
   numberOfStudents           Int
-  numberOfRegisteredStudents Int
+  numberOfRegisteredStudents Int                   @default(0)
   stilOpen                   Boolean?              @default(false)
   quizInstanceStudents       QuizInstanceStudent[]
   studentPathInstance        StudentPathInstance[]
   CourseInstance             CourseInstance[]
+  pathId                     Int
+  pathName                   String
+  path                       Path                  @relation(fields: [pathId], references: [id])
   createdDate                DateTime
   updatedDate                DateTime
   createdUserName            String
@@ -64,6 +63,7 @@ model Course {
   path            Path             @relation(fields: [pathId], references: [id])
   courseInstances CourseInstance[]
   lessons         Json
+  quiz            Json
   createdDate     DateTime
   updatedDate     DateTime
   createdUserName String

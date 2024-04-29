@@ -1,5 +1,6 @@
+
 import { Injectable } from '@nestjs/common';
-import { Prisma, Teacher } from '@prisma/client';
+import { Teacher, Prisma } from '@prisma/client';
 import { APIService } from '../../core/api/service';
 import { DatabaseService } from '../../core/database/database.service';
 

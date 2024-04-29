@@ -2,6 +2,8 @@ import {
   Body,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
@@ -9,6 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { z } from 'zod';
 import { Payload } from '../../auth/auth.service';
 import { CurrentUser } from '../../auth/constants';
 import { Result } from '../models/result';
@@ -33,12 +36,13 @@ export class ModelRestController<
   UpdateInput extends BasicRecrod,
 > {
   constructor(
-    private readonly apiService: APIService<
+    protected readonly apiService: APIService<
       T,
       Select,
       CreateInput,
       UpdateInput
     >,
+    protected validation?: z.AnyZodObject,
   ) {}
 
   @Post()
@@ -49,6 +53,7 @@ export class ModelRestController<
     createUserDto.updatedUserName = user.name;
     createUserDto.updatedUserId = user.sub;
     createUserDto.updatedDate = new Date();
+    this.validate(createUserDto);
     return this.apiService.create(createUserDto);
   }
 
@@ -62,7 +67,7 @@ export class ModelRestController<
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<T> {
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<T | null> {
     return this.apiService.findOne(id);
   }
 
@@ -75,7 +80,29 @@ export class ModelRestController<
     updateUserDto.updatedUserName = user.name;
     updateUserDto.updatedUserId = user.sub;
     updateUserDto.updatedDate = new Date();
+    this.validate(updateUserDto);
     return this.apiService.update(+id, updateUserDto);
+  }
+
+  private validate(updateUserDto: UpdateInput | CreateInput) {
+    if (this.validation) {
+      try {
+        this.validation.parse(updateUserDto);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          throw new HttpException(
+            {
+              message: 'Validation failed: ' + error.format(),
+              errors: error.errors,
+            },
+            HttpStatus.BAD_REQUEST,
+          );
+        } else {
+          // Handle other types of errors
+          throw error;
+        }
+      }
+    }
   }
 
   @Delete(':id')
