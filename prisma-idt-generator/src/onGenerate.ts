@@ -244,7 +244,7 @@ import { ZodOutputFor } from '../utils/type-utils';
 
 export const ${model.name}Validation = z.object({
 ${model.fields.filter(excludeFields).map(
-  (f) => `${f.name}: z.${zConstraint(f)}${optional(f)}
+  (f) => `${f.name}: z.${zConstraint(f)}${optional(f)}${array(f)}
   `,
 )}
 }) satisfies ZodOutputFor<${model.name}>;
@@ -298,6 +298,10 @@ function zConstraint(field: DMMF.Field) {
 
 function optional(field: DMMF.Field) {
   return field.isRequired ? '' : '.optional()';
+}
+
+function array(field: DMMF.Field) {
+  return field.isList ? '.array()' : '';
 }
 
 function createFile(

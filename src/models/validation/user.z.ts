@@ -7,5 +7,5 @@ export const UserValidation = z.object({
   email: z.string(),
   password: z.string(),
   language: z.nativeEnum(Language),
-  roles: z.nativeEnum(Role),
+  roles: z.nativeEnum(Role).array(),
 }) satisfies ZodOutputFor<User>;
