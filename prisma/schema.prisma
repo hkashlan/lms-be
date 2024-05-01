@@ -62,8 +62,8 @@ model Course {
   pathName        String
   path            Path             @relation(fields: [pathId], references: [id])
   courseInstances CourseInstance[]
-  lessons         Json
-  quiz            Json
+  lessons         Json?
+  quiz            Json?
   createdDate     DateTime
   updatedDate     DateTime
   createdUserName String
@@ -85,7 +85,7 @@ model CourseInstance {
   dateFrom         DateTime
   dateTo           DateTime
   book             String
-  lessons          Json
+  lessons          Json?
   quizzes          QuizInstance[]
   pageFrom         Int
   pageTo           Int
@@ -128,7 +128,7 @@ model QuizInstance {
   dateTo             DateTime
   mark               Float
   quizStudents       QuizInstanceStudent[]
-  questions          Json
+  questions          Json?
   courseInstanceId   Int
   courseInstanceName String
   courseInstance     CourseInstance        @relation(fields: [courseInstanceId], references: [id])
@@ -154,7 +154,7 @@ model QuizInstanceStudent {
   pathInstanceId     Int
   pathInstanceString String
   pathInstance       PathInstance @relation(fields: [pathInstanceId], references: [id])
-  answerOptions      Json
+  answerOptions      Json?
   createdDate        DateTime
   updatedDate        DateTime
   createdUserName    String
@@ -167,9 +167,9 @@ model Student {
   id                  Int                   @id
   name                String
   user                User                  @relation(fields: [id], references: [id])
-  student_info        Json
+  student_info        Json?
   quizStudents        QuizInstanceStudent[]
-  pathInformation     Json
+  pathInformation     Json?
   studentPathInstance StudentPathInstance[]
   createdDate         DateTime
   updatedDate         DateTime
