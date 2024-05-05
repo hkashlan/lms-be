@@ -1,4 +1,4 @@
-import { Language, Role, User } from '@prisma/client';
+import { User, Language, Role } from '@prisma/client';
 import { z } from 'zod';
 import { ZodOutputFor } from '../utils/type-utils';
 

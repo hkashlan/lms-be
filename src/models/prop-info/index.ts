@@ -8,7 +8,9 @@ import { QuizInstanceStudentPropInfo } from './quiz-instance-student.prop-info';
 import { StudentPropInfo } from './student.prop-info';
 import { TeacherPropInfo } from './teacher.prop-info';
 import { UserPropInfo } from './user.prop-info';
-export const propInfos = {
+import { MediaFolderPropInfo } from './media-folder.prop-info';
+import { MediaPropInfo } from './media.prop-info';
+export const modelPropInfos = {
   PathPropInfo,
   PathInstancePropInfo,
   CoursePropInfo,
@@ -19,4 +21,6 @@ export const propInfos = {
   StudentPropInfo,
   TeacherPropInfo,
   UserPropInfo,
+  MediaFolderPropInfo,
+  MediaPropInfo,
 };

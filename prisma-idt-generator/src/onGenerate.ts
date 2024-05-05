@@ -52,7 +52,7 @@ export default async function onGenerate(options: GeneratorOptions) {
     folderProp,
     'index',
     '',
-    content + 'export const propInfos = { ' + content2 + '}',
+    content + 'export const modelPropInfos = { ' + content2 + '}',
     false,
   );
 
