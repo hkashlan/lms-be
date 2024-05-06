@@ -27,7 +27,7 @@ import { storage } from './storage';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client'),
+      rootPath: join(__dirname, '..', '..', 'client'),
     }),
     MulterModule.register({
       storage: storage,
