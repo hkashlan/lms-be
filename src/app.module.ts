@@ -1,8 +1,13 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
+import { MulterModule } from '@nestjs/platform-express';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { CourseInstanceModule } from './api/course-instance/course-instance.module';
 import { CourseModule } from './api/course/course.module';
+import { MediaFolderModule } from './api/media-folder/media-folder.module';
+import { MediaModule } from './api/media/media.module';
 import { PathInstanceModule } from './api/path-instance/path-instance.module';
 import { PathModule } from './api/path/path.module';
 import { QuizInstanceStudentModule } from './api/quiz-instance-student/quiz-instance-student.module';
@@ -17,9 +22,16 @@ import { AuthGuard } from './auth/auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { RolesGuard } from './auth/roles.guard';
 import { DatabaseModule } from './core/database/database.module';
+import { storage } from './storage';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'client'),
+    }),
+    MulterModule.register({
+      storage: storage,
+    }),
     DatabaseModule,
     PathModule,
     PathInstanceModule,
@@ -31,6 +43,8 @@ import { DatabaseModule } from './core/database/database.module';
     QuizInstanceStudentModule,
     TeacherModule,
     UserModule,
+    MediaModule,
+    MediaFolderModule,
     AuthModule,
   ],
   controllers: [AppController],
