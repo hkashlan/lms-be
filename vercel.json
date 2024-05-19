@@ -2,22 +2,8 @@
   "version": 2,
   "builds": [
     {
-      "src": "prisma/schema.prisma",
-      "use": "@prisma/client/scripts/build",
-      "config": {
-        "datasources": [
-          {
-            "url": "env.POSTGRES_URL"
-          }
-        ]
-      }
-    },
-    {
-      "src": "./src",
-      "use": "@vercel/node",
-      "config": {
-        "watch": ["prisma/**/*.prisma", "src/**/*.ts"]
-      }
+      "src": "src/main.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
