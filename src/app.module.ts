@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
 import { MulterModule } from '@nestjs/platform-express';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { CourseInstanceModule } from './api/course-instance/course-instance.module';
 import { CourseModule } from './api/course/course.module';
 import { MediaFolderModule } from './api/media-folder/media-folder.module';
@@ -26,9 +24,9 @@ import { storage } from './storage';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'client'),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', '..', 'client'),
+    // }),
     MulterModule.register({
       storage: storage,
     }),
