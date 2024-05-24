@@ -33,6 +33,8 @@ export class AuthService {
       access_token: await this.jwtService.signAsync(payload, {
         secret: jwtConstants.secret,
       }),
+      username: user.email,
+      userId: user.id,
     };
   }
 }
