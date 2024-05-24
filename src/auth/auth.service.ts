@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from '@prisma/client';
 import { UserService } from '../api/user/user.service';
+import { jwtConstants } from './constants';
 
 export interface Payload {
   sub: number;
@@ -29,7 +30,11 @@ export class AuthService {
       roles: user.roles,
     };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.signAsync(payload, {
+        secret: jwtConstants.secret,
+      }),
+      username: user.email,
+      userId: user.id,
     };
   }
 }

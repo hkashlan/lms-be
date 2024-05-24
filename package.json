@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "postinstall": "npm run prisma:generate",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -19,7 +20,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "prisma:migrate": "npx prisma migrate dev",
     "preprisma:generate": "cd prisma-idt-generator && npm run build && cd .. && npm i ./prisma-idt-generator",
-    "prisma:generate": "npx prisma generate && npx prettier src/models/**/*.* --write",
+    "prisma:generate": "prisma generate && prettier src/models/**/*.* --write",
     "seed": "npx ts-node prisma/seed.ts",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
