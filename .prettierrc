@@ -3,5 +3,6 @@
   "trailingComma": "all",
   "importOrder": ["^@nestjs/(.*)$", "^[./]"],
   "importOrderSeparation": true,
+  "printWidth": 120,
   "importOrderSortSpecifiers": true
 }

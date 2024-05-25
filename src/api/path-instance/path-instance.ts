@@ -1,10 +1,4 @@
-import {
-  Course,
-  CourseInstance,
-  PathInstance,
-  Prisma,
-  QuizInstance,
-} from '@prisma/client';
+import { Course, CourseInstance, PathInstance, Prisma, QuizInstance } from '@prisma/client';
 import { Payload } from '../../auth/auth.service';
 import { ModelRestController } from '../../core/api/model.controller';
 
