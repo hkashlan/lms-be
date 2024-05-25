@@ -14,7 +14,10 @@ import { PathInstanceValidation } from '../../models/validation/path-instance.z'
 import { CourseInstanceService } from '../course-instance/course-instance.service';
 import { CourseService } from '../course/course.service';
 import { QuizInstanceService } from '../quiz-instance/quiz-instance.service';
-import { createCourseInstnaceDTO } from './path-instance';
+import {
+  createCourseInstnaceDTO,
+  createQuizInstnaceDTO,
+} from './path-instance';
 import { PathInstanceService } from './path-instance.service';
 
 @Controller('path-instance')
@@ -76,14 +79,13 @@ export class PathInstanceController extends ModelRestController<
       const quizzes = course.quiz as unknown as QuizInstance[];
       console.log(quizzes);
       console.log(courseInstnace);
-      // for (const quiz of quizzes) {
-      //   const quizInstanceDto: Prisma.QuizInstanceCreateInput = createQuizInstnaceDTO(
-      //     quiz,
-      //     courseInstnace,
-      //     user,
-      //   );
-      //   await this.quizInstanceService.create(quizInstanceDto);
-      // }
+      for (const quiz of quizzes) {
+        const quizInstanceDto: Prisma.QuizInstanceCreateInput =
+          createQuizInstnaceDTO(quiz, courseInstnace, user);
+        const quizInstnace =
+          await this.quizInstanceService.create(quizInstanceDto);
+        console.log(quizInstnace);
+      }
     }
   }
 }
