@@ -4,7 +4,6 @@ import { ModelRestController } from '../../core/api/model.controller';
 import { PathValidation } from '../../models/validation/path.z';
 import { PathService } from './path.service';
 
-
 @Controller('path')
 export class PathController extends ModelRestController<
   Path,

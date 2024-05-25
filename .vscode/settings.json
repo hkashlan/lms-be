@@ -4,10 +4,10 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
-  "prettier.printWidth": 80,
+  "prettier.printWidth": 120,
   "editor.rulers": [
     {
-      "column": 80, // spacing of 1st column from left
+      "column": 120, // spacing of 1st column from left
       "color": "#ff9900" // orange, Go Vols!
     }
   ]

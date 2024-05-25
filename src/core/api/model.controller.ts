@@ -47,14 +47,24 @@ export class ModelRestController<
 
   @Post()
   create(@Body() createUserDto: CreateInput, @CurrentUser() user: Payload) {
-    createUserDto.createdUserName = user.name;
-    createUserDto.createdUserId = user.sub;
-    createUserDto.createdDate = new Date();
-    createUserDto.updatedUserName = user.name;
-    createUserDto.updatedUserId = user.sub;
-    createUserDto.updatedDate = new Date();
+    createUserDto = {
+      ...createUserDto,
+      ...ModelRestController.fillUserInfo(user),
+    };
     this.validate(createUserDto);
     return this.apiService.create(createUserDto);
+  }
+
+  static fillUserInfo(user: Payload) {
+    const createUserDto = {
+      createdUserName: user.name,
+      createdUserId: user.sub,
+      createdDate: new Date(),
+      updatedUserName: user.name,
+      updatedUserId: user.sub,
+      updatedDate: new Date(),
+    };
+    return createUserDto;
   }
 
   @Get()
