@@ -1,5 +1,11 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { Course, PathInstance, Prisma, Role } from '@prisma/client';
+import {
+  Course,
+  PathInstance,
+  Prisma,
+  QuizInstance,
+  Role,
+} from '@prisma/client';
 import { Payload } from '../../auth/auth.service';
 import { CurrentUser, Public } from '../../auth/constants';
 import { ModelRestController } from '../../core/api/model.controller';
@@ -7,6 +13,8 @@ import { Result } from '../../core/models/result';
 import { PathInstanceValidation } from '../../models/validation/path-instance.z';
 import { CourseInstanceService } from '../course-instance/course-instance.service';
 import { CourseService } from '../course/course.service';
+import { QuizInstanceService } from '../quiz-instance/quiz-instance.service';
+import { createCourseInstnaceDTO } from './path-instance';
 import { PathInstanceService } from './path-instance.service';
 
 @Controller('path-instance')
@@ -20,6 +28,7 @@ export class PathInstanceController extends ModelRestController<
     pathInstanceService: PathInstanceService,
     private courseService: CourseService,
     private courseInstanceService: CourseInstanceService,
+    private quizInstanceService: QuizInstanceService,
   ) {
     super(pathInstanceService, PathInstanceValidation);
   }
@@ -27,7 +36,7 @@ export class PathInstanceController extends ModelRestController<
   @Public()
   @Post()
   async create(
-    @Body() createUserDto: Prisma.PathInstanceCreateInput,
+    @Body() pathInstanceDto: Prisma.PathInstanceCreateInput,
     @CurrentUser() user: Payload,
   ): Promise<PathInstance> {
     // createUserDto ={
@@ -36,27 +45,45 @@ export class PathInstanceController extends ModelRestController<
     //   // pathId: 1,
 
     // };
+    pathInstanceDto = (await this.findOne(
+      1,
+    )) as unknown as Prisma.PathInstanceCreateInput;
+    delete pathInstanceDto['id'];
     user = {
       sub: 1,
       username: 'test',
       name: 'test',
       roles: [Role.TEACHER],
     };
-    const pathInstance = await super.create(createUserDto, user);
+    const pathInstance = await super.create(pathInstanceDto, user);
     const courses = await this.courseService.findAll({
       where: { pathId: pathInstance.pathId },
     });
-    this.createCourseInstances(courses, user);
+    this.createCourseInstances(courses, pathInstance, user);
     return pathInstance;
   }
 
-  private createCourseInstances(courses: Result<Course>, user: Payload) {
-    courses.items.forEach((course) => {
-      const courseInstance: Prisma.CourseInstanceCreateInput = {
-        ...course,
-      } as unknown as Prisma.CourseInstanceCreateInput;
-      ModelRestController.fillUserInfo(courseInstance, user);
-      this.courseInstanceService.create(courseInstance);
-    });
+  private async createCourseInstances(
+    courses: Result<Course>,
+    pathInstance: PathInstance,
+    user: Payload,
+  ) {
+    for (const course of courses.items) {
+      const courseInstanceDto: Prisma.CourseInstanceCreateInput =
+        createCourseInstnaceDTO(course, pathInstance, user);
+      const courseInstnace =
+        await this.courseInstanceService.create(courseInstanceDto);
+      const quizzes = course.quiz as unknown as QuizInstance[];
+      console.log(quizzes);
+      console.log(courseInstnace);
+      // for (const quiz of quizzes) {
+      //   const quizInstanceDto: Prisma.QuizInstanceCreateInput = createQuizInstnaceDTO(
+      //     quiz,
+      //     courseInstnace,
+      //     user,
+      //   );
+      //   await this.quizInstanceService.create(quizInstanceDto);
+      // }
+    }
   }
 }
