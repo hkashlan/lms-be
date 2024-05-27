@@ -5,6 +5,7 @@ import { Payload } from '../../auth/auth.service';
 import { CurrentUser, Public } from '../../auth/constants';
 import { ModelRestController } from '../../core/api/model.controller';
 import { StudentValidation } from '../../models/validation/student.z';
+import { CourseInstanceService } from '../course-instance/course-instance.service';
 import { StudentService } from './student.service';
 
 export interface StudentInfo {
@@ -35,20 +36,38 @@ export class StudentController extends ModelRestController<
   Prisma.StudentCreateInput,
   Prisma.StudentUpdateInput
 > {
-  constructor(studentService: StudentService) {
+  constructor(
+    studentService: StudentService,
+    private courseInstanceService: CourseInstanceService,
+  ) {
     super(studentService, StudentValidation);
   }
 
   @Public()
   @Get('my-paths')
   async getMyPaths(@CurrentUser() user: Payload) {
-    user = this.fakeUser(user);
-    console.log('user', user);
-    return of<StudentInfo>({
+    const studentInfo: StudentInfo = {
       courses: [],
       quizzes: [],
       pathes: [],
-    });
+    };
+
+    const student = await this.apiService.findOne(user.sub);
+
+    if (student) {
+      const courseInstances = await this.courseInstanceService.findAll({
+        where: {
+          pathInstance: {
+            studentPathInstance: {
+              some: { student: { id: student.id } },
+            },
+          },
+        },
+      });
+      console.log(courseInstances);
+    }
+
+    return of<StudentInfo>(studentInfo);
   }
 
   @Public()
