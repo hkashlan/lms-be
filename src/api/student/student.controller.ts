@@ -1,18 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { Course, CourseInstance, PathInstance, Prisma, QuizInstance, Role, Student } from '@prisma/client';
-import { of } from 'rxjs';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { CourseInstance, PathInstance, Prisma, QuizInstance, Role, Student } from '@prisma/client';
 import { Payload } from '../../auth/auth.service';
 import { CurrentUser, Public } from '../../auth/constants';
 import { ModelRestController } from '../../core/api/model.controller';
 import { StudentValidation } from '../../models/validation/student.z';
-import { CourseInstanceService } from '../course-instance/course-instance.service';
 import { StudentService } from './student.service';
-
-export interface StudentInfo {
-  courses: CourseInstance[];
-  quizzes: QuizInstance[];
-  pathes: PathInstance[];
-}
 
 export interface FinishStudentLesson {
   done?: boolean;
@@ -36,64 +28,54 @@ export class StudentController extends ModelRestController<
   Prisma.StudentCreateInput,
   Prisma.StudentUpdateInput
 > {
-  constructor(
-    studentService: StudentService,
-    private courseInstanceService: CourseInstanceService,
-  ) {
+  constructor(private studentService: StudentService) {
     super(studentService, StudentValidation);
   }
 
   @Public()
   @Get('my-paths')
-  async getMyPaths(@CurrentUser() user: Payload) {
-    const studentInfo: StudentInfo = {
-      courses: [],
-      quizzes: [],
-      pathes: [],
-    };
-
-    const student = await this.apiService.findOne(user.sub);
-
-    if (student) {
-      const courseInstances = await this.courseInstanceService.findAll({
-        where: {
-          pathInstance: {
-            studentPathInstance: {
-              some: { student: { id: student.id } },
-            },
-          },
-        },
-      });
-      console.log(courseInstances);
-    }
-
-    return of<StudentInfo>(studentInfo);
+  async getMyPaths(@CurrentUser() user: Payload): Promise<Student> {
+    user = this.fakeUser(user);
+    const retVal = await this.studentService.fetchStudentCourses(user);
+    // console.log('retVal', JSON.stringify(retVal, null, 2));
+    return retVal;
   }
 
   @Public()
   @Get('open-paths')
-  async getOpenPaths(@CurrentUser() user: Payload) {
+  async getOpenPaths(@CurrentUser() user: Payload): Promise<PathInstance[]> {
     user = this.fakeUser(user);
     console.log('user', user);
-    return of<PathInstance[]>([]);
+    return [];
   }
 
   @Public()
   @Post('finish-exam')
-  async finishExam(@Body() createUserDto: FinishStudentQuiz, @CurrentUser() user: Payload) {
+  async finishExam(@Body() createUserDto: FinishStudentQuiz, @CurrentUser() user: Payload): Promise<QuizInstance> {
     user = this.fakeUser(user);
     console.log('user', user);
     console.log('createUserDto', createUserDto);
-    return of<QuizInstance>({} as QuizInstance);
+    return {} as QuizInstance;
   }
 
   @Public()
   @Post('finish-lesson')
-  async finishLesson(@Body() createUserDto: FinishStudentLesson, @CurrentUser() user: Payload) {
+  async finishLesson(
+    @Body() createUserDto: FinishStudentLesson,
+    @CurrentUser() user: Payload,
+  ): Promise<CourseInstance> {
     user = this.fakeUser(user);
     console.log('user', user);
     console.log('createUserDto', createUserDto);
-    return of<Course>({} as Course);
+    return {} as CourseInstance;
+  }
+
+  @Public()
+  @Get('register')
+  async register(@Param() pathInstanceId: number, @CurrentUser() user: Payload): Promise<PathInstance> {
+    user = this.fakeUser(user);
+    console.log('user', user);
+    return {} as PathInstance;
   }
 
   private fakeUser(user: Payload) {

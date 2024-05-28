@@ -1,4 +1,4 @@
-import { Language, MediaType, PrismaClient, Role } from '@prisma/client';
+import { Language, MediaType, PrismaClient, Role, Student, Teacher, User } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -12,7 +12,7 @@ const basicData = {
 };
 
 async function main() {
-  const findUser = await prisma.user.findUnique({
+  const findUser: User | null = await prisma.user.findUnique({
     where: {
       email: 'test',
     },
@@ -26,6 +26,47 @@ async function main() {
         password: '123456',
         language: Language.ar,
         roles: [Role.TEACHER],
+        ...basicData,
+      },
+    });
+  }
+
+  const findStudent: Student | null = await prisma.student.findUnique({
+    where: {
+      id: 1,
+    },
+  });
+  if (!findStudent) {
+    const student = await prisma.student.create({
+      data: {
+        name: 'test',
+        user: {
+          connect: {
+            id: 1,
+          },
+        },
+        student_info: {},
+        pathInformation: {},
+        ...basicData,
+      },
+    });
+  }
+
+  const findTeacher: Teacher | null = await prisma.teacher.findUnique({
+    where: {
+      id: 1,
+    },
+  });
+
+  if (!findTeacher) {
+    const teacher = await prisma.teacher.create({
+      data: {
+        name: 'test',
+        user: {
+          connect: {
+            id: 1,
+          },
+        },
         ...basicData,
       },
     });
