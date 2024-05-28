@@ -45,8 +45,9 @@ export class StudentController extends ModelRestController<
   @Get('open-paths')
   async getOpenPaths(@CurrentUser() user: Payload): Promise<PathInstance[]> {
     user = this.fakeUser(user);
-    console.log('user', user);
-    return [];
+    const today = new Date();
+    const openPaths = await this.studentService.fetchOpenPath(user, today);
+    return openPaths;
   }
 
   @Public()
@@ -74,8 +75,9 @@ export class StudentController extends ModelRestController<
   @Get('register')
   async register(@Param() pathInstanceId: number, @CurrentUser() user: Payload): Promise<PathInstance> {
     user = this.fakeUser(user);
-    console.log('user', user);
-    return {} as PathInstance;
+    // console.log('user', user);
+    const createdPathInstance = await this.studentService.registerStudent(user, pathInstanceId);
+    return createdPathInstance;
   }
 
   private fakeUser(user: Payload) {
