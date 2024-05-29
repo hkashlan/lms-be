@@ -56,7 +56,8 @@ export class StudentController extends ModelRestController<
     user = this.fakeUser(user);
     console.log('user', user);
     console.log('createUserDto', createUserDto);
-    return {} as QuizInstance;
+    const finishexam = await this.studentService.finishExams(user, createUserDto);
+    return finishexam;
   }
 
   @Public()
@@ -68,7 +69,8 @@ export class StudentController extends ModelRestController<
     user = this.fakeUser(user);
     console.log('user', user);
     console.log('createUserDto', createUserDto);
-    return {} as CourseInstance;
+    const finishlesson = await this.studentService.finishLesson(user, createUserDto);
+    return finishlesson;
   }
 
   @Public()
