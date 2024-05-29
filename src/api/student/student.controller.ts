@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CourseInstance, PathInstance, Prisma, QuizInstance, Role, Student } from '@prisma/client';
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { CourseInstance, PathInstance, Prisma, QuizInstance, Role, Student, StudentPathInstance } from '@prisma/client';
 import { Payload } from '../../auth/auth.service';
 import { CurrentUser, Public } from '../../auth/constants';
 import { ModelRestController } from '../../core/api/model.controller';
@@ -72,8 +72,11 @@ export class StudentController extends ModelRestController<
   }
 
   @Public()
-  @Get('register')
-  async register(@Param() pathInstanceId: number, @CurrentUser() user: Payload): Promise<PathInstance> {
+  @Get('register/:pathInstanceId')
+  async register(
+    @Param('pathInstanceId', ParseIntPipe) pathInstanceId: number,
+    @CurrentUser() user: Payload,
+  ): Promise<StudentPathInstance> {
     user = this.fakeUser(user);
     // console.log('user', user);
     const createdPathInstance = await this.studentService.registerStudent(user, pathInstanceId);

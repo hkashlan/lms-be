@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PathInstance, Prisma, Student } from '@prisma/client';
+import { PathInstance, Prisma, Student, StudentPathInstance } from '@prisma/client';
 import { APIService } from '../../core/api/service';
 import { DatabaseService } from '../../core/database/database.service';
 import { Payload } from './../../auth/auth.service';
@@ -52,16 +52,17 @@ export class StudentService extends APIService<
   }
 
   async fetchOpenPath(user: Payload, today: Date): Promise<PathInstance[]> {
-    return await this.db.pathInstance.findMany({
+    const retVal = await this.db.pathInstance.findMany({
       where: {
         NOT: {
-          studentPathInstance: {
-            some: {
-              studentId: user.sub,
+          path: {
+            studentPathInstance: {
+              some: {
+                studentId: user.sub,
+              },
             },
           },
         },
-        stilOpen: true,
         dateFrom: {
           lte: today,
         },
@@ -69,31 +70,40 @@ export class StudentService extends APIService<
           gte: today,
         },
         numberOfRegisteredStudents: {
-          lt: {
-            numberOfStudents: true,
-          },
+          lte: this.db.pathInstance.fields.numberOfStudents,
         },
       },
     });
+    console.log('retVal', JSON.stringify(retVal, null, 2));
+    return retVal;
   }
 
-  async registerStudent(user: Payload, pathInstanceId?: number): Promise<PathInstance> {
-    return await this.db.studentPathInstance.create({
-      data: {
-        mark: 100,
-        studentId: user.sub,
-        studentName: user.name,
-        pathInstanceName: '',
-        pathId: 2,
-        pathName: '',
-        createdDate: '',
-        updatedDate: '',
-        createdUserName: '',
-        createdUserId: 1,
-        updatedUserName: '',
-        updatedUserId: 1,
-      },
-      pathInstanceId: pathInstanceId,
+  async registerStudent(user: Payload, pathInstanceId: number): Promise<StudentPathInstance> {
+    const pathInstance = await this.db.pathInstance.findUnique({ where: { id: pathInstanceId } });
+    const data: Omit<Prisma.StudentPathInstanceCreateInput, 'student' | 'pathInstance' | 'path'> & {
+      studentId: number;
+      pathInstanceId: number;
+      pathId: number;
+    } = {
+      mark: 0,
+      fullMark: 0,
+      studentId: user.sub,
+      studentName: user.name,
+      pathInstanceName: pathInstance!.name,
+      pathInstanceId: pathInstance!.id,
+      pathName: pathInstance!.pathName,
+      pathId: pathInstance!.pathId,
+      createdUserName: user.name,
+      createdUserId: user.sub,
+      createdDate: new Date(),
+      updatedUserName: user.name,
+      updatedUserId: user.sub,
+      updatedDate: new Date(),
+    };
+    const studentPathInstance = await this.db.studentPathInstance.create({
+      data: data as unknown as Prisma.StudentPathInstanceCreateInput,
     });
+
+    return studentPathInstance;
   }
 }
