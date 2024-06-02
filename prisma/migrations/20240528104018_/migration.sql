@@ -140,8 +140,6 @@ CREATE TABLE "QuizInstanceStudent" (
     "quizName" TEXT NOT NULL,
     "studentId" INTEGER NOT NULL,
     "studentName" TEXT NOT NULL,
-    "pathInstanceId" INTEGER NOT NULL,
-    "pathInstanceString" TEXT NOT NULL,
     "answerOptions" JSONB NOT NULL,
     "createdDate" TIMESTAMP(3) NOT NULL,
     "updatedDate" TIMESTAMP(3) NOT NULL,
@@ -273,9 +271,6 @@ ALTER TABLE "QuizInstanceStudent" ADD CONSTRAINT "QuizInstanceStudent_quizId_fke
 
 -- AddForeignKey
 ALTER TABLE "QuizInstanceStudent" ADD CONSTRAINT "QuizInstanceStudent_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "QuizInstanceStudent" ADD CONSTRAINT "QuizInstanceStudent_pathInstanceId_fkey" FOREIGN KEY ("pathInstanceId") REFERENCES "PathInstance"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Student" ADD CONSTRAINT "Student_id_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

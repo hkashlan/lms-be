@@ -1,25 +1,14 @@
 import { Result } from '../models/result';
 import { Repository, SelectFilter } from './repository';
 
-export class APIService<
-  T,
-  Select extends SelectFilter,
-  CreateInput,
-  UpdateInput,
-> {
-  constructor(
-    protected repository: Repository<T, Select, CreateInput, UpdateInput>,
-  ) {}
+export class APIService<T, Select extends SelectFilter, CreateInput, UpdateInput> {
+  constructor(protected repository: Repository<T, Select, CreateInput, UpdateInput>) {}
 
   async create(createUserDto: CreateInput): Promise<T> {
     return this.repository.create({ data: createUserDto });
   }
 
-  async findAll(
-    filter?: Select,
-    page?: number,
-    size?: number,
-  ): Promise<Result<T>> {
+  async findAll(filter?: Select, page?: number, size?: number): Promise<Result<T>> {
     size = size ?? 10;
     const skip = page && size ? (page - 1) * size : 0;
     const users = await this.repository.findMany({
