@@ -9,7 +9,7 @@ import {
   StudentPathInstance,
 } from '@prisma/client';
 import { Payload } from '../../auth/auth.service';
-import { CurrentUser, Public } from '../../auth/constants';
+import { CurrentUser, Roles } from '../../auth/constants';
 import { ModelRestController } from '../../core/api/model.controller';
 import { StudentLesson } from '../../models/schema';
 import { StudentValidation } from '../../models/validation/student.z';
@@ -39,67 +39,43 @@ export class StudentController extends ModelRestController<
     super(studentService, StudentValidation);
   }
 
-  @Public()
+  @Roles(Role.STUDENT)
   @Get('my-paths')
   async getMyPaths(@CurrentUser() user: Payload): Promise<Student> {
-    user = this.fakeUser(user);
-    const retVal = await this.studentService.fetchStudentCourses(user);
-    // console.log('retVal', JSON.stringify(retVal, null, 2));
-    return retVal;
+    return await this.studentService.fetchStudentCourses(user);
   }
 
-  @Public()
+  @Roles(Role.STUDENT)
   @Get('open-paths')
   async getOpenPaths(@CurrentUser() user: Payload): Promise<PathInstance[]> {
-    user = this.fakeUser(user);
     const today = new Date();
-    const openPaths = await this.studentService.fetchOpenPath(user, today);
-    return openPaths;
+    return await this.studentService.fetchOpenPath(user, today);
   }
 
-  @Public()
+  @Roles(Role.STUDENT)
   @Post('finish-exam')
   async finishExam(
     @Body() quizInstanceStudent: QuizInstanceStudent,
     @CurrentUser() user: Payload,
   ): Promise<QuizInstanceStudent> {
-    user = this.fakeUser(user);
-    const finishexam = await this.studentService.finishExam(user, quizInstanceStudent);
-    return finishexam;
+    return await this.studentService.finishExam(user, quizInstanceStudent);
   }
 
-  @Public()
+  @Roles(Role.STUDENT)
   @Post('finish-lesson')
   async finishLesson(
     @Body() createUserDto: FinishStudentLesson,
     @CurrentUser() user: Payload,
   ): Promise<CourseInstance> {
-    user = this.fakeUser(user);
-    console.log('user', user);
-    console.log('createUserDto', createUserDto);
-    const finishlesson = await this.studentService.updateLessonStudent(user, createUserDto);
-    return finishlesson;
+    return await this.studentService.updateLessonStudent(user, createUserDto);
   }
 
-  @Public()
+  @Roles(Role.STUDENT)
   @Get('register/:pathInstanceId')
   async register(
     @Param('pathInstanceId', ParseIntPipe) pathInstanceId: number,
     @CurrentUser() user: Payload,
   ): Promise<StudentPathInstance> {
-    user = this.fakeUser(user);
-    // console.log('user', user);
-    const createdPathInstance = await this.studentService.registerStudent(user, pathInstanceId);
-    return createdPathInstance;
-  }
-
-  private fakeUser(user: Payload) {
-    user = {
-      sub: 1,
-      username: 'test',
-      name: 'test',
-      roles: [Role.STUDENT],
-    };
-    return user;
+    return await this.studentService.registerStudent(user, pathInstanceId);
   }
 }
