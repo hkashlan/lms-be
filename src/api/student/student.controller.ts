@@ -1,19 +1,26 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
-import { CourseInstance, PathInstance, Prisma, QuizInstance, Role, Student, StudentPathInstance } from '@prisma/client';
+import {
+  CourseInstance,
+  PathInstance,
+  Prisma,
+  QuizInstanceStudent,
+  Role,
+  Student,
+  StudentPathInstance,
+} from '@prisma/client';
 import { Payload } from '../../auth/auth.service';
 import { CurrentUser, Public } from '../../auth/constants';
 import { ModelRestController } from '../../core/api/model.controller';
+import { StudentLesson } from '../../models/schema';
 import { StudentValidation } from '../../models/validation/student.z';
 import { StudentService } from './student.service';
 
-export interface FinishStudentLesson {
-  done?: boolean;
-  fullMark?: number;
-  mark?: number;
-  answeredOptions?: number[][];
+export class FinishStudentLesson {
+  studentLesson: StudentLesson;
   courseId: number;
   lessonId: number;
 }
+
 export interface FinishStudentQuiz {
   fullMark: number;
   mark: number;
@@ -52,11 +59,12 @@ export class StudentController extends ModelRestController<
 
   @Public()
   @Post('finish-exam')
-  async finishExam(@Body() createUserDto: FinishStudentQuiz, @CurrentUser() user: Payload): Promise<QuizInstance> {
+  async finishExam(
+    @Body() quizInstanceStudent: QuizInstanceStudent,
+    @CurrentUser() user: Payload,
+  ): Promise<QuizInstanceStudent> {
     user = this.fakeUser(user);
-    console.log('user', user);
-    console.log('createUserDto', createUserDto);
-    const finishexam = await this.studentService.finishExams(user, createUserDto);
+    const finishexam = await this.studentService.finishExam(user, quizInstanceStudent);
     return finishexam;
   }
 
@@ -69,7 +77,7 @@ export class StudentController extends ModelRestController<
     user = this.fakeUser(user);
     console.log('user', user);
     console.log('createUserDto', createUserDto);
-    const finishlesson = await this.studentService.finishLesson(user, createUserDto);
+    const finishlesson = await this.studentService.updateLessonStudent(user, createUserDto);
     return finishlesson;
   }
 

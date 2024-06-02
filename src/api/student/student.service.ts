@@ -1,9 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CourseInstance, PathInstance, Prisma, QuizInstance, Student, StudentPathInstance } from '@prisma/client';
+import {
+  CourseInstance,
+  PathInstance,
+  Prisma,
+  QuizInstanceStudent,
+  Student,
+  StudentPathInstance,
+} from '@prisma/client';
 import { APIService } from '../../core/api/service';
 import { DatabaseService } from '../../core/database/database.service';
+import { Lesson } from '../../models/schema';
 import { Payload } from './../../auth/auth.service';
-import { FinishStudentLesson, FinishStudentQuiz } from './student.controller';
+import { FinishStudentLesson } from './student.controller';
 
 @Injectable()
 export class StudentService extends APIService<
@@ -108,108 +116,39 @@ export class StudentService extends APIService<
     return studentPathInstance;
   }
 
-  async finishExams(user: Payload, createUserDto: FinishStudentQuiz): Promise<QuizInstance> {
-    const { fullMark, mark, answeredOptions, quizzId } = createUserDto;
-    const quizInstance = await this.db.quizInstance.findUnique({
-      where: {
-        id: quizzId,
-      },
-      include: {
-        quizStudents: true,
-      },
+  async finishExam(user: Payload, quizInstanceStudent: QuizInstanceStudent): Promise<QuizInstanceStudent> {
+    return await this.db.quizInstanceStudent.create({
+      data: quizInstanceStudent as unknown as Prisma.QuizInstanceStudentCreateInput,
     });
-    const quizStudent = quizInstance?.quizStudents.find((student) => student.studentId === user.sub);
-
-    if (!quizStudent) {
-      throw new Error('Quiz student not found');
-    }
-    await this.db.quizInstanceStudent.update({
-      where: {
-        id: quizStudent.id,
-      },
-      data: {
-        fullMark: 0,
-        mark: 0,
-        date: new Date(),
-        quizId: quizInstance?.id,
-        quizName: quizInstance?.name,
-        studentId: user.sub,
-        studentName: user.name,
-        answerOptions: answeredOptions,
-        createdUserName: user.name,
-        createdUserId: user.sub,
-        createdDate: new Date(),
-        updatedUserName: user.name,
-        updatedUserId: user.sub,
-        updatedDate: new Date(),
-      },
-    });
-    return quizInstance!;
   }
 
-  async finishLesson(user: Payload, createUserDto: FinishStudentLesson): Promise<CourseInstance> {
-    const { courseId, lessonId, done, mark, answeredOptions } = createUserDto;
-
+  async updateLessonStudent(user: Payload, finishStudentLesson: FinishStudentLesson): Promise<CourseInstance> {
     const courseInstance = await this.db.courseInstance.findUnique({
-      where: { id: courseId },
-      include: {
-        lessons: {
-          where: { id: lessonId },
-          include: {
-            students: true,
-          },
-        },
-      },
+      where: { id: finishStudentLesson.courseId },
     });
 
     if (!courseInstance) {
       throw new Error('Course instance not found');
     }
 
-    const lesson = courseInstance.lessons[0];
+    const lessons = courseInstance.lessons || [];
+    const lesson = lessons?.[finishStudentLesson.lessonId] as Lesson;
     if (!lesson) {
       throw new Error('Lesson not found');
     }
 
-    const studentIndex = lesson.students.findIndex((student) => student.id === user.sub);
+    const studentIndex = lesson.students.findIndex((student) => student.studentId === user.sub);
 
     if (studentIndex !== -1) {
-      lesson.students[studentIndex].done = done;
-      lesson.students[studentIndex].mark = mark;
-      lesson.students[studentIndex].answeredOptions = answeredOptions;
+      lesson.students.push(finishStudentLesson.studentLesson);
     } else {
-      const student = {
-        id: user.sub,
-        done: true,
-        mark: 50,
-        answeredOptions: [],
-      };
-      lesson.students.push(student);
+      lesson.students[studentIndex] = finishStudentLesson.studentLesson;
     }
 
     const updatedCourseInstance = await this.db.courseInstance.update({
-      where: { id: courseId },
+      where: { id: courseInstance.courseId },
       data: {
-        lessons: {
-          update: {
-            where: { id: lessonId },
-            data: {
-              students: {
-                upsert: {
-                  create: students,
-                  update: students,
-                },
-              },
-            },
-          },
-        },
-      },
-      include: {
-        lessons: {
-          include: {
-            students: true,
-          },
-        },
+        lessons: lessons,
       },
     });
 
