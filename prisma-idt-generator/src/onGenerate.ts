@@ -26,7 +26,7 @@ const excludeNames = [
 export default async function onGenerate(options: GeneratorOptions) {
   const models = options.dmmf.datamodel.models;
   const folder = 'src/api';
-  const folderProp = 'src/models/prop-info/';
+  // const folderProp = 'src/models/prop-info/';
 
   models.forEach((e) => {
     const small = toSmallLetter(e.name);
@@ -36,25 +36,13 @@ export default async function onGenerate(options: GeneratorOptions) {
       createModule(folder, e);
     }
 
-    createPropInfo(folderProp, e);
     createZod('src/models/validation', e);
   });
 
-  const content = models
-    .map(
-      (m) =>
-        `import {${m.name}PropInfo} from './${toKebabCase(m.name)}.prop-info';`,
-    )
-    .join('\n');
-  const content2 = models.map((m) => `${m.name}PropInfo`).join(',\n');
+  // const content = models.map((m) => `import {${m.name}PropInfo} from './${toKebabCase(m.name)}.prop-info';`).join('\n');
+  // const content2 = models.map((m) => `${m.name}PropInfo`).join(',\n');
 
-  createFile(
-    folderProp,
-    'index',
-    '',
-    content + 'export const modelPropInfos = { ' + content2 + '}',
-    false,
-  );
+  // createFile(folderProp, 'index', '', content + 'export const modelPropInfos = { ' + content2 + '}', false);
 
   const outputFile = options.generator.output;
   if (!outputFile || !outputFile.value) {
@@ -127,110 +115,8 @@ export class ${model.name}Service extends APIService<
   createFile(folder, `${toKebabCase(model.name)}`, '.service', content);
 }
 
-function createPropInfo(folder: string, model: DMMF.Model) {
-  createPrismaPropInfo(folder, model);
-  createExtraPropInfo(folder, model);
-}
-
-function createExtraPropInfo(folder: string, model: DMMF.Model) {
-  const kebab = toKebabCase(model.name);
-  const fields = model.fields.filter(excludeFields2);
-  // if (!fs.existsSync(folder + kebab + '.prop-info.ts')) {
-  let content = `/* eslint-disable @typescript-eslint/no-explicit-any */
-import { ${model.name}, ${model.fields
-    .filter(
-      (f) => (f.kind === 'object' || f.kind === 'enum') && excludeFields2(f),
-    )
-    .map((f) => f.type)
-    .join(',')} } from '@prisma/client';
-import { PropInformation, WithPropType } from '../utils/type-utils';
-import { ${model.name}GenInfo } from './${kebab}.gen-info';`;
-  fields.forEach((f) => {
-    content += `const ${f.name}: PropInformation<${fromDBToTs(f.type)}, '${fromDBToTs(f.type)}'> = {
-        basic: ${model.name}GenInfo.${f.name},
-      };`;
-  });
-
-  content += `export const ${model.name}PropInfo: WithPropType<${model.name}, PropInformation<any, any>> = {`;
-  content += fields.map((f) => `${f.name}: ${f.name}`).join(',\n');
-  content += '};';
-  createFile(folder, kebab, '.prop-info', content, false);
-  // }
-}
-
-function createPrismaPropInfo(folder: string, model: DMMF.Model) {
-  let toImports = model.fields
-    .filter(
-      (f) => (f.kind === 'object' || f.kind === 'enum') && excludeFields2(f),
-    )
-    .map((f) => f.type)
-    .join(',');
-  toImports = toImports.trim().length
-    ? `import { ${toImports} } from '@prisma/client';`
-    : '';
-  let contentFields = `/* eslint-disable @typescript-eslint/no-explicit-any */
-import { PropPrismaInformation } from '../utils/type-utils';
-  `;
-  contentFields += toImports;
-
-  const fields = model.fields.filter(excludeFields2);
-  const contentExport =
-    `export const ${model.name}GenInfo = {` +
-    fields.map((f) => f.name).join(',') +
-    '};';
-
-  fields.forEach((f) => {
-    contentFields += `const ${f.name}: PropPrismaInformation<${fromDBToTs(f.type)}, '${fromDBToTs(f.type)}'> = {
-      type: '${fromDBToTs(f.type)}',
-      name: '${f.name}',
-    `;
-    if (f.hasDefaultValue && f.name !== 'id') {
-      contentFields += `defaultValue: ${f.default},`;
-    }
-
-    if (f.isList) {
-      contentFields += `array: true,`;
-    }
-
-    if (!f.isRequired) {
-      contentFields += `optional: true,`;
-    }
-
-    const ref = model.fields.find(
-      (ref) => ref.name === f.name.replace('Id', ''),
-    );
-    if (f.name.endsWith('Id') && ref) {
-      contentFields += `ref: '${ref.type}',`;
-    }
-    contentFields += `};
-    `;
-
-    // contentFields += JSON.stringify(f);
-  });
-
-  createFile(
-    folder,
-    `${toKebabCase(model.name)}`,
-    '.gen-info',
-    contentFields + contentExport,
-    false,
-  );
-}
 function excludeFields(f: DMMF.Field) {
-  return (
-    f.kind !== 'object' && f.type !== 'Json' && !excludeNames.includes(f.name)
-  );
-}
-
-function excludeFields2(f: DMMF.Field) {
-  return excludeFields(f);
-  // return (
-  //   f.name !== 'id' &&
-  //   f.type !== 'Json' &&
-  //   f.name !== 'user' &&
-  //   !(f.kind === 'object' && f.isList) &&
-  //   !excludeNames.includes(f.name)
-  // );
+  return f.kind !== 'object' && f.type !== 'Json' && !excludeNames.includes(f.name);
 }
 
 function createZod(folder: string, model: DMMF.Model) {
@@ -271,22 +157,6 @@ function fromDBToZod(db: string) {
   }
 }
 
-function fromDBToTs(db: string) {
-  switch (db) {
-    case 'Boolean':
-      return 'boolean';
-    case 'String':
-      return 'string';
-    case 'Int':
-    case 'Float':
-      return 'number';
-    case 'DateTime':
-      return 'Date';
-    default:
-      return db;
-  }
-}
-
 function zConstraint(field: DMMF.Field) {
   switch (field.kind) {
     case 'enum':
@@ -297,20 +167,14 @@ function zConstraint(field: DMMF.Field) {
 }
 
 function optional(field: DMMF.Field) {
-  return field.isRequired ? '' : '.optional()';
+  return field.isRequired ? '' : '.optional().nullable()';
 }
 
 function array(field: DMMF.Field) {
   return field.isList ? '.array()' : '';
 }
 
-function createFile(
-  folder: string,
-  fileName: string,
-  ext: string,
-  content: string,
-  withFolder = true,
-): void {
+function createFile(folder: string, fileName: string, ext: string, content: string, withFolder = true): void {
   const outputPath = path.resolve(folder) + (withFolder ? '/' + fileName : '');
   if (!fs.existsSync(outputPath)) {
     fs.mkdirSync(outputPath, {

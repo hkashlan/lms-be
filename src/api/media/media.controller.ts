@@ -1,13 +1,7 @@
-import {
-  Controller,
-  Param,
-  ParseIntPipe,
-  Post,
-  UploadedFiles,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Param, ParseIntPipe, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Media, Prisma } from '@prisma/client';
+import { put } from '@vercel/blob';
 import { Public } from '../../auth/constants';
 import { ModelRestController } from '../../core/api/model.controller';
 import { MediaValidation } from '../../models/validation/media.z';
@@ -33,15 +27,16 @@ export class MediaController extends ModelRestController<
     }),
   )
   // @UseInterceptors(FileInterceptor('file'))
-  uploadFile(
+  async uploadFile(
     @Param('id', ParseIntPipe) id: number,
     @UploadedFiles() files: Array<Express.Multer.File>, // Ensure correct usage of @UploadedFile
   ) {
     const file = files[0];
     if (file) {
+      const fileInfo = await this.uploadFileVercel(file);
       this.apiService.update(id, {
-        name: file.filename,
-        url: file.path, // Assuming you have defined 'url' in your media entity
+        name: fileInfo.fileName,
+        url: fileInfo.url,
         mimetype: file.mimetype,
         size: file.size,
       });
@@ -49,5 +44,18 @@ export class MediaController extends ModelRestController<
       // Handle the case where the file is undefined
       console.error('File upload failed: file is undefined');
     }
+  }
+
+  async uploadFileVercel(file: Express.Multer.File) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const fileParts = file.originalname.split('.');
+    const fileName = fileParts[0] + '-' + uniqueSuffix + '.' + fileParts[1];
+
+    const { url } = await put(
+      fileName,
+      file.buffer,
+      { access: 'public' }, // Set access as needed (public/private)
+    );
+    return { fileName, url };
   }
 }

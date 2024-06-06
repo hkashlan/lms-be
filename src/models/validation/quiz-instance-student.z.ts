@@ -10,6 +10,4 @@ export const QuizInstanceStudentValidation = z.object({
   quizName: z.string(),
   studentId: z.number(),
   studentName: z.string(),
-  pathInstanceId: z.number(),
-  pathInstanceString: z.string(),
 }) satisfies ZodOutputFor<QuizInstanceStudent>;

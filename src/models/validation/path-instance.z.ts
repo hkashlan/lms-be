@@ -9,7 +9,7 @@ export const PathInstanceValidation = z.object({
   dateTo: z.coerce.date(),
   numberOfStudents: z.number(),
   numberOfRegisteredStudents: z.number(),
-  stilOpen: z.boolean().optional(),
+  stilOpen: z.boolean().optional().nullable(),
   pathId: z.number(),
   pathName: z.string(),
 }) satisfies ZodOutputFor<PathInstance>;
