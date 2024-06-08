@@ -25,7 +25,7 @@ async function main() {
         email: 'test',
         password: '123456',
         language: Language.ar,
-        roles: [Role.TEACHER],
+        roles: [Role.TEACHER, Role.ADMIN],
         ...basicData,
       },
     });

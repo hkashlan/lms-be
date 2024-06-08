@@ -256,6 +256,7 @@ enum MediaType {
 }
 
 enum Role {
+  ADMIN
   TEACHER
   STUDENT
 }

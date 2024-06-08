@@ -49,6 +49,7 @@ export class StudentService extends APIService<
                           quizStudents: true,
                         },
                       },
+                      book: true,
                     },
                   },
                 },
