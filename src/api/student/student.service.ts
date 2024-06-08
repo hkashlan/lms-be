@@ -114,6 +114,15 @@ export class StudentService extends APIService<
       data: data as unknown as Prisma.StudentPathInstanceCreateInput,
     });
 
+    await this.db.pathInstance.update({
+      data: {
+        numberOfRegisteredStudents: {
+          increment: 1,
+        },
+      },
+      where: { id: pathInstanceId },
+    });
+
     return studentPathInstance;
   }
 
@@ -138,16 +147,17 @@ export class StudentService extends APIService<
       throw new Error('Lesson not found');
     }
 
+    lesson.students = lesson.students || [];
     const studentIndex = lesson.students.findIndex((student) => student.studentId === user.sub);
 
-    if (studentIndex !== -1) {
+    if (studentIndex === -1) {
       lesson.students.push(finishStudentLesson.studentLesson);
     } else {
       lesson.students[studentIndex] = finishStudentLesson.studentLesson;
     }
 
     const updatedCourseInstance = await this.db.courseInstance.update({
-      where: { id: courseInstance.courseId },
+      where: { id: courseInstance.id },
       data: {
         lessons: lessons,
       },
