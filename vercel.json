@@ -1,6 +1,7 @@
 {
   "version": 2,
   "routes": [
+    { "source": "/about", "destination": "public/tt.html" },
     {
       "src": "/api/(.*)",
       "dest": "dist/src/main.js",
