@@ -1,11 +1,4 @@
 {
   "version": 2,
-  "routes": [
-    { "src": "/about", "dest": "public/tt.html" },
-    {
-      "src": "/api/(.*)",
-      "dest": "/dist/src/main.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]
-    }
-  ]
+  "rewrites": [{ "source": "/(.*)", "destination": "/dist/src/main.js" }]
 }
