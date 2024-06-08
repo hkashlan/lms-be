@@ -8,7 +8,7 @@ export function createCourseInstnaceDTO(
   user: Payload,
 ): Prisma.CourseInstanceCreateInput {
   const retVal: Omit<CourseInstance, 'id'> = {
-    name: course.name,
+    name: pathInstance.name + ' ' + course.name,
     description: '',
     dateFrom: new Date(),
     dateTo: new Date(),
@@ -21,8 +21,8 @@ export function createCourseInstnaceDTO(
     courseName: course.name,
     pathInstanceId: pathInstance.id,
     pathInstanceName: pathInstance.name,
-    teacherId: user.sub,
-    teacherName: user.name,
+    teacherId: pathInstance.teacherId,
+    teacherName: pathInstance.teacherName,
     ...ModelRestController.fillUserInfo(user),
   };
   return retVal as unknown as Prisma.CourseInstanceCreateInput;
@@ -35,7 +35,7 @@ export function createQuizInstnaceDTO(
 ): Prisma.QuizInstanceCreateInput {
   const retVal: Omit<QuizInstance, 'id'> = {
     ...ModelRestController.fillUserInfo(user),
-    name: quiz.name,
+    name: courseInstnace.name + ' ' + quiz.name,
     dateFrom: new Date(),
     dateTo: new Date(),
     mark: 0,

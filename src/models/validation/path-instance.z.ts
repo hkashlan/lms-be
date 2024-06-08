@@ -10,6 +10,8 @@ export const PathInstanceValidation = z.object({
   numberOfStudents: z.number(),
   numberOfRegisteredStudents: z.number(),
   stilOpen: z.boolean().optional().nullable(),
+  teacherId: z.number(),
+  teacherName: z.string(),
   pathId: z.number(),
   pathName: z.string(),
 }) satisfies ZodOutputFor<PathInstance>;
