@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "postinstall": "npm run prisma:generate",
-    "build": "nest build && echo 'Build done!' > public/tt.html",
+    "build": "nest build && echo 'Build done!' > public/tt.html && ls dist/src",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
