@@ -55,16 +55,15 @@ export class UserService extends APIService<
         updatedUserId: user.updatedUserId,
         updatedUserName: user.updatedUserName,
       };
-      const tt = await this.db.student.upsert({
+      await this.db.student.upsert({
         where: {
           id: user.id,
         },
         create: create,
         update: {},
       });
-      console.log(JSON.stringify(tt, null, 2));
     } else {
-      this.db.student.delete({
+      await this.db.student.delete({
         where: {
           id: user.id,
         },
@@ -82,7 +81,7 @@ export class UserService extends APIService<
         updatedUserId: user.updatedUserId,
         updatedUserName: user.updatedUserName,
       };
-      this.db.teacher.upsert({
+      await this.db.teacher.upsert({
         where: {
           id: user.id,
         },
@@ -90,7 +89,7 @@ export class UserService extends APIService<
         update: {},
       });
     } else {
-      this.db.teacher.delete({
+      await this.db.teacher.delete({
         where: {
           id: user.id,
         },
